@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Tress_In_The_Cloud</string>
+    <string name="app_name">Trees_In_The_Cloud</string>
     <string name="Login">Login</string>
 
     <!--  log in variables -->
@@ -9,7 +9,7 @@
     <string name="action_settings">refresh</string>
 
     <!--activity names-->
-    <string name="title_activity_maps">Map</string>
+    <string name="title_activity_maps">Map EE5</string>
     <string name="title_activity_login">Login</string>
 
     <string-array name="sideMenu">

@@ -1,21 +1,27 @@
 package com.example.user.treesinthecloud;
 
+import android.content.Context;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.Toast;
+import android.widget.TextView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
@@ -30,40 +36,61 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     private DrawerLayout drawerlayout;
     private ListView listView;
-    private String[]options;
+    private MyAdapter myAdapter;
 
     private ActionBarDrawerToggle drawerListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.test_main_activity);
+        setContentView(R.layout.activity_maps);
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-        /*SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
-        mapFragment.getMapAsync(this);*/
+        mapFragment.getMapAsync(this);
 
         drawerlayout=(DrawerLayout) findViewById(R.id.drawer_layout);
 
-        options=getResources().getStringArray(R.array.sideMenu);
         listView=(ListView) findViewById(R.id.drawersList);
-        listView.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, options));
-
         listView.setOnItemClickListener(this);
 
+        myAdapter = new MyAdapter(this);
+        listView.setAdapter(myAdapter);
+
         drawerListener = new ActionBarDrawerToggle(this, drawerlayout,
-                R.drawable.horizontalbars, R.string.drawer_open, R.string.drawer_close){
+                R.string.drawer_open, R.string.drawer_close){
             @Override
             public void onDrawerClosed(View drawerView) {
-                Toast.makeText(MapsActivity.this, "Drawer Closed", Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onDrawerOpened(View drawerView) {
-                Toast.makeText(MapsActivity.this, "Drawer Opened", Toast.LENGTH_SHORT).show();
             }
         };
         drawerlayout.setDrawerListener(drawerListener);
+        getSupportActionBar().setHomeButtonEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        drawerListener.onConfigurationChanged(newConfig);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+        if(drawerListener.onOptionsItemSelected(item))
+        {
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        drawerListener.syncState();
     }
 
     @Override
@@ -76,6 +103,12 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
 
         mMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
+        mMap.getUiSettings().setZoomGesturesEnabled(true);
+        mMap.getUiSettings().setCompassEnabled(true);
+        mMap.getUiSettings().setZoomControlsEnabled(true);
+        mMap.getUiSettings().setScrollGesturesEnabled(true);
+        mMap.getUiSettings().setTiltGesturesEnabled(true);
+        mMap.getUiSettings().setRotateGesturesEnabled(true);
     }
 
     @Override
@@ -86,33 +119,65 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Toast.makeText(this, options[position] + " was selected", Toast.LENGTH_SHORT).show();
         selectItem(position);
     }
 
     public void selectItem(int position){
         listView.setItemChecked(position, true);
-        setTitle(options[position]);
     }
     public void setTitle(String title) {
         if(title != null) {
             getSupportActionBar().setTitle(title);
         }
+    }
+}
+class MyAdapter extends BaseAdapter {
+
+    private Context context;
+    private LayoutInflater inflater = null;
+
+    private String[]options;
+    int[] images = {R.drawable.profile, R.drawable.routes, R.drawable.settings };
+
+    public MyAdapter(Context context){
+        options = context.getResources().getStringArray(R.array.sideMenu);
+        inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+    }
+
+    @Override
+    public int getCount() {
+        return options.length;
+    }
+
+    @Override
+    public Object getItem(int position) {
+        return options[position];
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
+
+    @Override
+    public View getView(int position, View convertView, ViewGroup parent) {
+        View row = null;
+        if (convertView == null)
+        {
+            row = inflater.inflate(R.layout.custom_row_sidemenu, parent, false);
+        }
+        else
+        {
+            row= convertView;
+        }
+        TextView titleTextview = (TextView) row.findViewById(R.id.textView_sideMenu);
+        ImageView titleImageview = (ImageView) row.findViewById(R.id.imageView_sideMenu);
+
+        titleTextview.setText(options[position]);
+        titleImageview.setImageResource(images[position]);
+
+        return row;
     }
 }
