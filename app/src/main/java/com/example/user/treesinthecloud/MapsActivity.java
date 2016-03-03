@@ -2,6 +2,7 @@ package com.example.user.treesinthecloud;
 
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -31,6 +32,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private ListView listView;
     private String[]options;
 
+    private ActionBarDrawerToggle drawerListener;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,6 +50,20 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         listView.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, options));
 
         listView.setOnItemClickListener(this);
+
+        drawerListener = new ActionBarDrawerToggle(this, drawerlayout,
+                R.drawable.horizontalbars, R.string.drawer_open, R.string.drawer_close){
+            @Override
+            public void onDrawerClosed(View drawerView) {
+                Toast.makeText(MapsActivity.this, "Drawer Closed", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onDrawerOpened(View drawerView) {
+                Toast.makeText(MapsActivity.this, "Drawer Opened", Toast.LENGTH_SHORT).show();
+            }
+        };
+        drawerlayout.setDrawerListener(drawerListener);
     }
 
     @Override
