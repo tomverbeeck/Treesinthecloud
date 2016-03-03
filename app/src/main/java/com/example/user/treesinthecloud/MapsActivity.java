@@ -17,7 +17,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback{
 
     private GoogleMap mMap;
-    //action bar variables of search button
+
     private MenuItem mSearchAction;
     private boolean isSearchOpened = false;
     private EditText edtSeach;
