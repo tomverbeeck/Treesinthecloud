@@ -19,6 +19,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private GoogleMap mMap;
 
     private MenuItem mSearchAction;
+
     private boolean isSearchOpened = false;
     private EditText edtSeach;
 
