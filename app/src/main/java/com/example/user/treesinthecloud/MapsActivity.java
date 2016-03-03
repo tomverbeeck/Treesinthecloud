@@ -5,8 +5,12 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -14,7 +18,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback{
+public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback, AdapterView.OnItemClickListener {
 
     private GoogleMap mMap;
 
@@ -25,7 +29,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     private DrawerLayout drawerlayout;
     private ListView listView;
-
+    private String[]options;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,9 +41,13 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         mapFragment.getMapAsync(this);*/
 
         drawerlayout=(DrawerLayout) findViewById(R.id.drawer_layout);
-        listView=(ListView) findViewById(R.id.drawersList);
-    }
 
+        options=getResources().getStringArray(R.array.sideMenu);
+        listView=(ListView) findViewById(R.id.drawersList);
+        listView.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, options));
+
+        listView.setOnItemClickListener(this);
+    }
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
@@ -73,5 +81,21 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        Toast.makeText(this, options[position] + " was selected", Toast.LENGTH_SHORT).show();
+        selectItem(position);
+    }
+
+    public void selectItem(int position){
+        listView.setItemChecked(position, true);
+        setTitle(options[position]);
+    }
+    public void setTitle(String title) {
+        if(title != null) {
+            getSupportActionBar().setTitle(title);
+        }
     }
 }

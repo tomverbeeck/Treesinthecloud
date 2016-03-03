@@ -11,6 +11,8 @@
     </FrameLayout>
 
     <ListView
+        android:background="@color/colorWhite"
+        android:divider="@null"
         android:id="@+id/drawersList"
         android:layout_width="240dp"
         android:entries="@array/sideMenu"
