@@ -34,7 +34,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Tress In the cloud"
+        android:text="Trees In the cloud"
         android:id="@+id/email"
         android:gravity="left"
         android:layout_marginBottom="8dp"
