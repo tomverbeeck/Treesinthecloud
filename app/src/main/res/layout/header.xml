@@ -10,7 +10,7 @@
         android:id="@+id/profile_image"
         android:layout_width="56dp"
         android:layout_height="56dp"
-        android:src="@drawable/profile"
+        android:src="@drawable/logo_lkn"
         android:layout_marginLeft="24dp"
         android:layout_centerVertical="true"
         android:layout_alignParentLeft="true"

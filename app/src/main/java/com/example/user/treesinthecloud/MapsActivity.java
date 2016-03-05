@@ -2,17 +2,15 @@ package com.example.user.treesinthecloud;
 
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.os.PersistableBundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.EditText;
-import android.widget.ListView;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -26,17 +24,12 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     private GoogleMap mMap;
 
-    private MenuItem mSearchAction;
-
-    private boolean isSearchOpened = false;
-    private EditText edtSeach;
-
     private DrawerLayout drawerLayout;
     private Toolbar toolbar;
     private NavigationView navigationView;
-    ActionBarDrawerToggle actionBarDrawerToggle;
+    private ActionBarDrawerToggle actionBarDrawerToggle;
 
-    private ListView listView;
+    private int zoomLevel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,8 +39,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
-
-        drawerLayout=(DrawerLayout) findViewById(R.id.drawer);
 
         // Initializing Toolbar and setting it as the actionbar
         toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -69,15 +60,21 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 //Closing drawer on item click
                 drawerLayout.closeDrawers();
 
+                Bundle bundle = new Bundle();
+
                 //Check to see which item was being clicked and perform appropriate action
                 switch (menuItem.getItemId()) {
                     //Replacing the main content with ContentFragment Which is our Inbox View;
+                    case R.id.map:
+                        getSupportActionBar().setTitle("Map");
+                        return true;
+
                     case R.id.inbox:
-                        Toast.makeText(getApplicationContext(), "login Selected", Toast.LENGTH_SHORT).show();
-                        ContentFragment fragment = new ContentFragment();
-                        android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                        fragmentTransaction.replace(R.id.frame, fragment);
-                        fragmentTransaction.commit();
+                        LoginFragment fragmentLogin = new LoginFragment();
+                        android.support.v4.app.FragmentTransaction fragmentTransactionLogin = getSupportFragmentManager().beginTransaction();
+                        fragmentTransactionLogin.replace(R.id.frame, fragmentLogin);
+                        fragmentTransactionLogin.commit();
+                        getSupportActionBar().setTitle("Login");
                         return true;
 
                     // For rest of the options we just show a toast on click
@@ -109,7 +106,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         // Initializing Drawer Layout and ActionBarToggle
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer);
-        actionBarDrawerToggle = new ActionBarDrawerToggle(this,drawerLayout,toolbar,R.string.openDrawer, R.string.closeDrawer){
+        actionBarDrawerToggle = new ActionBarDrawerToggle(this,drawerLayout, toolbar,R.string.openDrawer, R.string.closeDrawer){
 
             @Override
             public void onDrawerClosed(View drawerView) {
@@ -124,11 +121,14 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 super.onDrawerOpened(drawerView);
             }
         };
+        getSupportActionBar().setHomeButtonEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
+
     @Override
-    public void onPostCreate(Bundle savedInstanceState, PersistableBundle persistentState) {
-        super.onPostCreate(savedInstanceState, persistentState);
+    public void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
         actionBarDrawerToggle.syncState();
     }
 
@@ -140,8 +140,10 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
+        MenuInflater inflater = getMenuInflater();
+        // Inflate menu to add items to action bar if it is present.
+        inflater.inflate(R.menu.menu_main, menu);
+        // Associate searchable configuration with the SearchView
         return true;
     }
 
@@ -157,20 +159,19 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
+        zoomLevel = 13;
 
         // Add a marker in Sydney and move the camera
         LatLng leuven = new LatLng(50.875, 4.708);
         mMap.addMarker(new MarkerOptions().position(leuven).title("Marker on Group T"));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(leuven));
 
-        mMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
+        mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
         mMap.getUiSettings().setZoomGesturesEnabled(true);
-        mMap.getUiSettings().setCompassEnabled(true);
         mMap.getUiSettings().setZoomControlsEnabled(true);
         mMap.getUiSettings().setScrollGesturesEnabled(true);
-        mMap.getUiSettings().setTiltGesturesEnabled(true);
-        mMap.getUiSettings().setRotateGesturesEnabled(true);
 
-        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(leuven, 13));
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(leuven, zoomLevel));
+
     }
 }

@@ -12,6 +12,7 @@
     <string name="navigation_item_1">Home</string>
     <string name="navigation_item_2">Events</string>
     <string name="starred_string">Starred</string>
+    <string name="map_string">Map</string>
     <string name="inbox_string">Inbox</string>
     <string name="sent_mail_string">Sent mail</string>
     <string name="draft_string">Drafts</string>
@@ -23,14 +24,9 @@
     <string name="openDrawer">Navigation View Closed</string>
 
     <!--activity names-->
-    <string name="title_activity_maps">Map EE5</string>
+    <string name="title_activity_maps">Trees in a cloud</string>
     <string name="title_activity_login">Login</string>
 
-    <string-array name="sideMenu">
-        <item>Profile</item>
-        <item>Routes</item>
-        <item>Settings</item>
-    </string-array>
     <string name="drawer_open">Open Navigation Drawer</string>
     <string name="drawer_close">Close Navigation Drawer</string>
 
