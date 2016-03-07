@@ -168,6 +168,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         mMap = googleMap;
         zoomLevel = 13;
 
+        //start with fixed location
         /*LatLng leuven = new LatLng(50.875, 4.708);
         mMap.addMarker(new MarkerOptions().position(leuven).title("Marker on Group T"));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(leuven));
@@ -183,6 +184,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
         mMap.setMyLocationEnabled(true);
 
+        //start with current location
         LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         Criteria criteria = new Criteria();
 
