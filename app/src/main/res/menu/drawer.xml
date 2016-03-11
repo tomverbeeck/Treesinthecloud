@@ -16,10 +16,10 @@
             android:title="@string/inbox_string" />
 
         <item
-            android:id="@+id/starred"
+            android:id="@+id/settings"
             android:checked="false"
-            android:icon="@drawable/ic_star_black"
-            android:title="@string/starred_string" />
+            android:icon="@drawable/ic_settings_black"
+            android:title="@string/settings_string" />
 
         <item
             android:id="@+id/sent_mail"

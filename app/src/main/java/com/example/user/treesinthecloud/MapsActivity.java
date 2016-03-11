@@ -86,9 +86,14 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
                     // For rest of the options we just show a toast on click
 
-                    case R.id.starred:
-                        Toast.makeText(getApplicationContext(), "Stared Selected", Toast.LENGTH_SHORT).show();
+                    case R.id.settings:
+                        SettingsFragment fragmentSettings = new SettingsFragment();
+                        android.support.v4.app.FragmentTransaction fragmentTransactionSettings = getSupportFragmentManager().beginTransaction();
+                        fragmentTransactionSettings.replace(R.id.frame, fragmentSettings);
+                        fragmentTransactionSettings.commit();
+                        getSupportActionBar().setTitle("Settings");
                         return true;
+
                     case R.id.sent_mail:
                         Toast.makeText(getApplicationContext(), "Send Selected", Toast.LENGTH_SHORT).show();
                         return true;
@@ -119,6 +124,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             public void onDrawerClosed(View drawerView) {
                 // Code here will be triggered once the drawer closes as we dont want anything to happen so we leave this blank
                 super.onDrawerClosed(drawerView);
+                invalidateOptionsMenu();
             }
 
             @Override
@@ -126,10 +132,13 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 // Code here will be triggered once the drawer open as we dont want anything to happen so we leave this blank
 
                 super.onDrawerOpened(drawerView);
+                invalidateOptionsMenu();
             }
         };
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        actionBarDrawerToggle.setDrawerIndicatorEnabled(true);
+
     }
 
 
