@@ -42,6 +42,17 @@
             </intent-filter>
         </activity>
 
+        <activity android:name=".SettingsActivity"
+            android:label="@string/title_activity_settings"/>
+
+        <activity android:name=".SettingsMenu.ChangeColor"
+            android:label="@string/title_activity_change_color"
+            android:theme="@style/AppTheme"/>
+
+        <activity android:name=".SettingsMenu.ChangeLanguage"
+            android:label="@string/title_activity_change_language"
+            android:theme="@style/AppTheme"/>
+
     </application>
 
 </manifest>

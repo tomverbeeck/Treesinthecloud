@@ -18,9 +18,5 @@ public class LoginFragment extends Fragment {
         return v;
     }
 
-    @Override
-    public void onStop() {
-        super.onStop();
-    }
 }
 
