@@ -76,38 +76,22 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                         getSupportActionBar().setTitle("Map");
                         return true;
 
-                    case R.id.inbox:
+                    case R.id.login:
                         LoginFragment fragmentLogin = new LoginFragment();
                         android.support.v4.app.FragmentTransaction fragmentTransactionLogin = getSupportFragmentManager().beginTransaction();
                         fragmentTransactionLogin.replace(R.id.frame, fragmentLogin);
+                        fragmentTransactionLogin.addToBackStack(null);
                         fragmentTransactionLogin.commit();
                         getSupportActionBar().setTitle("Login");
                         return true;
-
-                    // For rest of the options we just show a toast on click
 
                     case R.id.settings:
                         SettingsFragment fragmentSettings = new SettingsFragment();
                         android.support.v4.app.FragmentTransaction fragmentTransactionSettings = getSupportFragmentManager().beginTransaction();
                         fragmentTransactionSettings.replace(R.id.frame, fragmentSettings);
+                        fragmentTransactionSettings.addToBackStack(null);
                         fragmentTransactionSettings.commit();
-                        getSupportActionBar().setTitle("Settings");
-                        return true;
-
-                    case R.id.sent_mail:
-                        Toast.makeText(getApplicationContext(), "Send Selected", Toast.LENGTH_SHORT).show();
-                        return true;
-                    case R.id.drafts:
-                        Toast.makeText(getApplicationContext(), "Drafts Selected", Toast.LENGTH_SHORT).show();
-                        return true;
-                    case R.id.allmail:
-                        Toast.makeText(getApplicationContext(), "All Mail Selected", Toast.LENGTH_SHORT).show();
-                        return true;
-                    case R.id.trash:
-                        Toast.makeText(getApplicationContext(), "Trash Selected", Toast.LENGTH_SHORT).show();
-                        return true;
-                    case R.id.spam:
-                        Toast.makeText(getApplicationContext(), "Spam Selected", Toast.LENGTH_SHORT).show();
+                        getSupportActionBar().setTitle("Trees in a Cloud");
                         return true;
                     default:
                         Toast.makeText(getApplicationContext(), "Somethings Wrong", Toast.LENGTH_SHORT).show();
