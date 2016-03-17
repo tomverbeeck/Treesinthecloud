@@ -20,6 +20,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import com.example.user.treesinthecloud.TreeDatabase.Tree;
+import com.example.user.treesinthecloud.TreeDatabase.TreeDB;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -35,6 +37,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private Toolbar toolbar;
     private NavigationView navigationView;
     private ActionBarDrawerToggle actionBarDrawerToggle;
+    private TreeDB db;
+
 
     private int zoomLevel;
 
@@ -122,9 +126,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         actionBarDrawerToggle.setDrawerIndicatorEnabled(true);
-
     }
-
 
     @Override
     public void onPostCreate(Bundle savedInstanceState) {
@@ -195,6 +197,26 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
 
         }
+
+        /*setUpDatabase();
+
+        for(int i = 213508; i <= 213510; i++){ //create algorithm for amount of tree
+                mMap.addMarker(new MarkerOptions()
+                        .position(new LatLng(db.getTree(i).getLatitude(), db.getTree(i).getLongitude()))
+                        .title(db.getTree(i).toString()));
+        }*/
     }
 
+    public void setUpDatabase() {
+        //setting up database trees
+
+        if (db.getTree(213508).getId() == 213508 || db.getTree(213509).getId() == 213509 || db.getTree(213510).getId() == 213510) {}
+        else{
+            db = new TreeDB(this);
+
+            db.addTree(new Tree(213510, 50.8670517332164, 4.66370812960041, "Fagus sylvatica", "Gewone of groene beuk", "Actueel", "Losse groei", 1360));
+            db.addTree(new Tree(213509, 50.8846165703741, 4.76995208969272, "Prunus cerasifera Nigra", "Kerspruim", "Actueel", "Losse groei", 670));
+            db.addTree(new Tree(213508, 50.884704501765, 4.77002688152305, "Prunus cerasifera Nigra", "Kerspruim", "Actueel", "Losse groei", 780));
+        }
+    }
 }
