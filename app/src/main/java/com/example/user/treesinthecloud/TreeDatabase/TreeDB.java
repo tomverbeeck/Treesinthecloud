@@ -4,13 +4,13 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import android.database.SQLException;
 import java.util.LinkedList;
 import java.util.List;
 
-public class TreeDB extends SQLiteOpenHelper {
+public class TreeDB{
 
     // Database Version
     private static final int DATABASE_VERSION = 1;
@@ -30,43 +30,36 @@ public class TreeDB extends SQLiteOpenHelper {
     private static final String KEY_CUTTINGSHAPE = "cuttingShape";
     private static final String KEY_GIRTH = "girth";
 
+    private DatabaseHelper oDB;
+
+    private SQLiteDatabase db;
+
     private static final String[] COLUMNS = {KEY_ID,KEY_LATITUDE,KEY_LONGITUDE, KEY_LATINNAME, KEY_NAME, KEY_STATUS, KEY_CUTTINGSHAPE, KEY_GIRTH};
 
     public TreeDB(Context context) {
-        super(context, DATABASE_NAME, null, DATABASE_VERSION);
+        oDB = new DatabaseHelper(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
-    @Override
-    public void onCreate(SQLiteDatabase db) {
-            // SQL statement to create tree table
-            String CREATE_TREE_TABLE = "CREATE TABLE trees ( " +
-                    "id INTEGER PRIMARY KEY, " +
-                    "latitude DOUBLE(12), "+
-                    "longitude DOUBLE(12), " +
-                    "latinName TEXT, " +
-                    "name TEXT, " +
-                    "status TEXT, " +
-                    "cuttingShape TEXT, " +
-                    "girth INT )";
-
-            // create tree table
-            db.execSQL(CREATE_TREE_TABLE);
+    public void openWrite() throws SQLException{
+        db = oDB.getWritableDatabase();
     }
 
-    @Override
-    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        // Drop older tree table if existed
-        db.execSQL("DROP TABLE IF EXISTS TreeDB");
+    public void openRead() throws SQLException{
+        db = oDB.getReadableDatabase();
+    }
 
-        // create fresh tree table
-        this.onCreate(db);
+    public void close(){
+        oDB.close();
+    }
+
+    public SQLiteDatabase getDB() {
+        return db;
     }
 
     public void addTree(Tree tree){
         Log.d("addTree", tree.toString());
 
-        // 1. get reference to writable DB
-        SQLiteDatabase db = this.getWritableDatabase();
+        openWrite();
 
         // 2. create ContentValues to add key "column"/value
         ContentValues values = new ContentValues();
@@ -84,13 +77,11 @@ public class TreeDB extends SQLiteOpenHelper {
                 null, //nullColumnHack
                 values); // key/value -> keys = column names/ values = column values
 
-        // 4. close
-        db.close();
+        close();
     }
 
     public Tree getTree(int id){
-        // 1. get reference to readable DB
-        SQLiteDatabase db = this.getReadableDatabase();
+        openRead();
 
         // 2. build query
         Cursor cursor =
@@ -107,7 +98,7 @@ public class TreeDB extends SQLiteOpenHelper {
         if (cursor != null)
             cursor.moveToFirst();
 
-        // 4. build book object
+        // 4. build tree object
         Tree tree = new Tree();
         tree.setId(Integer.parseInt(cursor.getString(0)));
         tree.setLatitude(Double.parseDouble(cursor.getString(1)));
@@ -121,6 +112,9 @@ public class TreeDB extends SQLiteOpenHelper {
         //log
         Log.d("getTree(" + id + ")", tree.toString());
 
+
+        close();
+
         // 5. return book
         return tree;
     }
@@ -132,7 +126,7 @@ public class TreeDB extends SQLiteOpenHelper {
         String query = "SELECT  * FROM " + TABLE_TREE;
 
         // 2. get reference to writable DB
-        SQLiteDatabase db = this.getWritableDatabase();
+        openRead();
         Cursor cursor = db.rawQuery(query, null);
 
         // 3. go over each row, build book and add it to list
@@ -156,14 +150,15 @@ public class TreeDB extends SQLiteOpenHelper {
 
         Log.d("getAllBooks()", trees.toString());
 
+        close();
+
         // return books
         return trees;
     }
 
     public int updateTree(Tree tree) {
 
-        // 1. get reference to writable DB
-        SQLiteDatabase db = this.getWritableDatabase();
+        openWrite();
 
         // 2. create ContentValues to add key "column"/value
         ContentValues values = new ContentValues();
@@ -190,16 +185,14 @@ public class TreeDB extends SQLiteOpenHelper {
 
     public void deleteTree(Tree tree) {
 
-        // 1. get reference to writable DB
-        SQLiteDatabase db = this.getWritableDatabase();
+        openWrite();
 
         // 2. delete
         db.delete(TABLE_TREE, //table name
                 KEY_ID + " = ?",  // selections
                 new String[]{String.valueOf(tree.getId())}); //selections args
 
-        // 3. close
-        db.close();
+        close();
 
         //log
         Log.d("deleteBook", tree.toString());
