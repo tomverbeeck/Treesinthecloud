@@ -2,6 +2,7 @@ package com.example.user.treesinthecloud;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.location.Criteria;
@@ -19,13 +20,16 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
-
+import android.support.v4.app.Fragment;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import android.app.FragmentManager;
+
+
 
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback {
 
@@ -77,12 +81,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                         return true;
 
                     case R.id.login:
-                        LoginFragment fragmentLogin = new LoginFragment();
-                        android.support.v4.app.FragmentTransaction fragmentTransactionLogin = getSupportFragmentManager().beginTransaction();
-                        fragmentTransactionLogin.replace(R.id.frame, fragmentLogin);
-                        fragmentTransactionLogin.addToBackStack(null);
-                        fragmentTransactionLogin.commit();
-                        getSupportActionBar().setTitle("Login");
+
+                        Intent i = new Intent(getApplicationContext(), LoginActivity.class);
+                        startActivity(i);
                         return true;
 
                     case R.id.settings:
