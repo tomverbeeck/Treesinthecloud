@@ -27,16 +27,10 @@ public class Tree {
 
     @Override
     public String toString() {
-        return "Tree{" +
-                "id=" + id +
-                ", latitude=" + latitude +
-                ", longitude=" + longitude +
-                ", latinName='" + latinName + '\'' +
-                ", name='" + name + '\'' +
-                ", status='" + status + '\'' +
-                ", cuttingShape='" + cuttingShape + '\'' +
-                ", girth=" + girth +
-                '}';
+        return  "latinName='" + latinName + '\'' +
+                "\n status='" + status + '\'' +
+                "\n cuttingShape='" + cuttingShape + '\'' +
+                "\n girth=" + girth;
     }
 
     public int getId() {

@@ -18,7 +18,7 @@
         <item
             android:id="@+id/addTree"
             android:checked="false"
-            android:icon="@drawable/ic_setting_dark"
+            android:icon="@drawable/ic_map_tree"
             android:title="@string/string_add_tree"/>
 
         <item

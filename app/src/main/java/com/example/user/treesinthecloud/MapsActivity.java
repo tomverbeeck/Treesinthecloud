@@ -42,10 +42,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private ActionBarDrawerToggle actionBarDrawerToggle;
     private TreeDB db;
 
-
-
-
-
     private int zoomLevel;
 
     @Override
@@ -79,8 +75,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 //Closing drawer on item click
                 drawerLayout.closeDrawers();
 
-                Bundle bundle = new Bundle();
-
                 //Check to see which item was being clicked and perform appropriate action
                 switch (menuItem.getItemId()) {
                     //Replacing the main content with ContentFragment Which is our Inbox View;
@@ -107,6 +101,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                         return true;
                     default:
                         Toast.makeText(getApplicationContext(), "Somethings Wrong", Toast.LENGTH_SHORT).show();
+                        getSupportActionBar().setTitle("Tree in a Cloud");
                         return true;
                 }
             }
@@ -206,7 +201,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         }
 
-        //setUpDatabase();
+        setUpDatabase();
 
         for(int i = 213508; i <= 213510; i++){ //create algorithm for amount of tree
                 mMap.addMarker(new MarkerOptions()
@@ -214,7 +209,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                         .snippet(db.getTree(i).toString())
                         .title(db.getTree(i).getName())
                         .flat(true)
-                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_send_black)));
+                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_map_tree)));
         }
     }
 
