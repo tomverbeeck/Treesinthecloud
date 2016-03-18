@@ -52,6 +52,12 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
                 break;
 
             case R.id.signup:
+
+                String user_name = name.getText().toString();
+                String user_email = email.getText().toString();
+                String user_password = passowrd.getText().toString();
+
+               // User registerData  = new User (name,email,password);
                 break;
 
         }

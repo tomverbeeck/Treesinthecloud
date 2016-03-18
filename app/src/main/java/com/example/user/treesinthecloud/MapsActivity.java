@@ -20,17 +20,16 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
-
-import com.example.user.treesinthecloud.TreeDatabase.Tree;
-import com.example.user.treesinthecloud.TreeDatabase.TreeDB;
+import android.support.v4.app.Fragment;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
+import android.app.FragmentManager;
+
+
 
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback {
 
@@ -40,24 +39,19 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private Toolbar toolbar;
     private NavigationView navigationView;
     private ActionBarDrawerToggle actionBarDrawerToggle;
-    private TreeDB db;
-
-
-
-
 
     private int zoomLevel;
+    UserLocalStore userLocalStore;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
+        userLocalStore = new UserLocalStore(this);
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
-
-        db = new TreeDB(this);
 
         // Initializing Toolbar and setting it as the actionbar
         toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -89,17 +83,21 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                         return true;
 
                     case R.id.login:
-                        LoginFragment fragmentLogin = new LoginFragment();
-                        android.support.v4.app.FragmentTransaction fragmentTransactionLogin = getSupportFragmentManager().beginTransaction();
-                        fragmentTransactionLogin.replace(R.id.frame, fragmentLogin);
-                        fragmentTransactionLogin.addToBackStack(null);
-                        fragmentTransactionLogin.commit();
-                        getSupportActionBar().setTitle("Login");
+
+                        userLocalStore.clearUserData();
+                        userLocalStore.setUserLoggedIn(false);
+
+                        Intent i = new Intent(getApplicationContext(), LoginActivity.class);
+                        startActivity(i);
                         return true;
 
                     case R.id.settings:
-                        Intent i = new Intent(getApplicationContext(), SettingsActivity.class);
-                        startActivity(i);
+                        SettingsFragment fragmentSettings = new SettingsFragment();
+                        android.support.v4.app.FragmentTransaction fragmentTransactionSettings = getSupportFragmentManager().beginTransaction();
+                        fragmentTransactionSettings.replace(R.id.frame, fragmentSettings);
+                        fragmentTransactionSettings.addToBackStack(null);
+                        fragmentTransactionSettings.commit();
+                        getSupportActionBar().setTitle("Trees in a Cloud");
                         return true;
                     default:
                         Toast.makeText(getApplicationContext(), "Somethings Wrong", Toast.LENGTH_SHORT).show();
@@ -130,7 +128,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         actionBarDrawerToggle.setDrawerIndicatorEnabled(true);
+
     }
+
 
     @Override
     public void onPostCreate(Bundle savedInstanceState) {
@@ -165,7 +165,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        zoomLevel = 10;
+        zoomLevel = 13;
 
         //start with fixed location
         /*LatLng leuven = new LatLng(50.875, 4.708);
@@ -201,22 +201,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
 
         }
-
-        //setUpDatabase();
-
-        for(int i = 213508; i <= 213510; i++){ //create algorithm for amount of tree
-                mMap.addMarker(new MarkerOptions()
-                        .position(new LatLng(db.getTree(i).getLatitude(), db.getTree(i).getLongitude()))
-                        .snippet(db.getTree(i).toString())
-                        .title(db.getTree(i).getName())
-                        .flat(true)
-                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_send_black)));
-        }
     }
 
-    public void setUpDatabase() {
-            db.addTree(new Tree(213510, 50.8670517332164, 4.66370812960041, "Fagus sylvatica", "Gewone of groene beuk", "Actueel", "Losse groei", 1360));
-            db.addTree(new Tree(213509, 50.8846165703741, 4.76995208969272, "Prunus cerasifera Nigra", "Kerspruim", "Actueel", "Losse groei", 670));
-            db.addTree(new Tree(213508, 50.884704501765, 4.77002688152305, "Prunus cerasifera Nigra", "Kerspruim", "Actueel", "Losse groei", 780));
-    }
 }

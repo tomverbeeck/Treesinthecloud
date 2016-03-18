@@ -1,14 +1,9 @@
 package com.example.user.treesinthecloud;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -17,6 +12,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     Button login, signup;
     TextView create_account;
     EditText email,password;
+
+    UserLocalStore userLocalStore;
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
@@ -30,6 +27,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         login.setOnClickListener(this);
         create_account = (TextView) findViewById(R.id.input_account);
         create_account.setOnClickListener(this);
+
+        userLocalStore = new UserLocalStore(this);
     }
 
     @Override
@@ -41,8 +40,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 break;
 
             case R.id.login:
-                Intent Dbase = new Intent(this, DataBase.class);
-                startActivity(Dbase);
+              //  User user = new User(null,null);
+
+               // userLocalStore.storeUserData(user);
+                userLocalStore.setUserLoggedIn(true);
+
+
                 break;
         }
     }
