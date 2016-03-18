@@ -42,6 +42,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private ActionBarDrawerToggle actionBarDrawerToggle;
     private TreeDB db;
 
+    private String markers;
+
     private int zoomLevel;
 
     @Override
@@ -83,8 +85,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                         return true;
 
                     case R.id.login:
-                        Intent intentLogin = new Intent(getApplicationContext(), LoginActivity.class);
-                        startActivity(intentLogin);
+                        /*Intent intentLogin = new Intent(getApplicationContext(), LoginActivity.class);
+                        startActivity(intentLogin);*/
                         getSupportActionBar().setTitle("Login");
                         return true;
 
@@ -203,12 +205,17 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         setUpDatabase();
 
-        for(int i = 213508; i <= 213510; i++){ //create algorithm for amount of tree
-                mMap.addMarker(new MarkerOptions()
-                        .position(new LatLng(db.getTree(i).getLatitude(), db.getTree(i).getLongitude()))
-                        .snippet(db.getTree(i).toString())
-                        .title(db.getTree(i).getName())
-                        .flat(true)
+        Intent intent = getIntent();
+
+ //       if(intent != nul)
+   //     markers = intent.getStringExtra(ConfigProfile.KEY_USERNAME);
+
+        for(int i = 213508; i <= 213510; i++) { //create algorithm for amount of tree
+            mMap.addMarker(new MarkerOptions()
+                    .position(new LatLng(db.getTree(i).getLatitude(), db.getTree(i).getLongitude()))
+                    .snippet(db.getTree(i).toString())
+                    .title(db.getTree(i).getName())
+                    .flat(true)
                         .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_map_tree)));
         }
     }
