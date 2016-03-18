@@ -29,26 +29,9 @@
     <string name="title_activity_settings">Settings</string>
     <string name="title_activity_change_color">Which Color?</string>
     <string name="title_activity_change_language">Which Language?</string>
-    <string name="title_acitivty_add_tree">Add Tree</string>
-    <string name="title_activity_tree_profile">Tree Profile</string>
 
     <string name="drawer_open">Open Navigation Drawer</string>
     <string name="drawer_close">Close Navigation Drawer</string>
-
-    <!--Strings for adding a tree-->
-    <string name="string_TitleNewTree">Add a new tree</string>
-    <string name="string_textExplainWhy">Why do you want a tree on that specific location? Explain thoroughly</string>
-    <string name="string_longitude_text_newtree">Longitude:</string>
-    <string name="string_latitude_text_newtree">Latitude:</string>
-    <string name="string_group_text_newtree">Group: (optional)</string>
-    <string name="string_currentLoacationB">Get current location</string>
-    <string name="string_type_text_newtree">Type of tree: (optional)</string>
-    <string name="string_submitNewTreeB">Submit</string>
-    <string name="String_explenationError">Explantion is to short</string>@string/String_locationError
-    <string name="String_locationError">Location is not correct</string>
-    <string name="String_specie">Specie: </string>
-    <string name="String_status">Status: </string>
-    <string name="string_add_tree">Add Tree</string>
 
 </resources>
 
