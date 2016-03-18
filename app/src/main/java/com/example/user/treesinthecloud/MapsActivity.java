@@ -207,8 +207,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         Intent intent = getIntent();
 
- //       if(intent != nul)
-   //     markers = intent.getStringExtra(ConfigProfile.KEY_USERNAME);
+        if(intent != null) {
+            markers = intent.getStringExtra("marker");
+        }
 
         for(int i = 213508; i <= 213510; i++) { //create algorithm for amount of tree
             mMap.addMarker(new MarkerOptions()
