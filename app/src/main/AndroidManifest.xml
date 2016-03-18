@@ -45,7 +45,8 @@
         <activity android:name=".SignupActivity" android:theme="@style/AppTheme.Dark" />
 
         <activity android:name=".SettingsActivity"
-            android:label="@string/title_activity_settings"/>
+            android:label="@string/title_activity_settings"
+            android:theme="@style/AppTheme"/>
 
         <activity android:name=".SettingsMenu.ChangeColor"
             android:label="@string/title_activity_change_color"
@@ -53,6 +54,15 @@
 
         <activity android:name=".SettingsMenu.ChangeLanguage"
             android:label="@string/title_activity_change_language"
+            android:theme="@style/AppTheme"/>
+
+        <activity
+            android:name=".TreeProfileActivity"
+            android:label="@string/title_activity_tree_profile"
+            android:theme="@style/Theme.AppCompat"></activity>
+
+        <activity android:name=".NewtreeActivity"
+            android:label="@string/title_acitivty_add_tree"
             android:theme="@style/AppTheme"/>
 
     </application>
