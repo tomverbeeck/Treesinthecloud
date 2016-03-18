@@ -16,6 +16,12 @@
             android:title="@string/login_string" />
 
         <item
+            android:id="@+id/addTree"
+            android:checked="false"
+            android:icon="@drawable/ic_setting_dark"
+            android:title="@string/string_add_tree"/>
+
+        <item
             android:id="@+id/settings"
             android:checked="false"
             android:icon="@drawable/ic_settings_black"

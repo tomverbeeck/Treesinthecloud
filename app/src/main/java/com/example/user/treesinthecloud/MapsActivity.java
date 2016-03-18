@@ -89,17 +89,21 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                         return true;
 
                     case R.id.login:
-                        LoginFragment fragmentLogin = new LoginFragment();
-                        android.support.v4.app.FragmentTransaction fragmentTransactionLogin = getSupportFragmentManager().beginTransaction();
-                        fragmentTransactionLogin.replace(R.id.frame, fragmentLogin);
-                        fragmentTransactionLogin.addToBackStack(null);
-                        fragmentTransactionLogin.commit();
+                        Intent intentLogin = new Intent(getApplicationContext(), LoginActivity.class);
+                        startActivity(intentLogin);
                         getSupportActionBar().setTitle("Login");
+                        return true;
+
+                    case R.id.addTree:
+                        Intent intentAddTree = new Intent(getApplicationContext(), NewtreeActivity.class);
+                        startActivity(intentAddTree);
+                        getSupportActionBar().setTitle("Add Tree");
                         return true;
 
                     case R.id.settings:
                         Intent i = new Intent(getApplicationContext(), SettingsActivity.class);
                         startActivity(i);
+                        getSupportActionBar().setTitle("Settings");
                         return true;
                     default:
                         Toast.makeText(getApplicationContext(), "Somethings Wrong", Toast.LENGTH_SHORT).show();
