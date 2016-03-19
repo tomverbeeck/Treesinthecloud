@@ -1,6 +1,5 @@
 package com.example.user.treesinthecloud;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -15,13 +14,9 @@ import com.example.user.treesinthecloud.SettingsMenu.ChangeLanguage;
 import com.example.user.treesinthecloud.SettingsMenu.ChangePassword;
 import com.example.user.treesinthecloud.SettingsMenu.CustomizeMarker;
 
-/**
- * Created by User on 11/03/2016.
- */
 public class SettingsActivity extends AppCompatActivity{
 
     private ListView list_settings;
-    private Context context = this;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -29,32 +24,33 @@ public class SettingsActivity extends AppCompatActivity{
         setContentView(R.layout.layout_settings);
 
         list_settings = (ListView)findViewById(R.id.listView_settings);
-        String[] options = new String[]{"Color Menu", "Language", "Customize Marker",
-                "Change Password"};
+        String[] options = getResources().getStringArray(R.array.settings);
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, options);
         list_settings.setAdapter(adapter);
         list_settings.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String itemValue = (String) list_settings.getItemAtPosition(position);
-                String toast = "Position " + position + " Item: " + itemValue;
-                if(itemValue == "Color Menu") {
-                    Intent i = new Intent(context, ChangeColor.class);
-                    startActivity(i);
+                switch(position){
+                    case 0:
+                        Intent i = new Intent(getApplicationContext(), ChangeColor.class);
+                        startActivity(i);
+                        break;
+                    case 1:
+                        Intent j = new Intent(getApplicationContext(), ChangeLanguage.class);
+                        startActivity(j);
+                        break;
+                    case 2:
+                        Intent k = new Intent(getApplicationContext(), CustomizeMarker.class);
+                        startActivity(k);
+                        break;
+                    case 3:
+                        Intent m = new Intent(getApplicationContext(), ChangePassword.class);
+                        startActivity(m);
+                        break;
+                    default:
+                        Toast.makeText(getApplicationContext(), "Something went wrong", Toast.LENGTH_SHORT).show();
+                        break;
                 }
-                if(itemValue == "Language"){
-                    Intent j = new Intent(context, ChangeLanguage.class);
-                    startActivity(j);
-                }
-                if(itemValue == "Customize Marker"){
-                    Intent j = new Intent(context, CustomizeMarker.class);
-                    startActivity(j);
-                }
-                if(itemValue == "Change Password"){
-                    Intent j = new Intent(context, ChangePassword.class);
-                    startActivity(j);
-                }
-                Toast.makeText(context, toast, Toast.LENGTH_SHORT).show();
             }
         });
     }

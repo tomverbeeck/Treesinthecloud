@@ -34,7 +34,8 @@
 
         <activity
             android:name=".MapsActivity"
-            android:label="@string/title_activity_maps">
+            android:label="@string/title_activity_maps"
+            android:theme="@style/AppTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -57,11 +58,23 @@
         <activity
             android:name=".TreeProfileActivity"
             android:label="@string/title_activity_tree_profile"
-            android:theme="@style/Theme.AppCompat"></activity>
+            android:theme="@style/AppTheme"/>
 
-        <activity android:name=".NewtreeActivity"
+        <activity android:name=".AddTree.NewtreeActivity"
             android:label="@string/title_acitivty_add_tree"
             android:theme="@style/AppTheme"/>
+
+        <activity android:name=".SettingsMenu.CustomizeMarker"
+            android:label="@string/title_acitivty_customize_marker"
+            android:theme="@style/AppTheme"/>
+
+        <activity android:name=".Login.LoginActivity"
+            android:label="@string/title_activity_login"
+            android:theme="@style/AppTheme" />
+
+        <activity android:name=".Login.SignupActivity"
+            android:label="@string/title_activity_signup"
+            android:theme="@style/AppTheme" />
 
     </application>
 

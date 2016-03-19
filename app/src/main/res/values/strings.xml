@@ -1,36 +1,29 @@
 <resources>
-    <string name="app_name">Trees_In_The_Cloud</string>
+    <string name="app_name">Trees in the Cloud</string>
     <string name="Login">Login</string>
 
     <!--  log in variables -->
-    <string name="username">user name</string>
-    <string name="password">password</string>
+    <string name="username">Username</string>
+    <string name="password">Password</string>
     <string name="email">E-mail</string>
     <string name="action_settings">refresh</string>
 
-    <string name="hello_world">Hello world!</string>
-    <string name="navigation_item_1">Home</string>
-    <string name="navigation_item_2">Events</string>
     <string name="settings_string">Settings</string>
     <string name="map_string">Map</string>
     <string name="login_string">Login</string>
-    <string name="sent_mail_string">Sent mail</string>
-    <string name="draft_string">Drafts</string>
-    <string name="subheader">Subheader</string>
-    <string name="trash_string">Trash</string>
-    <string name="all_mail_string">All mails</string>
-    <string name="spam_string">Spams</string>
     <string name="closeDrawer">Navigation View</string>
     <string name="openDrawer">Navigation View Closed</string>
 
     <!--activity names-->
-    <string name="title_activity_maps">Trees in a cloud</string>
-    <string name="title_activity_login">Login</string>
+    <string name="title_activity_maps">Trees in the cloud</string>
+    <string name="title_activity_login">Please Login</string>
+    <string name="title_activity_signup">Please Sign up</string>
     <string name="title_activity_settings">Settings</string>
     <string name="title_activity_change_color">Which Color?</string>
-    <string name="title_activity_change_language">Which Language?</string>
+    <string name="title_activity_change_language">Choose which Language</string>
     <string name="title_acitivty_add_tree">Add Tree</string>
     <string name="title_activity_tree_profile">Tree Profile</string>
+    <string name="title_acitivty_customize_marker">Customize Marker</string>
 
     <string name="drawer_open">Open Navigation Drawer</string>
     <string name="drawer_close">Close Navigation Drawer</string>
@@ -40,15 +33,36 @@
     <string name="string_textExplainWhy">Why do you want a tree on that specific location? Explain thoroughly</string>
     <string name="string_longitude_text_newtree">Longitude:</string>
     <string name="string_latitude_text_newtree">Latitude:</string>
-    <string name="string_group_text_newtree">Group: (optional)</string>
+    <string name="string_group_text_newtree">Group (optional):</string>
     <string name="string_currentLoacationB">Get current location</string>
-    <string name="string_type_text_newtree">Type of tree: (optional)</string>
+    <string name="string_type_text_newtree">Type of tree (optional):</string>
     <string name="string_submitNewTreeB">Submit</string>
     <string name="String_explenationError">Explantion is to short</string>@string/String_locationError
     <string name="String_locationError">Location is not correct</string>
     <string name="String_specie">Specie: </string>
     <string name="String_status">Status: </string>
     <string name="string_add_tree">Add Tree</string>
+
+    <!--Settings menu-->
+    <array name="settings">
+        <item>Color Menu</item>
+        <item>Language</item>
+        <item>Customize Marker</item>
+        <item>Change Password</item>
+    </array>
+    <array name="languages">
+        <item>English</item>
+        <item>Dutch</item>
+        <item>Spannish</item>
+    </array>
+    <array name="colors">
+        <item>Blue</item>
+        <item>Green</item>
+        <item>White</item>
+        <item>Black</item>
+        <item>Yellow</item>
+    </array>
+
 
 </resources>
 

@@ -1,4 +1,4 @@
-package com.example.user.treesinthecloud;
+package com.example.user.treesinthecloud.AddTree;
 
 import android.Manifest;
 import android.content.Context;
@@ -14,6 +14,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.example.user.treesinthecloud.R;
 
 public class NewtreeActivity extends AppCompatActivity {
 

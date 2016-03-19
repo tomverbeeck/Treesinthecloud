@@ -21,6 +21,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import com.example.user.treesinthecloud.AddTree.NewtreeActivity;
+import com.example.user.treesinthecloud.Login.LoginActivity;
+import com.example.user.treesinthecloud.Login.UserLocalStore;
 import com.example.user.treesinthecloud.TreeDatabase.Tree;
 import com.example.user.treesinthecloud.TreeDatabase.TreeDB;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -46,6 +49,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     private int zoomLevel;
 
+    UserLocalStore userLocalStore;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,6 +61,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         mapFragment.getMapAsync(this);
 
         db = new TreeDB(this);
+
+        userLocalStore = new UserLocalStore(this);
 
         // Initializing Toolbar and setting it as the actionbar
         toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -85,25 +92,28 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                         return true;
 
                     case R.id.login:
-                        /*Intent intentLogin = new Intent(getApplicationContext(), LoginActivity.class);
-                        startActivity(intentLogin);*/
-                        getSupportActionBar().setTitle("Login");
+                        userLocalStore.clearUserData();
+                        userLocalStore.setUserLoggedIn(false);
+
+                        Intent intentLogin = new Intent(getApplicationContext(), LoginActivity.class);
+                        getSupportActionBar().setTitle(R.string.title_activity_login);
+                        startActivity(intentLogin);
                         return true;
 
                     case R.id.addTree:
                         Intent intentAddTree = new Intent(getApplicationContext(), NewtreeActivity.class);
                         startActivity(intentAddTree);
-                        getSupportActionBar().setTitle("Add Tree");
+                        getSupportActionBar().setTitle(R.string.title_acitivty_add_tree);
                         return true;
 
                     case R.id.settings:
-                        Intent i = new Intent(getApplicationContext(), SettingsActivity.class);
-                        startActivity(i);
-                        getSupportActionBar().setTitle("Settings");
+                        Intent intentSettings = new Intent(getApplicationContext(), SettingsActivity.class);
+                        startActivity(intentSettings);
+                        getSupportActionBar().setTitle(R.string.title_activity_settings);
                         return true;
                     default:
                         Toast.makeText(getApplicationContext(), "Somethings Wrong", Toast.LENGTH_SHORT).show();
-                        getSupportActionBar().setTitle("Tree in a Cloud");
+                        getSupportActionBar().setTitle(R.string.app_name);
                         return true;
                 }
             }
