@@ -2,39 +2,40 @@ package com.example.user.treesinthecloud.TreeDatabase;
 
 public class Tree {
 
-    private int id;
+    private int idTree;
     private double latitude;
     private double longitude;
-    private String latinName;
+    private String specie;
     private String name;
     private String status;
     private String cuttingShape;
-    private int girth;              //stamomtrek
+
+    private int originalGirth;              //stamomtrek
+    private int currentGirth;
 
     public Tree(){}
 
-    public Tree (int id, double latitude, double longitude, String latinName, String name, String status, String cuttingShape, int girth){
+    /*public Tree (int idTree, double latitude, double longitude, String specie, String name, String status, String cuttingShape, int girth){
         super();
-        this.id = id;
+        this.idTree = idTree;
         this.latitude = latitude;
         this.longitude = longitude;
-        this.latinName = latinName;
+        this.specie = specie;
         this.name = name;
         this.status = status;
         this.cuttingShape = cuttingShape;
         this.girth = girth;
-    }
+    }*/
 
     @Override
     public String toString() {
-        return  "latinName='" + latinName + '\'' +
-                "\n" +  "status='" + status + '\'' +
-                "\n" + "cuttingShape='" + cuttingShape + '\'' +
-                "\n" + "girth=" + girth;
+        return "Name= " + name +
+                ", Status= " + status +
+                ", OrgGirth" + originalGirth;
     }
 
-    public int getId() {
-        return id;
+    public int getIdTree() {
+        return idTree;
     }
 
     public double getLatitude() {
@@ -45,8 +46,8 @@ public class Tree {
         return longitude;
     }
 
-    public String getLatinName() {
-        return latinName;
+    public String getSpecie() {
+        return specie;
     }
 
     public String getName() {
@@ -61,12 +62,8 @@ public class Tree {
         return cuttingShape;
     }
 
-    public int getGirth() {
-        return girth;
-    }
-
-    public void setId(int id) {
-        this.id = id;
+    public void setIdTree(int idTree) {
+        this.idTree = idTree;
     }
 
     public void setLatitude(double latitude) {
@@ -77,8 +74,8 @@ public class Tree {
         this.longitude = longitude;
     }
 
-    public void setLatinName(String latinName) {
-        this.latinName = latinName;
+    public void setSpecie(String specie) {
+        this.specie = specie;
     }
 
     public void setName(String name) {
@@ -93,7 +90,19 @@ public class Tree {
         this.cuttingShape = cuttingShape;
     }
 
-    public void setGirth(int girth) {
-        this.girth = girth;
+    public int getOriginalGirth() {
+        return originalGirth;
+    }
+
+    public void setOriginalGirth(int originalGirth) {
+        this.originalGirth = originalGirth;
+    }
+
+    public int getCurrentGirth() {
+        return currentGirth;
+    }
+
+    public void setCurrentGirth(int currentGirth) {
+        this.currentGirth = currentGirth;
     }
 }

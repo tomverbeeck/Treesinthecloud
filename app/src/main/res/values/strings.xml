@@ -63,6 +63,11 @@
         <item>Yellow</item>
     </array>
 
+    <!--Strings concerning the pop up window-->
+    <string name="textview_layout_window_specie">Specie: </string>
+    <string name="textview_layout_window_name">Name: </string>
+
+
 
 </resources>
 

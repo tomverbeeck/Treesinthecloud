@@ -1,13 +1,11 @@
 package com.example.user.treesinthecloud;
 
 import android.Manifest;
-import android.content.Context;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
-import android.location.Criteria;
-import android.location.Location;
-import android.location.LocationManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
@@ -19,23 +17,28 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.user.treesinthecloud.AddTree.NewtreeActivity;
 import com.example.user.treesinthecloud.Login.LoginActivity;
 import com.example.user.treesinthecloud.Login.UserLocalStore;
+import com.example.user.treesinthecloud.TreeDatabase.ConfigIDTree;
+import com.example.user.treesinthecloud.TreeDatabase.RequestHandler;
 import com.example.user.treesinthecloud.TreeDatabase.Tree;
-import com.example.user.treesinthecloud.TreeDatabase.TreeDB;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback {
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback{
 
     private GoogleMap mMap;
 
@@ -43,13 +46,22 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private Toolbar toolbar;
     private NavigationView navigationView;
     private ActionBarDrawerToggle actionBarDrawerToggle;
-    private TreeDB db;
-
-    private String markers;
 
     private int zoomLevel;
 
     UserLocalStore userLocalStore;
+
+    //get one tree
+    private ProgressDialog loading;
+    private Tree tree = new Tree();
+    private static MapsActivity instance;
+
+    TextView textSpecie;
+
+    //get all trees
+    String myJSON;
+    JSONArray trees = null;
+    private String JSON_STRING;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,9 +72,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
-        db = new TreeDB(this);
-
         userLocalStore = new UserLocalStore(this);
+
+        instance = this;
 
         // Initializing Toolbar and setting it as the actionbar
         toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -179,10 +191,10 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         zoomLevel = 10;
 
         //start with fixed location
-        /*LatLng leuven = new LatLng(50.875, 4.708);
+        LatLng leuven = new LatLng(50.875, 4.708);
         mMap.addMarker(new MarkerOptions().position(leuven).title("Marker on Group T"));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(leuven));
-        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(leuven, zoomLevel));*/
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(leuven, zoomLevel));
 
         mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
         mMap.getUiSettings().setZoomGesturesEnabled(true);
@@ -195,7 +207,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         mMap.setMyLocationEnabled(true);
 
         //start with current location
-        LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        /*LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         Criteria criteria = new Criteria();
 
         Location location = locationManager.getLastKnownLocation(locationManager.getBestProvider(criteria, false));
@@ -210,30 +222,94 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     .bearing(0)                // Sets the orientation of the camera to north
                     .build();                   // Creates a CameraPosition from the builder
             mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+        }*/
 
-        }
+        getJSON();
 
-        setUpDatabase();
+        //loading.dismiss();
 
-        Intent intent = getIntent();
+        /*mMap.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
 
-        if(intent != null) {
-            markers = intent.getStringExtra("marker");
-        }
+            //private final View mWindow = getLayoutInflater().inflate(R.layout);
+            private final View mWindow = getLayoutInflater().inflate(R.layout.layout_window, null);
+            private final View mContents = getLayoutInflater().inflate(R.layout.layout_window, null);
 
-        for(int i = 213508; i <= 213510; i++) { //create algorithm for amount of tree
-            mMap.addMarker(new MarkerOptions()
-                    .position(new LatLng(db.getTree(i).getLatitude(), db.getTree(i).getLongitude()))
-                    .snippet(db.getTree(i).toString())
-                    .title(db.getTree(i).getName())
-                    .flat(true)
-                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_map_tree)));
-        }
+            @Override
+            public View getInfoWindow(Marker marker) {
+                textSpecie = (TextView) findViewById(R.id.textview_specie_layout_window);
+                textSpecie.setText("Specie: "); //+ tree.getSpecie());
+                return mWindow;
+            }
+
+            @Override
+            public View getInfoContents(Marker marker) {
+                textSpecie = (TextView) findViewById(R.id.textview_specie_layout_window);
+                textSpecie.setText("Specie: "); //+ tree.getSpecie());
+
+                return mContents;
+            }
+        });*/
+
     }
 
-    public void setUpDatabase() {
-            db.addTree(new Tree(213510, 50.8670517332164, 4.66370812960041, "Fagus sylvatica", "Gewone of groene beuk", "Actueel", "Losse groei", 1360));
-            db.addTree(new Tree(213509, 50.8846165703741, 4.76995208969272, "Prunus cerasifera Nigra", "Kerspruim", "Actueel", "Losse groei", 670));
-            db.addTree(new Tree(213508, 50.884704501765, 4.77002688152305, "Prunus cerasifera Nigra", "Kerspruim", "Actueel", "Losse groei", 780));
+    public void getJSON(){
+        class GetJSON extends AsyncTask<Void,Void,String> {
+
+            ProgressDialog loading;
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+                //loading = ProgressDialog.show(getApplicationContext(),"Fetching Data","Wait...",false,false);
+            }
+
+            @Override
+            protected void onPostExecute(String s) {
+                super.onPostExecute(s);
+                //loading.dismiss();
+                JSON_STRING = s;
+                JSONObject jsonObject = null;
+                try {
+                    jsonObject = new JSONObject(JSON_STRING);
+                    JSONArray result = jsonObject.getJSONArray(ConfigIDTree.TAG_JSON_ARRAY);
+
+                    for(int i = 0; i<result.length(); i++){
+                        JSONObject jo = result.getJSONObject(i);
+
+                        tree.setIdTree(Integer.parseInt(jo.getString(ConfigIDTree.TAG_ID)));
+                        tree.setLongitude(Double.parseDouble(jo.getString(ConfigIDTree.TAG_LONGITUDE)));
+                        tree.setLatitude(Double.parseDouble(jo.getString(ConfigIDTree.TAG_LATITUDE)));
+                        tree.setSpecie(jo.getString(ConfigIDTree.TAG_SPECIE));
+                        tree.setStatus(jo.getString(ConfigIDTree.TAG_STATUS));
+                        tree.setName(jo.getString(ConfigIDTree.TAG_COMMON_NAME));
+                        tree.setOriginalGirth(Integer.parseInt(jo.getString(ConfigIDTree.TAG_ORIGINAL_GIRTH)));
+                        tree.setCurrentGirth(Integer.parseInt(jo.getString(ConfigIDTree.TAG_CURRENT_GIRTH)));
+                        tree.setCuttingShape(jo.getString(ConfigIDTree.TAG_CUTTING_SHAPE));
+
+                        Toast.makeText(getApplicationContext(), tree.toString(), Toast.LENGTH_SHORT).show();
+
+                        addMarkers(tree);
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            protected String doInBackground(Void... params) {
+                RequestHandler rh = new RequestHandler();
+                String s = rh.sendGetRequest(ConfigIDTree.URL_GET_ALL);
+                return s;
+            }
+        }
+        GetJSON gj = new GetJSON();
+        gj.execute();
+    }
+
+    public void addMarkers(Tree tree){
+        mMap.addMarker(new MarkerOptions()
+                .position(new LatLng(tree.getLatitude(), tree.getLongitude()))
+                .title(tree.getSpecie())
+                .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_map_tree)));
     }
 }
