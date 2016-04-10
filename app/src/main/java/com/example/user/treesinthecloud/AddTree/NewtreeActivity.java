@@ -2,6 +2,7 @@ package com.example.user.treesinthecloud.AddTree;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Criteria;
 import android.location.Location;
@@ -13,16 +14,20 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.user.treesinthecloud.R;
 
 public class NewtreeActivity extends AppCompatActivity {
 
+    double longitudeDouble;
+    double latitudeDouble;
+    String longitudeString;
+    String latitudeString;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.newtree);
+        setContentView(R.layout.layout_add_tree__new_tree);
 
         final EditText longtitude = (EditText) findViewById(R.id.longtitudeNewTree);
         final EditText latitude = (EditText) findViewById(R.id.latitudeNewTree);
@@ -33,33 +38,33 @@ public class NewtreeActivity extends AppCompatActivity {
         final TextView locationError = (TextView) findViewById(R.id.locationError_newtree);
 
         Button getCurrentLocation = (Button) findViewById(R.id.currentLocationB);
+        Button getMap = (Button) findViewById(R.id.button_add_tree_choose_location);
+
+        //start with current location
+        LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        Criteria criteria = new Criteria();
+
+        //Checing if the phone can get their current location, needs to be declared in manifest
+        if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_COARSE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+            return;
+        }
+        Location location = locationManager.getLastKnownLocation(locationManager.getBestProvider(criteria, false));
+
+        if(location!=null) {
+            longitudeDouble = location.getLongitude();
+            latitudeDouble = location.getLatitude();
+            longitudeString = "" + longitudeDouble;
+            latitudeString = "" + latitudeDouble;
+        }
 
         getCurrentLocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //start with current location
-                LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-                Criteria criteria = new Criteria();
-
-                //Checing if the phone can get their current location, needs to be declared in manifest
-                if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION)
-                        != PackageManager.PERMISSION_GRANTED
-                        && ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_COARSE_LOCATION)
-                        != PackageManager.PERMISSION_GRANTED) {
-                    return;
-                }
-                Location location = locationManager.getLastKnownLocation(locationManager.getBestProvider(criteria, false));
-
-                if(location!=null){
-                    String longitudeString = "" + location.getLongitude();
-                    String latitudeString = "" + location.getLatitude();
-
-                    longtitude.setText(longitudeString);
-                    latitude.setText(latitudeString);
-                }
-                else{
-                    Toast.makeText(getApplicationContext(), "Somethings Wrong with Getting Current Location", Toast.LENGTH_SHORT).show();
-                }
+                longtitude.setText(longitudeString);
+                latitude.setText(latitudeString);
             }
         });
 
@@ -108,8 +113,12 @@ public class NewtreeActivity extends AppCompatActivity {
 
             }
         });
-
-
     }
 
+    public void getLocationOnMap(View view){
+        Intent openMap = new Intent(this, ChooseLocationActivity.class);
+        openMap.putExtra("longitude", longitudeDouble);
+        openMap.putExtra("latitude", latitudeDouble);
+        startActivity(openMap);
+    }
 }

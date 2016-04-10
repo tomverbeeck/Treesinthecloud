@@ -56,7 +56,27 @@
     </array>
     <string name="title_acitivty_customize_marker">Marker Aanpassen</string>
     <string name="title_activity_signup">Gelieve te Registreren</string>
-    <string name="textview_layout_window_specie">Specie:</string>
+    <string name="textview_layout_window_specie">Soort:</string>
+    <string name="text_where_are_you">U bent hier!</string>
+    <string name="infowindow_button_moreinfo">Meer Informatie</string>
+    <string name="textview_infowindow_onclicklistener">Klik op Venster Voor Meer Informatie</string>
+    <string name="title_activity_get_extra_info">Extra Informatie</string>
+    <string name="textview_extra_info_fragment_one_title">Details</string>
+    <string name="text_extra_info_fragment_one_title">Details</string>
+    <string name="text_extra_info_fragment_three_title">Commentaar</string>
+    <string name="text_extra_info_fragment_two_title">Extra</string>
+    <string name="textview_extra_info_common_name">Naam</string>
+    <string name="textview_extra_info_cutting_shape">Snoeivorm</string>
+    <string name="textview_extra_info_specie">Soort</string>
+    <string name="textview_extra_info_status">Status</string>
+    <string name="textview_layout_window_name">Naam: </string>
+    <string name="textview_extra_info_original">Originele</string>
+    <string name="textview_extra_info_girth">Stamomtrek</string>
+    <string name="textview_extra_info_current">Actuele</string>
+    <string name="text_fetching_tree">Details Boom Ophalen ...</string>
+    <string name="text_loading_trees">Bomen Laden ...</string>
+    <string name="button_add_tree_choose_location">Kies Locatie op Map</string>
+    <string name="title_activity_choose_location">Kies Locatie</string>
 
 
 </resources>

@@ -13,17 +13,14 @@ import android.widget.Toast;
 import com.example.user.treesinthecloud.MapsActivity;
 import com.example.user.treesinthecloud.R;
 
-import de.hdodenhof.circleimageview.CircleImageView;
-
 public class ChangeColor extends Activity{
 
     private ListView list_colors;
-    private CircleImageView sidebar;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.layout_change_color);
+        setContentView(R.layout.layout_settings_change_color);
 
         list_colors = (ListView)findViewById(R.id.listView_colors);
         String[] colors = getResources().getStringArray(R.array.colors);

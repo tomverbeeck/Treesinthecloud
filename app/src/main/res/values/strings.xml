@@ -8,11 +8,13 @@
     <string name="email">E-mail</string>
     <string name="action_settings">refresh</string>
 
+    <!--variable concerning the main (google maps) screen-->
     <string name="settings_string">Settings</string>
     <string name="map_string">Map</string>
     <string name="login_string">Login</string>
     <string name="closeDrawer">Navigation View</string>
     <string name="openDrawer">Navigation View Closed</string>
+    <string name="text_loading_trees">Loading Trees ...</string>
 
     <!--activity names-->
     <string name="title_activity_maps">Trees in the cloud</string>
@@ -24,6 +26,8 @@
     <string name="title_acitivty_add_tree">Add Tree</string>
     <string name="title_activity_tree_profile">Tree Profile</string>
     <string name="title_acitivty_customize_marker">Customize Marker</string>
+    <string name="title_activity_get_extra_info">Extra Information</string>
+    <string name="title_activity_choose_location">Choose Location</string>
 
     <string name="drawer_open">Open Navigation Drawer</string>
     <string name="drawer_close">Close Navigation Drawer</string>
@@ -37,11 +41,13 @@
     <string name="string_currentLoacationB">Get current location</string>
     <string name="string_type_text_newtree">Type of tree (optional):</string>
     <string name="string_submitNewTreeB">Submit</string>
-    <string name="String_explenationError">Explantion is to short</string>@string/String_locationError
+    <string name="String_explenationError">Explantion is to short</string>
+    @string/String_locationError
     <string name="String_locationError">Location is not correct</string>
     <string name="String_specie">Specie: </string>
     <string name="String_status">Status: </string>
     <string name="string_add_tree">Add Tree</string>
+    <string name="button_add_tree_choose_location">Choose Location on Map</string>
 
     <!--Settings menu-->
     <array name="settings">
@@ -66,8 +72,23 @@
     <!--Strings concerning the pop up window-->
     <string name="textview_layout_window_specie">Specie: </string>
     <string name="textview_layout_window_name">Name: </string>
+    <string name="text_where_are_you">You Are Here!</string>
+    <string name="infowindow_button_moreinfo">More Information</string>
+    <string name="textview_infowindow_onclicklistener">Click On Window For More Information</string>
 
-
+    <!--strings concerning the extra information acitvity-->
+    <string name="text_extra_info_fragment_one_title">Details</string>
+    <string name="text_extra_info_fragment_two_title">Extra</string>
+    <string name="text_extra_info_fragment_three_title">Comments</string>
+    <string name="textview_extra_info_specie">Specie</string>
+    <string name="textview_extra_info_status">Status</string>
+    <string name="textview_extra_info_common_name">Common Name</string>
+    <string name="textview_extra_info_girth">Girth</string>
+    <string name="textview_extra_info_original">Original</string>
+    <string name="textview_extra_info_current">Current</string>
+    <string name="textview_extra_info_cutting_shape">Cutting Shape</string>
+    <string name="text_fetching_tree">Getting Tree Details ...</string>
+    <string name="textview_extra_info_fragment_one_title">Details</string>
 
 </resources>
 

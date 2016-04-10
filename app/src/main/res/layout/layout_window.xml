@@ -14,15 +14,14 @@
             android:layout_width="wrap_content"
             android:layout_height="20dp"
             android:textSize="15sp"
-            android:text="@string/textview_layout_window_specie"
-            android:layout_marginTop="20dp"/>
+            android:textStyle="bold"
+            android:text="@string/textview_layout_window_specie"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="20dp"
             android:textSize="15sp"
-            android:id="@+id/textview_specie_layout_window"
-            android:layout_marginTop="20dp"/>
+            android:id="@+id/textview_specie_layout_window" />
 
     </LinearLayout>
 
@@ -36,15 +35,23 @@
             android:layout_height="20dp"
             android:textSize="15sp"
             android:text="@string/textview_layout_window_name"
-            android:layout_marginTop="20dp"/>
+            android:textStyle="bold"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="20dp"
             android:textSize="15sp"
-            android:id="@+id/textview_name_layout_window"
-            android:layout_marginTop="20dp"/>
+            android:id="@+id/textview_name_layout_window" />
 
     </LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="10sp"
+        android:text="@string/textview_infowindow_onclicklistener"
+        android:layout_gravity="center"
+        android:textStyle="bold|italic"
+        android:textColor="#ffff0000" />
 
 </LinearLayout>

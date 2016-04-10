@@ -1,6 +1,8 @@
 package com.example.user.treesinthecloud.TreeDatabase;
 
-public class Tree {
+import java.io.Serializable;
+
+public class Tree implements Serializable{
 
     private int idTree;
     private double latitude;
@@ -30,8 +32,9 @@ public class Tree {
     @Override
     public String toString() {
         return "Name= " + name +
+                ", Specie= " + specie +
                 ", Status= " + status +
-                ", OrgGirth" + originalGirth;
+                ", OrgGirth= " + originalGirth;
     }
 
     public int getIdTree() {

@@ -4,10 +4,10 @@
     android:layout_height="match_parent"
     android:orientation="horizontal">
 
-    <ImageView
+    <!--<ImageView
         android:layout_width="20dp"
         android:layout_height="20dp"
-        android:id="@+id/imageview_layout_listview"/>
+        android:id="@+id/imageview_layout_listview"/>-->
 
     <TextView
         android:layout_width="wrap_content"

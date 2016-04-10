@@ -54,4 +54,10 @@ public class SettingsActivity extends AppCompatActivity{
             }
         });
     }
+
+    @Override
+    public void onBackPressed() {
+        //getSupportActionBar().setTitle(R.string.app_name);
+        SettingsActivity.this.finish();
+    }
 }

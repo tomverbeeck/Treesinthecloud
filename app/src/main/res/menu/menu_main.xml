@@ -8,4 +8,10 @@
         android:orderInCategory="100"
         app:showAsAction="never" />
 
+    <item android:id="@+id/action_search"
+        android:title="Search for tree"
+        android:icon="@drawable/places_ic_search"
+        app:showAsAction="ifRoom|collapseActionView"
+        android:actionViewClass="android.support.v7.widget.SearchView"/>
+
 </menu>

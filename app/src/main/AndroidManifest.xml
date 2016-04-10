@@ -42,40 +42,49 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <activity android:name=".SettingsActivity"
+        <activity
+            android:name=".SettingsActivity"
             android:label="@string/title_activity_settings"
-            android:theme="@style/AppTheme"/>
-
-        <activity android:name=".SettingsMenu.ChangeColor"
+            android:theme="@style/MyMaterialTheme" />
+        <activity
+            android:name=".SettingsMenu.ChangeColor"
             android:label="@string/title_activity_change_color"
-            android:theme="@style/AppTheme"/>
-
-        <activity android:name=".SettingsMenu.ChangeLanguage"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".SettingsMenu.ChangeLanguage"
             android:label="@string/title_activity_change_language"
-            android:theme="@style/AppTheme"/>
-
+            android:theme="@style/AppTheme" />
         <activity
             android:name=".TreeProfileActivity"
             android:label="@string/title_activity_tree_profile"
-            android:theme="@style/AppTheme"/>
-
-        <activity android:name=".AddTree.NewtreeActivity"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".AddTree.NewtreeActivity"
             android:label="@string/title_acitivty_add_tree"
-            android:theme="@style/AppTheme"/>
-
-        <activity android:name=".SettingsMenu.CustomizeMarker"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".SettingsMenu.CustomizeMarker"
             android:label="@string/title_acitivty_customize_marker"
-            android:theme="@style/AppTheme"/>
-
-        <activity android:name=".Login.LoginActivity"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".Login.LoginActivity"
             android:label="@string/title_activity_login"
             android:theme="@style/AppTheme" />
-
-        <activity android:name=".Login.SignupActivity"
+        <activity
+            android:name=".Login.SignupActivity"
             android:label="@string/title_activity_signup"
             android:theme="@style/AppTheme" />
-
+        <activity
+            android:name=".ExtraInfoTreeActivity"
+            android:label="@string/title_activity_get_extra_info"
+            android:theme="@style/MyMaterialTheme" />
+        <activity
+            android:name=".AddTree.ChooseLocationActivity"
+            android:label="@string/title_activity_choose_location">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.user.treesinthecloud.MapsActivity" />
+        </activity>
     </application>
 
 </manifest>

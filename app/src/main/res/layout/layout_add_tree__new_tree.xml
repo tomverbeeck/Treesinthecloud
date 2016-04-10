@@ -11,10 +11,6 @@
         android:layout_height="wrap_content"
         android:id="@+id/newtreeLayout">
 
-
-
-
-
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -52,12 +48,12 @@
         <Button
             style="?android:attr/buttonStyleSmall"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="70dp"
             android:text="@string/string_currentLoacationB"
             android:id="@+id/currentLocationB"
-            android:layout_marginTop="30dp"
-            android:layout_below="@+id/reasonForNewTree"
-            android:layout_centerHorizontal="true" />
+            android:layout_below="@+id/explanationError_newtree"
+            android:layout_alignRight="@+id/explanationError_newtree"
+            android:layout_alignEnd="@+id/explanationError_newtree" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -185,6 +181,16 @@
             android:layout_above="@+id/longtitude_text_newtree"
             android:layout_alignLeft="@+id/longtitude_text_newtree"
             android:layout_alignStart="@+id/longtitude_text_newtree" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="70dp"
+            android:text="@string/button_add_tree_choose_location"
+            android:id="@+id/button_add_tree_choose_location"
+            android:layout_below="@+id/explanationError_newtree"
+            android:layout_toRightOf="@+id/explanationError_newtree"
+            android:layout_toEndOf="@+id/explanationError_newtree"
+            android:onClick="getLocationOnMap"/>
 
 
     </RelativeLayout>

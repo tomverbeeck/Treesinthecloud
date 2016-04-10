@@ -2,6 +2,7 @@ package com.example.user.treesinthecloud;
 
 import android.Manifest;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
@@ -9,6 +10,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -17,6 +19,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -32,13 +35,14 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback{
+public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoWindowClickListener,OnMapReadyCallback{
 
     private GoogleMap mMap;
 
@@ -173,7 +177,29 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         // Inflate menu to add items to action bar if it is present.
         inflater.inflate(R.menu.menu_main, menu);
         // Associate searchable configuration with the SearchView
-        return true;
+
+        final MenuItem searchItem = menu.findItem(R.id.action_search);
+        SearchView searchview = (SearchView) MenuItemCompat.getActionView(searchItem);
+
+        //Define listener
+        MenuItemCompat.OnActionExpandListener expandListener = new MenuItemCompat.OnActionExpandListener() {
+            @Override
+            public boolean onMenuItemActionExpand(MenuItem item) {
+                //do something when action item collapses
+                return true;
+            }
+
+            @Override
+            public boolean onMenuItemActionCollapse(MenuItem item) {
+                //do something when expanded
+                searchItem.collapseActionView();
+                return true;
+            }
+        };
+
+        MenuItemCompat.setOnActionExpandListener(searchItem, expandListener);
+
+        return super.onCreateOptionsMenu(menu);
     }
 
     @Override
@@ -192,7 +218,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         //start with fixed location
         LatLng leuven = new LatLng(50.875, 4.708);
-        mMap.addMarker(new MarkerOptions().position(leuven).title("Marker on Group T"));
+        //mMap.addMarker(new MarkerOptions().position(leuven).title("Marker on Group T"));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(leuven));
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(leuven, zoomLevel));
 
@@ -205,8 +231,28 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             return;
         }
         mMap.setMyLocationEnabled(true);
+        mMap.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
+            @Override
+            public View getInfoWindow(Marker marker) {
+                return null;
+            }
 
-        //start with current location
+            @Override
+            public View getInfoContents(Marker marker) {
+                View infoWindows = getLayoutInflater().inflate(R.layout.layout_window, null);
+
+                TextView name = (TextView) infoWindows.findViewById(R.id.textview_name_layout_window);
+                TextView specie = (TextView) infoWindows.findViewById(R.id.textview_specie_layout_window);
+
+                name.setText(marker.getSnippet());
+                specie.setText(marker.getTitle());
+
+                return (infoWindows);
+            }
+        });
+        mMap.setOnInfoWindowClickListener(this);
+
+                //start with current location
         /*LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         Criteria criteria = new Criteria();
 
@@ -222,54 +268,36 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     .bearing(0)                // Sets the orientation of the camera to north
                     .build();                   // Creates a CameraPosition from the builder
             mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+            LatLng position = new LatLng(location.getLatitude(), location.getLongitude());
+            mMap.addMarker(new MarkerOptions().position(position).title(getResources().getString(R.string.text_where_are_you)));
         }*/
-
-        getJSON();
-
-        //loading.dismiss();
-
-        /*mMap.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
-
-            //private final View mWindow = getLayoutInflater().inflate(R.layout);
-            private final View mWindow = getLayoutInflater().inflate(R.layout.layout_window, null);
-            private final View mContents = getLayoutInflater().inflate(R.layout.layout_window, null);
-
-            @Override
-            public View getInfoWindow(Marker marker) {
-                textSpecie = (TextView) findViewById(R.id.textview_specie_layout_window);
-                textSpecie.setText("Specie: "); //+ tree.getSpecie());
-                return mWindow;
-            }
-
-            @Override
-            public View getInfoContents(Marker marker) {
-                textSpecie = (TextView) findViewById(R.id.textview_specie_layout_window);
-                textSpecie.setText("Specie: "); //+ tree.getSpecie());
-
-                return mContents;
-            }
-        });*/
-
+                getJSON();
     }
 
     public void getJSON(){
         class GetJSON extends AsyncTask<Void,Void,String> {
 
-            ProgressDialog loading;
+            private ProgressDialog loading = new ProgressDialog(MapsActivity.this);
             @Override
             protected void onPreExecute() {
-                super.onPreExecute();
-                //loading = ProgressDialog.show(getApplicationContext(),"Fetching Data","Wait...",false,false);
+                loading.setMessage(getResources().getString(R.string.text_loading_trees));
+                loading.show();
+                loading.setOnCancelListener(new DialogInterface.OnCancelListener() {
+                    @Override
+                    public void onCancel(DialogInterface dialog) {
+                        GetJSON.this.cancel(true);
+                    }
+                });
             }
 
             @Override
             protected void onPostExecute(String s) {
                 super.onPostExecute(s);
                 //loading.dismiss();
-                JSON_STRING = s;
                 JSONObject jsonObject = null;
                 try {
-                    jsonObject = new JSONObject(JSON_STRING);
+
+                    jsonObject = new JSONObject(s);
                     JSONArray result = jsonObject.getJSONArray(ConfigIDTree.TAG_JSON_ARRAY);
 
                     for(int i = 0; i<result.length(); i++){
@@ -285,11 +313,10 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                         tree.setCurrentGirth(Integer.parseInt(jo.getString(ConfigIDTree.TAG_CURRENT_GIRTH)));
                         tree.setCuttingShape(jo.getString(ConfigIDTree.TAG_CUTTING_SHAPE));
 
-                        Toast.makeText(getApplicationContext(), tree.toString(), Toast.LENGTH_SHORT).show();
-
                         addMarkers(tree);
                     }
 
+                    this.loading.dismiss();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -309,7 +336,16 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     public void addMarkers(Tree tree){
         mMap.addMarker(new MarkerOptions()
                 .position(new LatLng(tree.getLatitude(), tree.getLongitude()))
-                .title(tree.getSpecie())
+                .title(tree.getName())
+                .snippet("" + tree.getIdTree())
                 .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_map_tree)));
+    }
+
+    @Override
+    public void onInfoWindowClick(Marker marker) {
+        Intent intentMoreInfo = new Intent(getApplicationContext(), ExtraInfoTreeActivity.class);
+        String toSend = marker.getSnippet();
+        intentMoreInfo.putExtra("treeID", toSend);
+        startActivity(intentMoreInfo);
     }
 }
