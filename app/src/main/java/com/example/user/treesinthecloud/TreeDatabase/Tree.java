@@ -1,5 +1,7 @@
 package com.example.user.treesinthecloud.TreeDatabase;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import java.io.Serializable;
 
 public class Tree implements Serializable{
@@ -7,6 +9,16 @@ public class Tree implements Serializable{
     private int idTree;
     private double latitude;
     private double longitude;
+
+    public LatLng getPosition() {
+        return position;
+    }
+
+    public void setPosition(LatLng position) {
+        this.position = new LatLng(getLatitude(), getLongitude());
+    }
+
+    private LatLng position;
     private String specie;
     private String name;
     private String status;
@@ -17,7 +29,7 @@ public class Tree implements Serializable{
 
     public Tree(){}
 
-    /*public Tree (int idTree, double latitude, double longitude, String specie, String name, String status, String cuttingShape, int girth){
+    public Tree (int idTree, double latitude, double longitude, String specie, String name, String status, String cuttingShape, int originalGirth, int currentGirth){
         super();
         this.idTree = idTree;
         this.latitude = latitude;
@@ -26,8 +38,9 @@ public class Tree implements Serializable{
         this.name = name;
         this.status = status;
         this.cuttingShape = cuttingShape;
-        this.girth = girth;
-    }*/
+        this.originalGirth = originalGirth;
+        this.currentGirth = currentGirth;
+    }
 
     @Override
     public String toString() {
@@ -78,19 +91,23 @@ public class Tree implements Serializable{
     }
 
     public void setSpecie(String specie) {
-        this.specie = specie;
+        if(specie != null)
+            this.specie = specie;
     }
 
     public void setName(String name) {
-        this.name = name;
+        if(name != null)
+            this.name = name;
     }
 
     public void setStatus(String status) {
-        this.status = status;
+        if(status != null)
+            this.status = status;
     }
 
     public void setCuttingShape(String cuttingShape) {
-        this.cuttingShape = cuttingShape;
+        if(cuttingShape != null)
+            this.cuttingShape = cuttingShape;
     }
 
     public int getOriginalGirth() {
@@ -98,7 +115,8 @@ public class Tree implements Serializable{
     }
 
     public void setOriginalGirth(int originalGirth) {
-        this.originalGirth = originalGirth;
+        if(originalGirth != 0)
+            this.originalGirth = originalGirth;
     }
 
     public int getCurrentGirth() {
@@ -106,6 +124,7 @@ public class Tree implements Serializable{
     }
 
     public void setCurrentGirth(int currentGirth) {
-        this.currentGirth = currentGirth;
+        if(currentGirth != 0)
+            this.currentGirth = currentGirth;
     }
 }

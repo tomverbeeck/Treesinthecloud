@@ -28,6 +28,7 @@
     <string name="title_acitivty_customize_marker">Customize Marker</string>
     <string name="title_activity_get_extra_info">Extra Information</string>
     <string name="title_activity_choose_location">Choose Location</string>
+    <string name="title_activity_routes">Routes</string>
 
     <string name="drawer_open">Open Navigation Drawer</string>
     <string name="drawer_close">Close Navigation Drawer</string>
@@ -89,6 +90,13 @@
     <string name="textview_extra_info_cutting_shape">Cutting Shape</string>
     <string name="text_fetching_tree">Getting Tree Details ...</string>
     <string name="textview_extra_info_fragment_one_title">Details</string>
+    <string name="textview_extra_info_address">Location of the Tree</string>
+    <string name="text_unable_to_load_address">Unable to load Address of the Tree</string>
+
+    <!--strings concerning routes-->
+    <string name="title_menu_options_routes">Routes</string>
+    <string name="title_activity_maps_activity__route">MapRoute</string>
+    <string name="title_activity_new_route_maps">Map</string>
 
 </resources>
 

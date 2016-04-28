@@ -77,6 +77,9 @@
     <string name="text_loading_trees">Bomen Laden ...</string>
     <string name="button_add_tree_choose_location">Kies Locatie op Map</string>
     <string name="title_activity_choose_location">Kies Locatie</string>
+    <string name="textview_extra_info_address">Locatie van de Boom</string>
+    <string name="text_unable_to_load_address">Adres van de Boom niet kunnen ophalen</string>
+    <string name="title_menu_options_routes">Routes</string>
 
 
 </resources>

@@ -2,14 +2,27 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center"
-    tools:context=".ExtraInfoTreeActivity">
+    android:gravity="top|center"
+    android:padding="20dp"
+    android:orientation="vertical"
+    tools:context=".ExtraInformationTabs.ExtraInfoTreeActivity">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@color/aluminum"
-        android:textSize="50sp"
-        android:text="TWO"/>
+        android:text="@string/textview_extra_info_address"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:layout_marginTop="10dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:gravity="center"
+        android:text="Loading..."
+        android:id="@+id/TextView_extra_info_street"
+        android:paddingBottom="20dp"/>
+
 
 </LinearLayout>

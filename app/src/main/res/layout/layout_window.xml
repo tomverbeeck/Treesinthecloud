@@ -1,57 +1,88 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:gravity="left|top">
+    android:gravity="left|top"
+    android:background="#FFFFFF">
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="20dp"
-            android:textSize="15sp"
-            android:textStyle="bold"
-            android:text="@string/textview_layout_window_specie"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="20dp"
-            android:textSize="15sp"
-            android:id="@+id/textview_specie_layout_window" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="20dp"
-            android:textSize="15sp"
-            android:text="@string/textview_layout_window_name"
-            android:textStyle="bold"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="20dp"
-            android:textSize="15sp"
-            android:id="@+id/textview_name_layout_window" />
-
-    </LinearLayout>
+    <TextView
+        android:layout_width="150dp"
+        android:layout_height="40dp"
+        android:textSize="15sp"
+        android:text="testspecie"
+        android:textColor="@color/green"
+        android:id="@+id/textview_specie_layout_window"
+        android:layout_below="@+id/textview_name_layout_window"
+        android:layout_alignLeft="@+id/textview_name_layout_window"
+        android:layout_alignStart="@+id/textview_name_layout_window" />
 
     <TextView
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="10sp"
-        android:text="@string/textview_infowindow_onclicklistener"
-        android:layout_gravity="center"
-        android:textStyle="bold|italic"
-        android:textColor="#ffff0000" />
+        android:layout_height="40dp"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        android:textColor="@color/green"
+        android:text="@string/textview_layout_window_specie"
+        android:id="@+id/textView"
+        android:layout_below="@+id/textView3"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 
-</LinearLayout>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:textSize="15sp"
+        android:textColor="@color/green"
+        android:text="@string/textview_layout_window_name"
+        android:textStyle="bold"
+        android:id="@+id/textView3"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:layout_width="150dp"
+        android:layout_height="40dp"
+        android:textSize="15sp"
+        android:text="testname"
+        android:textColor="@color/green"
+        android:id="@+id/textview_name_layout_window"
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@+id/textView"
+        android:layout_toEndOf="@+id/textView"
+        android:layout_marginLeft="18dp"
+        android:layout_marginStart="18dp" />
+
+    <ImageView
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:src="@drawable/ic_plus"
+        android:scaleType="fitXY"
+        android:layout_gravity="right"
+        android:id="@+id/imageView2"
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@+id/textview_name_layout_window"
+        android:layout_toEndOf="@+id/textview_name_layout_window" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="20dp"
+        android:text="Status: "
+        android:textColor="@color/green"
+        android:layout_below="@+id/textView"
+        android:layout_alignRight="@+id/textView"
+        android:layout_alignEnd="@+id/textView"
+        android:textStyle="bold"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="20dp"
+        android:text="teststatus"
+        android:textColor="@color/green"
+        android:id="@+id/textview_status_layout_window"
+        android:layout_below="@+id/textview_specie_layout_window"
+        android:layout_alignLeft="@+id/textview_specie_layout_window"
+        android:layout_alignStart="@+id/textview_specie_layout_window" />
+
+</RelativeLayout>

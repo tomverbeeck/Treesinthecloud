@@ -2,10 +2,14 @@ package com.example.user.treesinthecloud;
 
 import android.Manifest;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
+import android.location.Criteria;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -24,6 +28,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.user.treesinthecloud.AddTree.NewtreeActivity;
+import com.example.user.treesinthecloud.ExtraInformationTabs.ExtraInfoTreeActivity;
 import com.example.user.treesinthecloud.Login.LoginActivity;
 import com.example.user.treesinthecloud.Login.UserLocalStore;
 import com.example.user.treesinthecloud.TreeDatabase.ConfigIDTree;
@@ -56,16 +61,12 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
     UserLocalStore userLocalStore;
 
     //get one tree
-    private ProgressDialog loading;
     private Tree tree = new Tree();
     private static MapsActivity instance;
 
-    TextView textSpecie;
+    private LatLng currentLoc;
 
-    //get all trees
-    String myJSON;
-    JSONArray trees = null;
-    private String JSON_STRING;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,9 +78,7 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
         mapFragment.getMapAsync(this);
 
         userLocalStore = new UserLocalStore(this);
-
         instance = this;
-
         // Initializing Toolbar and setting it as the actionbar
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -127,8 +126,12 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
                         startActivity(intentSettings);
                         getSupportActionBar().setTitle(R.string.title_activity_settings);
                         return true;
+                    case R.id.routes:
+                        Intent intentRoutes = new Intent(getApplicationContext(), RoutesActivity.class);
+                        startActivity(intentRoutes);
+                        getSupportActionBar().setTitle(R.string.title_activity_routes);
                     default:
-                        Toast.makeText(getApplicationContext(), "Somethings Wrong", Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(getApplicationContext(), "Somethings Wrong", Toast.LENGTH_SHORT).show();
                         getSupportActionBar().setTitle(R.string.app_name);
                         return true;
                 }
@@ -243,9 +246,12 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
 
                 TextView name = (TextView) infoWindows.findViewById(R.id.textview_name_layout_window);
                 TextView specie = (TextView) infoWindows.findViewById(R.id.textview_specie_layout_window);
+                TextView status = (TextView) infoWindows.findViewById(R.id.textview_status_layout_window);
 
-                name.setText(marker.getSnippet());
-                specie.setText(marker.getTitle());
+                String [] parts = marker.getSnippet().split("-");
+                name.setText(marker.getTitle());
+                specie.setText(parts[3]);
+                status.setText(parts[4]);
 
                 return (infoWindows);
             }
@@ -253,25 +259,16 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
         mMap.setOnInfoWindowClickListener(this);
 
                 //start with current location
-        /*LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         Criteria criteria = new Criteria();
 
         Location location = locationManager.getLastKnownLocation(locationManager.getBestProvider(criteria, false));
         if (location != null)
         {
-            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
-                    new LatLng(location.getLatitude(), location.getLongitude()), zoomLevel));
+            currentLoc = new LatLng(location.getLatitude(), location.getLongitude());
+        }
 
-            CameraPosition cameraPosition = new CameraPosition.Builder()
-                    .target(new LatLng(location.getLatitude(), location.getLongitude()))      // Sets the center of the map to location user
-                    .zoom(zoomLevel)            // Sets the zoom
-                    .bearing(0)                // Sets the orientation of the camera to north
-                    .build();                   // Creates a CameraPosition from the builder
-            mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-            LatLng position = new LatLng(location.getLatitude(), location.getLongitude());
-            mMap.addMarker(new MarkerOptions().position(position).title(getResources().getString(R.string.text_where_are_you)));
-        }*/
-                getJSON();
+        getJSON();
     }
 
     public void getJSON(){
@@ -293,7 +290,7 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
             @Override
             protected void onPostExecute(String s) {
                 super.onPostExecute(s);
-                //loading.dismiss();
+                loading.dismiss();
                 JSONObject jsonObject = null;
                 try {
 
@@ -313,9 +310,22 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
                         tree.setCurrentGirth(Integer.parseInt(jo.getString(ConfigIDTree.TAG_CURRENT_GIRTH)));
                         tree.setCuttingShape(jo.getString(ConfigIDTree.TAG_CUTTING_SHAPE));
 
-                        addMarkers(tree);
+                        mMap.addMarker(new MarkerOptions()
+                                .position(new LatLng(tree.getLatitude(), tree.getLongitude()))
+                                .title(tree.getName())
+                                .snippet("" + tree.getIdTree()          //0
+                                        + "-" + tree.getLatitude()      //1
+                                        + "-" + tree.getLongitude()     //2
+                                        + "-" + tree.getSpecie()        //3
+                                        + "-" + tree.getStatus()        //4
+                                        + "-" + tree.getOriginalGirth() //5
+                                        + "-" + tree.getCurrentGirth()  //6
+                                        + "-" + tree.getCuttingShape()  //7
+                                        + "-" + tree.getName())         //8
+                                .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_map_tree)));
                     }
 
+                    Toast.makeText(getApplicationContext(), "result size: " + result.length(), Toast.LENGTH_SHORT).show();
                     this.loading.dismiss();
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -324,6 +334,7 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
 
             @Override
             protected String doInBackground(Void... params) {
+                //LatLng leuven = new LatLng(50.878554 , 4.70637);
                 RequestHandler rh = new RequestHandler();
                 String s = rh.sendGetRequest(ConfigIDTree.URL_GET_ALL);
                 return s;
@@ -333,19 +344,22 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
         gj.execute();
     }
 
-    public void addMarkers(Tree tree){
-        mMap.addMarker(new MarkerOptions()
-                .position(new LatLng(tree.getLatitude(), tree.getLongitude()))
-                .title(tree.getName())
-                .snippet("" + tree.getIdTree())
-                .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_map_tree)));
-    }
-
     @Override
     public void onInfoWindowClick(Marker marker) {
         Intent intentMoreInfo = new Intent(getApplicationContext(), ExtraInfoTreeActivity.class);
-        String toSend = marker.getSnippet();
-        intentMoreInfo.putExtra("treeID", toSend);
+
+        String [] parts = marker.getSnippet().split("-");
+        intentMoreInfo.putExtra("treeID", parts[0]);
+        intentMoreInfo.putExtra("treeLat", Double.parseDouble(parts[1]));
+        intentMoreInfo.putExtra("treeLong", Double.parseDouble(parts[2]));
+        if(parts[8] != "") {
+            intentMoreInfo.putExtra("treeSpecie", parts[3]);
+            intentMoreInfo.putExtra("treeStatus", parts[4]);
+            intentMoreInfo.putExtra("treeOrgGirth", Integer.parseInt(parts[5]));
+            intentMoreInfo.putExtra("treeCurGirth", Integer.parseInt(parts[6]));
+            intentMoreInfo.putExtra("treeCutShape", parts[7]);
+            intentMoreInfo.putExtra("treeName", parts[8]);
+        }
         startActivity(intentMoreInfo);
     }
 }

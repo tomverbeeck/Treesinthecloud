@@ -1,4 +1,4 @@
-package com.example.user.treesinthecloud;
+package com.example.user.treesinthecloud.ExtraInformationTabs;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,9 +10,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
-import com.example.user.treesinthecloud.ExtraInformationTabs.OneFragment;
-import com.example.user.treesinthecloud.ExtraInformationTabs.ThreeFragment;
-import com.example.user.treesinthecloud.ExtraInformationTabs.TwoFragment;
+import com.example.user.treesinthecloud.R;
 
 import java.util.ArrayList;
 import java.util.List;
