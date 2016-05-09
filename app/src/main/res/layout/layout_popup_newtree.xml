@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="300dp"
+    android:layout_height="150dp"
+    android:orientation="vertical"
+    android:background="#848181"
+    android:id="@+id/layout_popup_newtree">
+
+    <TextView android:id="@+id/popup_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/string_popup_newtree"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="20dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="false"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="false"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginBottom="15dp" />
+
+    <Button android:id="@+id/cancel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/string_popup_newtree_cancel"
+        android:layout_below="@+id/popup_text"
+        android:layout_alignLeft="@+id/popup_text"
+        android:layout_alignStart="@+id/popup_text"
+        android:layout_marginLeft="10dp"
+        android:onClick="closePopup"
+        android:layout_marginBottom="20dp" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/string_popup_newtree_continue"
+        android:id="@+id/Contin"
+        android:layout_below="@+id/popup_text"
+        android:layout_alignRight="@+id/popup_text"
+        android:layout_alignEnd="@+id/popup_text"
+        android:layout_marginRight="10dp"
+        android:onClick="continuePopup"
+        android:layout_marginBottom="20dp" />
+
+</RelativeLayout>

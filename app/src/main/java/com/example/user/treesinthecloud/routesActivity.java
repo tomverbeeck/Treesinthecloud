@@ -46,6 +46,8 @@ public class RoutesActivity extends AppCompatActivity implements ListView.OnItem
 
         getJSONRoute();
 
+
+
         routeList.setOnItemClickListener(this);
     }
 
@@ -73,13 +75,12 @@ public class RoutesActivity extends AppCompatActivity implements ListView.OnItem
                     Route route = null;
 
                     for(int i = 0; i<result.length(); i++){
-                        route = new Route(0,"", "", 0);
+                        route = new Route();
                         JSONObject jo = result.getJSONObject(i);
 
-                        route.setIdRoute(Integer.parseInt(jo.getString(ConfigIDRoute.TAG_ID)));
-                        route.setName(jo.getString(ConfigIDRoute.TAG_NAME));
-                        route.setShortDescription(jo.getString(ConfigIDRoute.TAG_SHORTDESCRIPTION));
-                        route.setLength(Integer.parseInt(jo.getString(ConfigIDRoute.TAG_LENGTH)));
+                        route.setName(jo.getString(ConfigIDRoute.KEY_NAME));
+                        route.setShortDescription(jo.getString(ConfigIDRoute.KEY_SHORTDESCRIPTION));
+                        route.setLength(jo.getString(ConfigIDRoute.KEY_LENGTH));
 
                         routes.add(route);
                     }
@@ -107,12 +108,9 @@ public class RoutesActivity extends AppCompatActivity implements ListView.OnItem
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Intent intent = new Intent(this, MapsActivity_Route.class);
-        String routeID = "" + routes.get(position).getIdRoute();
-        //String shortDescription = routes.get(position).getShortDescription();
-        String length = "" + routes.get(position).getLength();
-        intent.putExtra("route_id", routeID);
-       // intent.putExtra("short_description", shortDescription);
-        intent.putExtra("length", length);
+        String routeName = routes.get(position).getName();
+        String length = routes.get(position).getLength();
+        intent.putExtra("route_name", routeName);
         startActivity(intent);
     }
 

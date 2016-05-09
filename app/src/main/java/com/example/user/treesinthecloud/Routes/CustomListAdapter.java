@@ -54,7 +54,7 @@ public class CustomListAdapter extends BaseAdapter {
 
         title.setText(routeItems.get(position).getName());
         shortDescription.setText(routeItems.get(position).getShortDescription());
-        length.setText("" + routeItems.get(position).getIdRoute());
+        length.setText("" + routeItems.get(position).getLength());
 
         return convertView;
     }

@@ -1,11 +1,12 @@
 package com.example.user.treesinthecloud.Routes;
 
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.FragmentActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -22,6 +23,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 
@@ -37,16 +39,23 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
-public class NewRouteMapsActivity extends FragmentActivity implements OnMapReadyCallback {
+public class NewRouteMapsActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnInfoWindowClickListener {
 
     private GoogleMap mMap;
     private ArrayList<LatLng> markerPoints;
-    private Button btnDraw, btnCreate, btnSelectTree;
+    private ArrayList<String> markerpointsString;
+    private Button btnDraw, btnCreate, btnSelectTree, btnNext, btnPrev;
     private TextView help;
     private ArrayList<Tree> trees;
     private LatLng location;
+    private int countTrees;
+
+    private Route route = new Route();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,31 +67,27 @@ public class NewRouteMapsActivity extends FragmentActivity implements OnMapReady
         mapFragment.getMapAsync(this);
 
         // Initializing
-        markerPoints = new ArrayList<LatLng>();
+        markerPoints = new ArrayList<>();
+        markerpointsString = new ArrayList<>();
         trees = new ArrayList<>();
         btnDraw = (Button)findViewById(R.id.btnDraw);
         btnCreate = (Button)findViewById(R.id.btnCreate);
         btnSelectTree = (Button) findViewById(R.id.btnSelectTrees);
+        btnNext = (Button) findViewById(R.id.btn_add_route_next_tree);
+        btnPrev = (Button) findViewById(R.id.btn_add_route_prev_tree);
+
         help = (TextView)findViewById(R.id.textview_new_route_help);
         help.setText("Choose Start Location!");
 
+        route.setName(getIntent().getExtras().getString("nameRoute"));
+        route.setShortDescription(getIntent().getExtras().getString("descriptionRoute"));
     }
 
-
-    /**
-     * Manipulates the map once available.
-     * This callback is triggered when the map is ready to be used.
-     * This is where we can add markers or lines, add listeners or move the camera. In this case,
-     * we just add a marker near Sydney, Australia.
-     * If Google Play services is not installed on the device, the user will be prompted to install
-     * it inside the SupportMapFragment. This method will only be triggered once the user has
-     * installed Google Play services and returned to the app.
-     */
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
-        int zoomLevel = 12;
+        int zoomLevel = 15;
 
         //start with fixed location
         LatLng leuven = new LatLng(50.875, 4.708);
@@ -161,8 +166,19 @@ public class NewRouteMapsActivity extends FragmentActivity implements OnMapReady
                 View view = findViewById(R.id.btnCreate);
                 view.setVisibility(View.INVISIBLE);
 
+                View view1 = findViewById(R.id.btnSelectTrees);
+                view1.setVisibility(View.INVISIBLE);
+
                 View view2 = findViewById(R.id.btnDraw);
                 view2.setVisibility(View.VISIBLE);
+
+                View view3 = findViewById(R.id.btn_add_route_next_tree);
+                view3.setVisibility(View.INVISIBLE);
+
+                View view4 = findViewById(R.id.btn_add_route_prev_tree);
+                view4.setVisibility(View.INVISIBLE);
+
+                countTrees = 0;
             }
         });
 
@@ -183,6 +199,9 @@ public class NewRouteMapsActivity extends FragmentActivity implements OnMapReady
 
                     // Start downloading json data from Google Directions API
                     downloadTask.execute(url);
+                }else {
+                    Toast.makeText(getApplicationContext(), "Please Select at Least Two Points", Toast.LENGTH_SHORT).show();
+                    return;
                 }
                 help.setText("Good? then select your trees that you want to see during the walk (click per marker)");
 
@@ -190,6 +209,19 @@ public class NewRouteMapsActivity extends FragmentActivity implements OnMapReady
                 button.setVisibility(View.INVISIBLE);
                 View view = findViewById(R.id.btnSelectTrees);
                 view.setVisibility(View.VISIBLE);
+
+                for(int j = 0; j<markerPoints.size(); j++){
+                    markerpointsString.add(getStringFromLatLng(markerPoints.get(j)));
+                }
+                if(markerpointsString.size() != 10){
+                    int place = markerpointsString.size();
+                    for(int i = place ; i<=9; i++){
+                        markerpointsString.add("not used");
+                    }
+                }
+                route.setMarkers(markerpointsString);
+
+                mMap.setOnMapClickListener(null);
             }
         });
 
@@ -197,9 +229,24 @@ public class NewRouteMapsActivity extends FragmentActivity implements OnMapReady
 
             @Override
             public void onClick(View v) {
+                String idTree = "";
+                String shortDescr = "";
+                String res = "";
 
-                Toast.makeText(getApplicationContext(), "Done", Toast.LENGTH_SHORT).show();
+                // Get a set of the entries
+                Set set = route.getTrees().entrySet();
+                // Get an iterator
+                Iterator i = set.iterator();
+                // Display elements
+                while(i.hasNext()) {
+                    Map.Entry me = (Map.Entry) i.next();
+                    idTree = me.getKey().toString();
+                    shortDescr = me.getValue().toString();
+                    addTreeToRoute(idTree, shortDescr);
+                }
+                addWholeRoute();
 
+                finish();
             }
         });
 
@@ -207,22 +254,96 @@ public class NewRouteMapsActivity extends FragmentActivity implements OnMapReady
 
             @Override
             public void onClick(View v) {
-
-                for (int i = 0; i < markerPoints.size(); i++) {
-                    location = markerPoints.get(i);
-                    if (location != null) {
-                        Toast.makeText(getApplicationContext(), "Load trees for marker " + i, Toast.LENGTH_SHORT).show();
-                        getJSON();
-                    }
-                }
+                countTrees = 0 ;
+                location = markerPoints.get(countTrees);
+                getJSON();
 
                 Button button = (Button) v;
                 button.setVisibility(View.INVISIBLE);
-                View view = findViewById(R.id.btnCreate);
+                View view = findViewById(R.id.btn_add_route_next_tree);
                 view.setVisibility(View.VISIBLE);
+                View view2 = findViewById(R.id.btn_add_route_prev_tree);
+                view2.setVisibility(View.VISIBLE);
             }
         });
+
+        btnNext.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                countTrees++;
+                location = markerPoints.get(countTrees);
+                getJSON();
+
+                help.setText("Select the trees that you want to see at this point!\n");
+
+                if(countTrees == markerPoints.size()-2)
+                    help.setText("Look out if you press next you can't go back to selecting trees!");
+
+                if(countTrees == markerPoints.size()-1) {
+                    //end routine
+                    Button button = (Button) v;
+                    button.setVisibility(View.INVISIBLE);
+                    View view = findViewById(R.id.btnCreate);
+                    view.setVisibility(View.VISIBLE);
+                    View view2 = findViewById(R.id.btn_add_route_prev_tree);
+                    view2.setVisibility(View.INVISIBLE);
+                }
+
+            }
+        });
+
+        btnPrev.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                countTrees--;
+                location = markerPoints.get(countTrees);
+                getJSON();
+
+                help.setText("Select the trees that you want to see at this point!");
+                //end routine
+
+            }
+        });
+
+        // Setting a custom info window adapter for the google map
+        mMap.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
+
+            // Use default InfoWindow frame
+            @Override
+            public View getInfoWindow(Marker arg0) {
+                return null;
+            }
+
+            // Defines the contents of the InfoWindow
+            @Override
+            public View getInfoContents(Marker marker) {
+                View infoWindows = getLayoutInflater().inflate(R.layout.layout_new_route_infowindow, null);
+
+                TextView name = (TextView) infoWindows.findViewById(R.id.textview_new_route_name_layout_window);
+                TextView specie = (TextView) infoWindows.findViewById(R.id.textview_new_route_specie_layout_window);
+                TextView status = (TextView) infoWindows.findViewById(R.id.textview_new_route_status_layout_window);
+
+                String [] parts = marker.getSnippet().split("-");
+                name.setText(marker.getTitle());
+                specie.setText(parts[3]);
+                status.setText(parts[4]);
+
+                return (infoWindows);
+
+            }
+        });
+        mMap.setOnInfoWindowClickListener(this);
     }
+
+
+
+
+
+
+
+
 
     private String getDirectionsUrl(LatLng origin,LatLng dest){
 
@@ -414,8 +535,8 @@ public class NewRouteMapsActivity extends FragmentActivity implements OnMapReady
         mMap.addCircle(circleOptions);
     }
 
-    public void getJSON(){
-        class GetJSON extends AsyncTask<Void,Void,String> {
+    public void getJSON() {
+        class GetJSON extends AsyncTask<Void, Void, String> {
 
             //private ProgressDialog loading = new ProgressDialog(NewRouteMapsActivity.this);
             @Override
@@ -442,21 +563,33 @@ public class NewRouteMapsActivity extends FragmentActivity implements OnMapReady
 
                     Tree tree = new Tree();
 
-                    for(int i = 0; i<result.length(); i++){
+                    for (int i = 0; i < result.length(); i++) {
                         JSONObject jo = result.getJSONObject(i);
 
                         tree.setIdTree(Integer.parseInt(jo.getString(ConfigIDTree.TAG_ID)));
+                        tree.setName(jo.getString(ConfigIDTree.TAG_COMMON_NAME));
                         tree.setLongitude(Double.parseDouble(jo.getString(ConfigIDTree.TAG_LONGITUDE)));
                         tree.setLatitude(Double.parseDouble(jo.getString(ConfigIDTree.TAG_LATITUDE)));
+                        tree.setSpecie(jo.getString(ConfigIDTree.TAG_SPECIE));
+                        tree.setStatus(jo.getString(ConfigIDTree.TAG_STATUS));
 
-                        if(tree!=null) {
+                        if (tree != null) {
                             //Toast.makeText(getApplicationContext(), "Tree added", Toast.LENGTH_SHORT).show();
                             trees.add(tree);
-                            addMarkers(tree);
+                            String snippet = "" + tree.getIdTree()      //0
+                                    + "-" + tree.getLatitude()          //1
+                                    + "-" + tree.getLongitude()         //2
+                                    + "-" + tree.getSpecie()            //3
+                                    + "-" + tree.getStatus();           //4
+                            mMap.addMarker(new MarkerOptions()
+                                    .position(new LatLng(tree.getLatitude(), tree.getLongitude()))
+                                    .title(tree.getName())
+                                    .snippet(snippet)
+                                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_map_tree)));
                         }
                     }
 
-                    Toast.makeText(getApplicationContext(), "result size: " + result.length(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "trees size: " + trees.size(), Toast.LENGTH_SHORT).show();
                     //this.loading.dismiss();
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -467,7 +600,7 @@ public class NewRouteMapsActivity extends FragmentActivity implements OnMapReady
             protected String doInBackground(Void... params) {
                 RequestHandler rh = new RequestHandler();
 
-                double dummy = location.longitude -0.001;
+                double dummy = location.longitude - 0.001;
                 String curLongMin = "" + dummy;
                 dummy = location.longitude + 0.001;
                 String curLongMax = "" + dummy;
@@ -476,7 +609,6 @@ public class NewRouteMapsActivity extends FragmentActivity implements OnMapReady
                 dummy = location.latitude - 0.001;
                 String curLatMin = "" + dummy;
                 String rest = "?latMin=" + curLatMin + "&latMax=" + curLatMax + "&longMin=" + curLongMin + "&longMax=" + curLongMax;
-                //Toast.makeText(getApplicationContext(), rest, Toast.LENGTH_LONG).show();
 
                 String s = rh.sendGetRequest(ConfigIDTree.URL_GET_TREE_AREA + rest.trim());
                 return s;
@@ -486,27 +618,145 @@ public class NewRouteMapsActivity extends FragmentActivity implements OnMapReady
         gj.execute();
     }
 
-    private boolean alreadyExist(Tree tree){
-        for(int i = 0; i<trees.size(); i++){
-            if(trees.get(i).getLatitude() == tree.getLatitude() && trees.get(i).getLongitude() == tree.getLongitude())
-                return true;
-        }
-        return false;
+    @Override
+    public void onInfoWindowClick(Marker marker) {
+        //add tree to database
+        Intent intentNewTree = new Intent(getApplicationContext(), NewRouteDescriptionTree.class);
+
+        String [] parts = marker.getSnippet().split("-");
+
+        intentNewTree.putExtra("idTree", parts[0]);
+        startActivityForResult(intentNewTree, 1);
     }
 
-    private void addMarkers(Tree tree){
-        mMap.addMarker(new MarkerOptions()
-                .position(new LatLng(tree.getLatitude(), tree.getLongitude()))
-                .title(tree.getName())
-                .snippet("" + tree.getIdTree()          //0
-                        + "-" + tree.getLatitude()      //1
-                        + "-" + tree.getLongitude()     //2
-                        + "-" + tree.getSpecie()        //3
-                        + "-" + tree.getStatus()        //4
-                        + "-" + tree.getOriginalGirth() //5
-                        + "-" + tree.getCurrentGirth()  //6
-                        + "-" + tree.getCuttingShape()  //7
-                        + "-" + tree.getName())         //8
-                .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_map_tree)));
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1) {
+            if(resultCode == RESULT_OK){
+                String stredittext=data.getStringExtra("descriptionTree");
+                String id = data.getStringExtra("idTreesReturn");
+                route.addTree(id , stredittext, getApplicationContext());
+                Toast.makeText(getApplicationContext(), "Tree added to Database, trees size is " + route.getTrees().size(), Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    private ArrayList<String> latlngToString (ArrayList<LatLng>waypoints){
+        ArrayList<String> dummy = new ArrayList<>();
+        Double latitude;
+        Double longitude;
+        String latlng;
+        for(int i = 0; i<waypoints.size(); i++){
+            latitude = waypoints.get(i).latitude;
+            longitude = waypoints.get(i).longitude;
+            latlng = latitude + "-" + longitude;
+
+            dummy.add(latlng);
+        }
+        return dummy;
+    }
+
+    private String getStringFromLatLng(LatLng loc){
+        String lat = "" + loc.latitude;
+        String longi = "" + loc.longitude;
+        return lat + "-" + longi;
+    }
+
+    private void addWholeRoute(){
+        final String name = route.getName();
+        final String shortDescription = route.getShortDescription();
+        final String length = "0"; //+ route.getLength();
+        final String startLatLng = route.getMarkers().get(0);
+        final String endLatLng = route.getMarkers().get(1);
+        final String w1 = route.getMarkers().get(2);
+        final String w2 = route.getMarkers().get(3);
+        final String w3 = route.getMarkers().get(4);
+        final String w4 = route.getMarkers().get(5);
+        final String w5 = route.getMarkers().get(6);
+        final String w6 = route.getMarkers().get(7);
+        final String w7 = route.getMarkers().get(8);
+        final String w8 = route.getMarkers().get(9);
+
+        class AddWholeRoute extends AsyncTask<Void,Void,String>{
+
+            //ProgressDialog loading;
+
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+                //loading = ProgressDialog.show(MainActivity.this,"Adding...","Wait...",false,false);
+            }
+
+            @Override
+            protected void onPostExecute(String s) {
+                super.onPostExecute(s);
+                //loading.dismiss();
+                Toast.makeText(NewRouteMapsActivity.this,s,Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            protected String doInBackground(Void... v) {
+                HashMap<String,String> params = new HashMap<>();
+                params.put(ConfigIDRoute.KEY_NAME,name);
+                params.put(ConfigIDRoute.KEY_SHORTDESCRIPTION,shortDescription);
+                params.put(ConfigIDRoute.KEY_LENGTH,length);
+                params.put(ConfigIDRoute.KEY_START,startLatLng);
+                params.put(ConfigIDRoute.KEY_END,endLatLng);
+                params.put(ConfigIDRoute.KEY_W1,w1);
+                params.put(ConfigIDRoute.KEY_W2,w2);
+                params.put(ConfigIDRoute.KEY_W3,w3);
+                params.put(ConfigIDRoute.KEY_W4,w4);
+                params.put(ConfigIDRoute.KEY_W5,w5);
+                params.put(ConfigIDRoute.KEY_W6,w6);
+                params.put(ConfigIDRoute.KEY_W7,w7);
+                params.put(ConfigIDRoute.KEY_W8,w8);
+
+                RequestHandler rh = new RequestHandler();
+                String res = rh.sendPostRequest(ConfigIDRoute.ADDROUTE_URL, params);
+                return res;
+            }
+        }
+
+        AddWholeRoute adr = new AddWholeRoute();
+        adr.execute();
+    }
+
+    private void addTreeToRoute(String idTree, String shortDescr){
+        final String name = route.getName();
+        final String idTrees = idTree;
+        final String descr = shortDescr;
+
+        class AddWholeRoute extends AsyncTask<Void,Void,String>{
+
+            //ProgressDialog loading;
+
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+                //loading = ProgressDialog.show(MainActivity.this,"Adding...","Wait...",false,false);
+            }
+
+            @Override
+            protected void onPostExecute(String s) {
+                super.onPostExecute(s);
+                //loading.dismiss();
+                Toast.makeText(NewRouteMapsActivity.this,s,Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            protected String doInBackground(Void... v) {
+                HashMap<String, String> params = new HashMap<>();
+                params.put(ConfigIDRoute.KEY_TREE_ID, idTrees);
+                params.put(ConfigIDRoute.KEY_ROUTE_NAME, name);
+                params.put(ConfigIDRoute.KEY_DESCR_TREE, descr);
+
+                RequestHandler rh = new RequestHandler();
+                String res = rh.sendPostRequest(ConfigIDRoute.ADDTREETOROUTE_URL, params);
+                return res;
+            }
+        }
+
+        AddWholeRoute adr = new AddWholeRoute();
+        adr.execute();
     }
 }

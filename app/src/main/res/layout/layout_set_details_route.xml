@@ -90,7 +90,7 @@
             android:layout_height="wrap_content"
             android:textSize="15dp"
             android:textStyle="italic"
-            android:text="4. Click on a marker and select the trees that you want to see at this point"/>
+            android:text="4. Go through the markers and select the trees that you want to see at this point"/>
 
     </LinearLayout>
 

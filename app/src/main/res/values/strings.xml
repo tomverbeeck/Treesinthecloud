@@ -98,5 +98,10 @@
     <string name="title_activity_maps_activity__route">MapRoute</string>
     <string name="title_activity_new_route_maps">Map</string>
 
+    <!--Strings concerning adding a tree-->
+    <string name="string_popup_newtree">Bent u zeker dat u deze boom wilt aanvragen? Een verzoek zal verstuurd worden naar Klimaat Neutraal Leuven.</string>
+    <string name="string_popup_newtree_cancel">Annuleren</string>
+    <string name="string_popup_newtree_continue">DOORGAAN</string>
+
 </resources>
 

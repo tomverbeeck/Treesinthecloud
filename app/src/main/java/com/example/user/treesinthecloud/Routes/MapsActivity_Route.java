@@ -1,18 +1,12 @@
 package com.example.user.treesinthecloud.Routes;
 
 import android.Manifest;
-import android.app.PendingIntent;
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.location.LocationManager;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
-import android.view.View;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.RequestQueue;
@@ -21,16 +15,11 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.user.treesinthecloud.R;
-import com.example.user.treesinthecloud.TreeDatabase.ConfigIDTree;
-import com.example.user.treesinthecloud.TreeDatabase.RequestHandler;
-import com.example.user.treesinthecloud.TreeDatabase.Tree;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import org.json.JSONArray;
@@ -38,19 +27,12 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class MapsActivity_Route extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMapRoute;
     private ProgressDialog loading;
-    private List<Tree> trees = new ArrayList<>();
-    private Tree treeDummy;
-
-    LocationManager locationManager;
-    PendingIntent pendingIntent;
-    SharedPreferences sharedPreferences;
-    int locationCount = 0;
+    private Route route = new Route();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,7 +44,9 @@ public class MapsActivity_Route extends FragmentActivity implements OnMapReadyCa
         mapFragment.getMapAsync(this);
 
         Intent intent = getIntent();
-        getJSONRoute(intent.getStringExtra("route_id"));
+        String nameRoute = intent.getStringExtra("route_name");
+        Toast.makeText(getApplicationContext(), nameRoute, Toast.LENGTH_SHORT).show();
+        getRoute(nameRoute);
     }
 
 
@@ -85,9 +69,6 @@ public class MapsActivity_Route extends FragmentActivity implements OnMapReadyCa
         mMapRoute.moveCamera(CameraUpdateFactory.newLatLng(leuven));
         mMapRoute.animateCamera(CameraUpdateFactory.newLatLngZoom(leuven, 10));
 
-        LatLng erasmusTuin = new LatLng(50.87780243724243, 4.708591103553772);
-        mMapRoute.addMarker(new MarkerOptions().position(erasmusTuin));
-
         mMapRoute.setMapType(GoogleMap.MAP_TYPE_NORMAL);
         mMapRoute.getUiSettings().setZoomGesturesEnabled(true);
         mMapRoute.getUiSettings().setZoomControlsEnabled(true);
@@ -97,7 +78,7 @@ public class MapsActivity_Route extends FragmentActivity implements OnMapReadyCa
             return;
         }
         mMapRoute.setMyLocationEnabled(true);
-        mMapRoute.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
+        /*mMapRoute.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
             @Override
             public View getInfoWindow(Marker marker) {
                 return null;
@@ -118,79 +99,53 @@ public class MapsActivity_Route extends FragmentActivity implements OnMapReadyCa
 
                 return (infoWindows);
             }
-        });
+        });*/
     }
 
 
-    public void getJSONRoute(final String id){
-        class GetJSONRoute extends AsyncTask<Void,Void,String> {
+    private void getRoute(final String name) {
+        loading = ProgressDialog.show(this, "Please wait...", "Fetching...", false, false);
 
+        String url = ConfigIDRoute.GET_ROUTE_URL + name.trim();
+
+        StringRequest stringRequest = new StringRequest(url, new Response.Listener<String>() {
             @Override
-            protected void onPreExecute() {
-                //loading.setMessage("Get routes...");
-                //loading.show();
-                /*loading.setOnCancelListener(new DialogInterface.OnCancelListener() {
-                    @Override
-                    public void onCancel(DialogInterface dialog) {
-                        GetJSONRoute.this.cancel(true);
-                    }
-                });*/
-            }
-
-            @Override
-            protected void onPostExecute(String s) {
-                super.onPostExecute(s);
-                JSONObject jsonObject = null;
-
+            public void onResponse(String response) {
+                loading.dismiss();
                 try {
+                    JSONObject jsonObject = new JSONObject(response);
+                    JSONArray result = jsonObject.getJSONArray(ConfigIDRoute.JSON_ARRAY);
+                    JSONObject data = result.getJSONObject(0);
+                    route.setName(name);
+                    route.setShortDescription(data.getString(ConfigIDRoute.KEY_SHORTDESCRIPTION));
+                    route.setLength(data.getString(ConfigIDRoute.KEY_LENGTH));
 
-                    jsonObject = new JSONObject(s);
-                    JSONArray result = jsonObject.getJSONArray(ConfigIDTree.TAG_JSON_ARRAY);
+                    ArrayList<LatLng> markers = new ArrayList<>();
+                    markers.add(getLatLngFromString(data.getString(ConfigIDRoute.KEY_START)));
+                    markers.add(getLatLngFromString(data.getString(ConfigIDRoute.KEY_END)));
+                    addMarkers(markers.get(0));
+                    addMarkers(markers.get(1));
 
-                    for(int i = 0; i<result.length(); i++){
-                        Tree dummy = new Tree();
-                        JSONObject jo = result.getJSONObject(i);
-
-                        dummy.setIdTree(Integer.parseInt(jo.getString(ConfigIDTree.TAG_ID)));
-
-                        trees.add(dummy);
-
-                        getData("" + dummy.getIdTree());
+                    LatLng location;
+                    String query;
+                    for(int i = 2; i<10; i++){
+                        query = "w" + (i-1) + "LatLng";
+                        String dataString = data.getString(query).toString();
+                        location = getLatLngFromString(dataString);
+                        if(location.latitude != 0) {
+                            markers.add(location);
+                        }
+                        addMarkers(markers.get(i));
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
             }
-
-            @Override
-            protected String doInBackground(Void... params) {
-                RequestHandler rh = new RequestHandler();
-                String s = rh.sendGetRequest(ConfigIDRoute.DATA_URL + id);
-                return s;
-            }
-        }
-        GetJSONRoute gj = new GetJSONRoute();
-        gj.execute();
-    }
-
-
-
-    private void getData(String id) {
-        //loading = ProgressDialog.show(this, "Please wait...", "Fetching...", false, false);
-
-        String url = ConfigIDTree.DATA_URL + id.trim();
-
-        StringRequest stringRequest = new StringRequest(url, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                //loading.dismiss();
-                showJSON(response);
-            }
         },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(MapsActivity_Route.this, error.getMessage().toString(), Toast.LENGTH_LONG).show();
+                        Toast.makeText(MapsActivity_Route.this, error.getMessage(), Toast.LENGTH_LONG).show();
                     }
                 });
 
@@ -198,42 +153,19 @@ public class MapsActivity_Route extends FragmentActivity implements OnMapReadyCa
         requestQueue.add(stringRequest);
     }
 
-    private void showJSON(String response) {
-        try {
-            JSONObject jsonObject = new JSONObject(response);
-            JSONArray result = jsonObject.getJSONArray(ConfigIDTree.JSON_ARRAY);
-            JSONObject data = result.getJSONObject(0);
-            treeDummy = null;
-            treeDummy = new Tree(
-                    Integer.parseInt(data.getString(ConfigIDTree.KEY_ID)),
-                    Double.parseDouble(data.getString(ConfigIDTree.KEY_LONGITUDE)),
-                    Double.parseDouble(data.getString(ConfigIDTree.KEY_LATITUDE)),
-                    data.getString(ConfigIDTree.KEY_SPECIE),
-                    data.getString(ConfigIDTree.KEY_STATUS),
-                    data.getString(ConfigIDTree.KEY_CUTTING_SHAPE),
-                    data.getString(ConfigIDTree.KEY_COMMON_NAME),
-                    Integer.parseInt(data.getString(ConfigIDTree.KEY_ORIGINAL_GIRTH)),
-                    Integer.parseInt(data.getString(ConfigIDTree.KEY_CURRENT_GIRTH)));
-
-            trees.add(treeDummy);
-
-            Toast.makeText(getApplicationContext(), "" + treeDummy.getLongitude() + "  " + treeDummy.getLatitude(), Toast.LENGTH_SHORT).show();
-
-            mMapRoute.addMarker(new MarkerOptions()
-                    .position(new LatLng(treeDummy.getLongitude(), treeDummy.getLatitude()))
-                    .title(treeDummy.getName())
-                    .snippet("" + treeDummy.getIdTree()          //0
-                            + "-" + treeDummy.getSpecie()        //1
-                            + "-" + treeDummy.getStatus()        //2
-                            + "-" + treeDummy.getLatitude()      //3
-                            + "-" + treeDummy.getLongitude()     //4
-                            + "-" + treeDummy.getOriginalGirth() //5
-                            + "-" + treeDummy.getCurrentGirth()  //6
-                            + "-" + treeDummy.getCuttingShape()  //7
-                            + "-" + treeDummy.getName())         //8
-                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_map_tree)));
-        } catch (JSONException e) {
-            e.printStackTrace();
+    private LatLng getLatLngFromString(String latlong){
+        if(latlong != "not used" || latlong != null || latlong != "") {
+            String[] parts = latlong.split("-");
+            LatLng dummy = new LatLng(Double.parseDouble(parts[0]), Double.parseDouble(parts[1]));
+            return dummy;
         }
+        return new LatLng(0,0);
+    }
+
+    private void addMarkers(LatLng marker){
+        mMapRoute.addMarker(new MarkerOptions()
+                .position(marker)
+                .title(route.getName())
+                .snippet(route.getShortDescription()));
     }
 }

@@ -47,13 +47,13 @@
 
         <Button
             style="?android:attr/buttonStyleSmall"
-            android:layout_width="wrap_content"
+            android:layout_width="150dp"
             android:layout_height="70dp"
             android:text="@string/string_currentLoacationB"
             android:id="@+id/currentLocationB"
             android:layout_below="@+id/explanationError_newtree"
-            android:layout_alignRight="@+id/explanationError_newtree"
-            android:layout_alignEnd="@+id/explanationError_newtree" />
+            android:layout_alignLeft="@+id/explanationError_newtree"
+            android:layout_alignStart="@+id/explanationError_newtree" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -61,9 +61,9 @@
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:text="@string/string_longitude_text_newtree"
             android:id="@+id/longtitude_text_newtree"
-            android:layout_above="@+id/latitudeNewTree"
-            android:layout_alignLeft="@+id/reasonForNewTree"
-            android:layout_alignStart="@+id/reasonForNewTree" />
+            android:layout_alignBottom="@+id/longtitudeNewTree"
+            android:layout_alignLeft="@+id/currentLocationB"
+            android:layout_alignStart="@+id/currentLocationB" />
 
         <EditText
             android:layout_width="200dp"
@@ -71,10 +71,13 @@
             android:inputType="numberDecimal"
             android:ems="10"
             android:id="@+id/longtitudeNewTree"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="62dp"
+            android:layout_marginLeft="10dp"
             android:layout_below="@+id/currentLocationB"
-            android:layout_alignRight="@+id/reasonForNewTree"
-            android:layout_alignEnd="@+id/reasonForNewTree" />
+            android:layout_alignRight="@+id/button_add_tree_choose_location"
+            android:layout_alignEnd="@+id/button_add_tree_choose_location"
+            android:layout_alignLeft="@+id/submitNewTreeB"
+            android:layout_alignStart="@+id/submitNewTreeB" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -183,14 +186,14 @@
             android:layout_alignStart="@+id/longtitude_text_newtree" />
 
         <Button
-            android:layout_width="wrap_content"
+            android:layout_width="150dp"
             android:layout_height="70dp"
             android:text="@string/button_add_tree_choose_location"
             android:id="@+id/button_add_tree_choose_location"
-            android:layout_below="@+id/explanationError_newtree"
-            android:layout_toRightOf="@+id/explanationError_newtree"
-            android:layout_toEndOf="@+id/explanationError_newtree"
-            android:onClick="getLocationOnMap"/>
+            android:onClick="getLocationOnMap"
+            android:layout_above="@+id/longtitudeNewTree"
+            android:layout_toRightOf="@+id/currentLocationB"
+            android:layout_toEndOf="@+id/currentLocationB" />
 
 
     </RelativeLayout>

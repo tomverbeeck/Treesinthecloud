@@ -1,38 +1,42 @@
 package com.example.user.treesinthecloud.Routes;
 
-import com.example.user.treesinthecloud.TreeDatabase.Tree;
+import android.content.Context;
+import android.widget.Toast;
 
-import java.util.List;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Created by User on 21/04/2016.
  */
 public class Route {
 
-    private int idRoute;
     private String name;
     private String shortDescription;
-    private int length;
-    private List<Tree> trees;
+    private String length;
+
+    private ArrayList<String> markers = new ArrayList<>();
+
+    private HashMap<String, String> trees = new HashMap<>();
 
     public Route(){
 
     }
 
-    public Route(int idRoute, String name, String shortDescription, int length)
+    @Override
+    public String toString() {
+        return "Route{" +
+                "name='" + name + '\'' +
+                ", shortDescription='" + shortDescription + '\'' +
+                ", length='" + length + '\'' +
+                '}';
+    }
+
+    public Route(String name, String shortDescription, String length)
     {
-        this.idRoute = idRoute;
         this.name = name;
         this.shortDescription = shortDescription;
         this.length = length;
-    }
-
-    public int getIdRoute() {
-        return idRoute;
-    }
-
-    public void setIdRoute(int idRoute) {
-        this.idRoute = idRoute;
     }
 
     public String getName() {
@@ -43,11 +47,11 @@ public class Route {
         this.name = name;
     }
 
-    public int getLength() {
+    public String getLength() {
         return length;
     }
 
-    public void setLength(int length) {
+    public void setLength(String length) {
         this.length = length;
     }
 
@@ -57,5 +61,29 @@ public class Route {
 
     public void setShortDescription(String shortDescription) {
         this.shortDescription = shortDescription;
+    }
+
+    public ArrayList<String> getMarkers() {
+        return markers;
+    }
+
+    public void setMarkers(ArrayList<String> markers) {
+        this.markers = markers;
+    }
+
+    public void addTree(String id, String descr, Context con){
+        if(id != "" && descr != ""){
+            trees.put(id, descr);
+            Toast.makeText(con, "tree added", Toast.LENGTH_SHORT).show();
+        }
+
+    }
+
+    public HashMap<String, String> getTrees() {
+        return trees;
+    }
+
+    public void setTrees(HashMap<String, String> trees) {
+        this.trees = trees;
     }
 }
