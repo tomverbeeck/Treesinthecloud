@@ -52,14 +52,11 @@ import org.json.JSONObject;
 public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoWindowClickListener,OnMapReadyCallback {
 
     private GoogleMap mMap;
-
     private DrawerLayout drawerLayout;
     private Toolbar toolbar;
     private NavigationView navigationView;
     private ActionBarDrawerToggle actionBarDrawerToggle;
-
     private int zoomLevel;
-
     private DatabaseHandler db;
 
     private double range = 0.002;
