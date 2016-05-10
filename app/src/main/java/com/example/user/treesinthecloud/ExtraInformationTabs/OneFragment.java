@@ -45,6 +45,7 @@ public class OneFragment extends Fragment{
         tree.setOriginalGirth(getActivity().getIntent().getExtras().getInt("treeOrgGirth"));
         tree.setCurrentGirth(getActivity().getIntent().getExtras().getInt("treeCurGirth"));
         tree.setCuttingShape(getActivity().getIntent().getExtras().getString("treeCutShape"));
+        tree.setShortDescr(getActivity().getIntent().getExtras().getString("shortDescription"));
 
         specie.setText("" + tree.getSpecie());
         status.setText(tree.getStatus());

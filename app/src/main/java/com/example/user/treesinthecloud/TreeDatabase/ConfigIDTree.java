@@ -5,15 +5,6 @@ public class ConfigIDTree {
     public static final String DATA_URL = "http://projectmovie.16mb.com/sortID.php?idTrees=";
     public static final String URL_GET_TREE_AREA = "http://projectmovie.16mb.com/showTreesInArea.php";
 
-    public static final String KEY_ID = "idTrees";
-    public static final String KEY_LONGITUDE = "longitude";
-    public static final String KEY_LATITUDE = "latitude";
-    public static final String KEY_SPECIE = "specie";
-    public static final String KEY_STATUS = "status";
-    public static final String KEY_COMMON_NAME = "common name";
-    public static final String KEY_ORIGINAL_GIRTH = "original girth";
-    public static final String KEY_CURRENT_GIRTH = "current girth";
-    public static final String KEY_CUTTING_SHAPE = "cutting shape";
     public static final String JSON_ARRAY = "result";
 
     //public static final String URL_GET_ALL = "https://a15_ee5_trees1.studev.groept.be/showAllTrees.php";

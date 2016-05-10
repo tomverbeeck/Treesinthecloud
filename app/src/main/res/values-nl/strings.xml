@@ -31,7 +31,7 @@
     <string name="title_acitivty_add_tree">Boom Toevoegen</string>
     <string name="title_activity_change_color">Welke Kleur?</string>
     <string name="title_activity_change_language">Selecteer Taal</string>
-    <string name="title_activity_login">Geleive aan te Melden</string>
+    <string name="title_activity_login">Gelieve aan te Melden</string>
     <string name="title_activity_maps">Trees in the cloud</string>
     <string name="title_activity_settings">Instellingen</string>
     <string name="title_activity_tree_profile">Boom Profiel</string>
@@ -80,6 +80,7 @@
     <string name="textview_extra_info_address">Locatie van de Boom</string>
     <string name="text_unable_to_load_address">Adres van de Boom niet kunnen ophalen</string>
     <string name="title_menu_options_routes">Routes</string>
+    <string name="make_group_string">Maak groep</string>
 
 
 </resources>

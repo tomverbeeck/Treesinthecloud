@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.user.treesinthecloud">
 
+
     <!--
          The ACCESS_COARSE/FINE_LOCATION permissions are not required to use
          Google Maps Android API v2, but you must specify either coarse or fine
@@ -46,8 +47,7 @@
 
         <activity
             android:name=".MapsActivity"
-            android:label="@string/title_activity_maps"
-            android:theme="@style/AppTheme">
+            android:label="@string/title_activity_maps">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -57,43 +57,52 @@
         <activity
             android:name=".SettingsActivity"
             android:label="@string/title_activity_settings"
-            android:theme="@style/MyMaterialTheme" />
+            android:theme="@style/AppTheme"/>
+
         <activity
             android:name=".SettingsMenu.ChangeColor"
             android:label="@string/title_activity_change_color"
-            android:theme="@style/AppTheme" />
+        android:theme="@style/AppTheme"/>
+
         <activity
             android:name=".SettingsMenu.ChangeLanguage"
             android:label="@string/title_activity_change_language"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/AppTheme"/>
         <activity
             android:name=".TreeProfileActivity"
             android:label="@string/title_activity_tree_profile"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/AppTheme"/>
+
         <activity
             android:name=".AddTree.NewtreeActivity"
             android:label="@string/title_acitivty_add_tree"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/AppTheme"/>
+
         <activity
             android:name=".SettingsMenu.CustomizeMarker"
             android:label="@string/title_acitivty_customize_marker"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/AppTheme"/>
+
         <activity
             android:name=".Login.LoginActivity"
             android:label="@string/title_activity_login"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/AppTheme"/>
+
         <activity
             android:name=".Login.SignupActivity"
             android:label="@string/title_activity_signup"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/AppTheme"/>
+
         <activity
             android:name=".ExtraInformationTabs.ExtraInfoTreeActivity"
             android:label="@string/title_activity_get_extra_info"
-            android:theme="@style/MyMaterialTheme" />
+            android:theme="@style/MyMaterialTheme"/>
+
         <activity
             android:name=".AddTree.ChooseLocationActivity"
-            android:label="@string/title_activity_choose_location">
-            <meta-data
+            android:label="@string/title_activity_choose_location"
+            android:theme="@style/AppTheme">
+        <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.user.treesinthecloud.MapsActivity" />
         </activity>
@@ -102,26 +111,37 @@
             android:label="@string/title_activity_routes"
             android:parentActivityName=".MapsActivity"
             android:theme="@style/AppTheme">
-            <meta-data
+        <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.user.treesinthecloud.MapsActivity" />
         </activity>
+
         <activity
             android:name=".Routes.MapsActivity_Route"
-            android:label="@string/title_activity_maps_activity__route">
-            <meta-data
+            android:label="@string/title_activity_maps_activity__route"
+            android:theme="@style/Theme.Example">
+        <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.user.treesinthecloud.MapsActivity" />
         </activity>
         <activity
             android:name=".Routes.NewRouteMapsActivity"
-            android:label="@string/title_activity_new_route_maps">
-            <meta-data
+            android:label="@string/title_activity_new_route_maps"
+            android:theme="@style/AppTheme">
+        <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.user.treesinthecloud.MapsActivity" />
         </activity>
-        <activity android:name=".Routes.SetDetailsRouteActivity" />
-        <activity android:name=".Routes.NewRouteDescriptionTree"></activity>
+
+        <activity android:name=".Routes.SetDetailsRouteActivity"
+            android:theme="@style/AppTheme"/>
+        <activity android:name=".Routes.NewRouteDescriptionTree"
+            android:theme="@style/AppTheme"/>
+
+        <activity android:name=".Groups.MakegroupActivity"
+            android:theme="@style/AppTheme"/>
+
+
     </application>
 
 </manifest>

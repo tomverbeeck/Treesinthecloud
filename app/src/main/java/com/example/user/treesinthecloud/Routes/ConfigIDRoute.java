@@ -1,7 +1,7 @@
 package com.example.user.treesinthecloud.Routes;
 
 public class ConfigIDRoute {
-    public static final String DATA_URL = "http://projectmovie.16mb.com/getTreeFromRoute.php?idRoutes=";
+    public static final String GET_TREE_URL = "http://projectmovie.16mb.com/getTreeFromRoute.php?nameRoute=";
     public static final String ADDROUTE_URL = "http://projectmovie.16mb.com/addRoute.php";
     public static final String ADDTREETOROUTE_URL = "http://projectmovie.16mb.com/addTreeToRoute.php";
     public static final String GET_ROUTE_URL = "http://projectmovie.16mb.com/sortIDRoute.php?name=";
@@ -27,7 +27,4 @@ public class ConfigIDRoute {
 
 
     public static final String JSON_ARRAY = "result";
-
-
-
 }

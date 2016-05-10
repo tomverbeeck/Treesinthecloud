@@ -27,6 +27,8 @@ public class Tree implements Serializable{
     private int originalGirth;              //stamomtrek
     private int currentGirth;
 
+    private String shortDescr;
+
     public Tree(){}
 
     public Tree (int idTree, double latitude, double longitude, String specie, String name, String status, String cuttingShape, int originalGirth, int currentGirth){
@@ -126,5 +128,13 @@ public class Tree implements Serializable{
     public void setCurrentGirth(int currentGirth) {
         if(currentGirth != 0)
             this.currentGirth = currentGirth;
+    }
+
+    public String getShortDescr() {
+        return shortDescr;
+    }
+
+    public void setShortDescr(String shortDescr) {
+        this.shortDescr = shortDescr;
     }
 }

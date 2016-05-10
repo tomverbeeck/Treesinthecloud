@@ -4,15 +4,15 @@ package com.example.user.treesinthecloud;
  * Created by Gebruiker on 17/03/2016.
  */
 
-import android.app.Activity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
 import android.widget.TextView;
 
 /**
  * Created by Gebruiker on 16/03/2016.
  */
-public class TreeProfileActivity extends Activity {
+public class TreeProfileActivity extends AppCompatActivity {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:id="@+id/scrollView"
+    android:visibility="visible"
+    style="AppTheme.Dark">
+
+    <LinearLayout
+        xmlns:tools="http://schemas.android.com/tools"
+        android:orientation="vertical"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        tools:context=".MakegroupActivity">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="@string/string_make_a_group"
+            android:id="@+id/makeGroupTitle"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="30sp"
+            android:layout_marginBottom="20sp" />
+
+        <ListView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/listViewUsers"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:fastScrollAlwaysVisible="false"
+            android:fastScrollEnabled="false"
+            android:focusable="true"
+            android:importantForAccessibility="yes" />
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <Button
+                style="?android:attr/borderlessButtonStyle"
+                android:id="@+id/addUser"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="+"
+                android:textSize="30dp"
+                android:onClick="addUserToList"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
+                android:layout_marginRight="32dp"
+                android:layout_marginEnd="32dp"
+                android:gravity="center" />
+
+            <AutoCompleteTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:inputType="textPersonName"
+                android:text="@string/string_username"
+                android:ems="10"
+                android:layout_marginTop="15dp"
+                android:layout_marginLeft="40dp"
+                android:id="@+id/addUserText"
+                android:gravity="bottom"
+                android:layout_below="@+id/listViewUsers" />
+
+        </RelativeLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="@string/string_user_does_not_exist"
+            android:id="@+id/user_does_not_exist"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="10dp"
+            android:textColor="#f13f3f"
+            android:visibility="invisible" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Continue"
+            android:textColor="@color/black"
+            android:id="@+id/continueB"
+            android:gravity="center"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="10dp"
+            android:onClick="ContinueButton"
+            android:background="@color/green" />
+
+
+    </LinearLayout>
+
+</ScrollView>
+
+

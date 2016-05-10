@@ -18,9 +18,10 @@ import java.util.Locale;
 
 public class TwoFragment extends Fragment {
 
-    private TextView addressLabel;
+    private TextView addressLabel, titelDescr, descr;
     private double longitude;
     private double latitude;
+    private String description;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -34,7 +35,21 @@ public class TwoFragment extends Fragment {
 
         longitude = getActivity().getIntent().getExtras().getDouble("treeLong");
         latitude = getActivity().getIntent().getExtras().getDouble("treeLat");
+        description = getActivity().getIntent().getExtras().getString("shortDescription");
+
         addressLabel = (TextView) view.findViewById(R.id.TextView_extra_info_street);
+        titelDescr = (TextView) view.findViewById(R.id.TextView_extra_info_titel_descr_tree);
+        descr = (TextView) view.findViewById(R.id.TextView_extra_info_tree_descr) ;
+
+        if(description == null){
+            titelDescr.setVisibility(View.INVISIBLE);
+            descr.setVisibility(View.INVISIBLE);
+        }else{
+            titelDescr.setVisibility(View.VISIBLE);
+            descr.setVisibility(View.VISIBLE);
+            descr.setText(description);
+        }
+
         Location locationTree = new Location("");
         locationTree.setLatitude(latitude);
         locationTree.setLongitude(longitude);

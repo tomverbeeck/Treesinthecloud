@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="250dp"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:id="@+id/layout_popup_choose_groupname"
+    style="AppTheme.Dark"
+    android:background="@color/primary_dark">
+
+    <TextView android:id="@+id/popup_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:gravity="center_horizontal"
+        android:text="@string/string_choose_your_group_name"
+        android:textSize="18sp"
+        android:textIsSelectable="false" />
+
+    <EditText
+        android:layout_width="184dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/groupnameTextfield"
+        android:gravity="center_horizontal"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="15dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="@string/string_group_name_error"
+        android:id="@+id/groupnameError"
+        android:textColor="#f13f3f"
+        android:visibility="invisible"
+        android:gravity="center_horizontal"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="5dp" />
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal">
+
+
+        <Button
+            android:id="@+id/CancelB"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/string_cancel"
+            android:onClick="cancelPopup"
+            android:background="@color/primary_darker" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/ConfirmB"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="20dp"
+            android:text="@string/string_confirm"
+            android:onClick="confirmPopup"
+            android:background="@color/primary_darker" />
+    </LinearLayout>
+
+
+</LinearLayout>
+
+

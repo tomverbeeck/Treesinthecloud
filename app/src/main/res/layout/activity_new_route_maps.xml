@@ -65,7 +65,7 @@
         android:id="@+id/textview_new_route_help"
         android:textSize="15dp"
         android:text="Hulp"
-        android:textColor="@color/colorWhite"
+        android:textColor="@color/black"
         android:layout_gravity="center"
         android:layout_marginTop="10dp"/>
 

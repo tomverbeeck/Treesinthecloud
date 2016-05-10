@@ -21,6 +21,7 @@ import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.example.user.treesinthecloud.R;
 
 public class NewtreeActivity extends AppCompatActivity {
@@ -90,7 +91,7 @@ public class NewtreeActivity extends AppCompatActivity {
                 //check for decent explanation
 
                 String expl = explanation.getText().toString();
-                if (expl.trim().length() > 20) {
+                if (expl.trim().length() < 20) {
                     explanationError.setVisibility(view.VISIBLE);
                     return;
                 }

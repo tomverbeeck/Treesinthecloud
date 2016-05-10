@@ -15,6 +15,7 @@
     <string name="closeDrawer">Navigation View</string>
     <string name="openDrawer">Navigation View Closed</string>
     <string name="text_loading_trees">Loading Trees ...</string>
+    <string name="make_group_string">Make Group</string>
 
     <!--activity names-->
     <string name="title_activity_maps">Trees in the cloud</string>
@@ -29,6 +30,8 @@
     <string name="title_activity_get_extra_info">Extra Information</string>
     <string name="title_activity_choose_location">Choose Location</string>
     <string name="title_activity_routes">Routes</string>
+    <string name="title_activity_make_group">Make a Group</string>
+
 
     <string name="drawer_open">Open Navigation Drawer</string>
     <string name="drawer_close">Close Navigation Drawer</string>
@@ -102,6 +105,18 @@
     <string name="string_popup_newtree">Bent u zeker dat u deze boom wilt aanvragen? Een verzoek zal verstuurd worden naar Klimaat Neutraal Leuven.</string>
     <string name="string_popup_newtree_cancel">Annuleren</string>
     <string name="string_popup_newtree_continue">DOORGAAN</string>
+
+    <!-- social part-->
+    <string name="string_username">username</string>
+    <string name="string_make_a_group">Make a group</string>
+    <string name="string_user_does_not_exist">User does not existt</string>
+    <string name="string_popup_makegroup">Do you still want to add</string>
+    <string name="stirng_no">No</string>
+    <string name="string_yes">Yes</string>
+    <string name="string_group_name_error">group name already taken</string>
+    <string name="string_cancel">Cancel</string>
+    <string name="string_confirm">Confirm</string>
+    <string name="string_choose_your_group_name">Choose your group name</string>
 
 </resources>
 

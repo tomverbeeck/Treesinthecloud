@@ -133,7 +133,7 @@ public class NewRouteMapsActivity extends AppCompatActivity implements OnMapRead
                  * for the rest of markers, the color is AZURE
                  */
 
-                drawCircle(point);
+                //drawCircle(point);
 
                 if(markerPoints.size()==1){
                     options.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
@@ -234,7 +234,7 @@ public class NewRouteMapsActivity extends AppCompatActivity implements OnMapRead
                 String res = "";
 
                 // Get a set of the entries
-                Set set = route.getTrees().entrySet();
+                Set set = route.getTreesHash().entrySet();
                 // Get an iterator
                 Iterator i = set.iterator();
                 // Display elements
@@ -636,7 +636,7 @@ public class NewRouteMapsActivity extends AppCompatActivity implements OnMapRead
                 String stredittext=data.getStringExtra("descriptionTree");
                 String id = data.getStringExtra("idTreesReturn");
                 route.addTree(id , stredittext, getApplicationContext());
-                Toast.makeText(getApplicationContext(), "Tree added to Database, trees size is " + route.getTrees().size(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "Tree added to temporary Database, size is " + route.getTreesHash().size(), Toast.LENGTH_SHORT).show();
             }
         }
     }

@@ -1,7 +1,8 @@
 package com.example.user.treesinthecloud.Routes;
 
 import android.content.Context;
-import android.widget.Toast;
+
+import com.example.user.treesinthecloud.TreeDatabase.Tree;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -17,7 +18,9 @@ public class Route {
 
     private ArrayList<String> markers = new ArrayList<>();
 
-    private HashMap<String, String> trees = new HashMap<>();
+    private ArrayList<Tree> trees = new ArrayList<>();
+
+    private HashMap<String, String> treesHash = new HashMap<>();
 
     public Route(){
 
@@ -71,19 +74,20 @@ public class Route {
         this.markers = markers;
     }
 
-    public void addTree(String id, String descr, Context con){
-        if(id != "" && descr != ""){
-            trees.put(id, descr);
-            Toast.makeText(con, "tree added", Toast.LENGTH_SHORT).show();
-        }
-
-    }
-
-    public HashMap<String, String> getTrees() {
+    public ArrayList<Tree> getTrees() {
         return trees;
     }
 
-    public void setTrees(HashMap<String, String> trees) {
-        this.trees = trees;
+    public void setTrees(Tree tree) {
+        if(tree != null)
+            trees.add(tree);
+    }
+
+    public void addTree(String id, String descr, Context con){
+        treesHash.put(id, descr);
+    }
+
+    public HashMap<String, String> getTreesHash() {
+        return treesHash;
     }
 }

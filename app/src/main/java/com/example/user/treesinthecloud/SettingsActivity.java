@@ -14,7 +14,7 @@ import com.example.user.treesinthecloud.SettingsMenu.ChangeLanguage;
 import com.example.user.treesinthecloud.SettingsMenu.ChangePassword;
 import com.example.user.treesinthecloud.SettingsMenu.CustomizeMarker;
 
-public class SettingsActivity extends AppCompatActivity{
+public class SettingsActivity extends AppCompatActivity {
 
     private ListView list_settings;
 

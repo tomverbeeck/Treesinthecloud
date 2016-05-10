@@ -29,9 +29,11 @@ import android.widget.Toast;
 
 import com.example.user.treesinthecloud.AddTree.NewtreeActivity;
 import com.example.user.treesinthecloud.ExtraInformationTabs.ExtraInfoTreeActivity;
+import com.example.user.treesinthecloud.Groups.MakegroupActivity;
 import com.example.user.treesinthecloud.Login.LoginActivity;
 import com.example.user.treesinthecloud.Login.UserLocalStore;
 import com.example.user.treesinthecloud.TreeDatabase.ConfigIDTree;
+import com.example.user.treesinthecloud.TreeDatabase.DatabaseHandler;
 import com.example.user.treesinthecloud.TreeDatabase.RequestHandler;
 import com.example.user.treesinthecloud.TreeDatabase.Tree;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -47,7 +49,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoWindowClickListener,OnMapReadyCallback{
+public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoWindowClickListener,OnMapReadyCallback {
 
     private GoogleMap mMap;
 
@@ -58,6 +60,10 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
 
     private int zoomLevel;
 
+    private DatabaseHandler db;
+
+    private double range = 0.002;
+
     UserLocalStore userLocalStore;
 
     //get one tree
@@ -66,6 +72,7 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
 
     private LatLng currentLoc;
 
+    private int MY_PERMISSIONS_REQUEST_LOCATION =11;
 
 
     @Override
@@ -78,10 +85,10 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
         mapFragment.getMapAsync(this);
 
         userLocalStore = new UserLocalStore(this);
-        instance = this;
         // Initializing Toolbar and setting it as the actionbar
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        db = new DatabaseHandler(getApplicationContext());
 
         //Initializing NavigationView
         navigationView = (NavigationView) findViewById(R.id.navigation_view);
@@ -119,6 +126,12 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
                         Intent intentAddTree = new Intent(getApplicationContext(), NewtreeActivity.class);
                         startActivity(intentAddTree);
                         getSupportActionBar().setTitle(R.string.title_acitivty_add_tree);
+                        return true;
+
+                    case R.id.makeGroup:
+                        Intent intentmakeGroup = new Intent(getApplicationContext(), MakegroupActivity.class);
+                        startActivity(intentmakeGroup);
+                        getSupportActionBar().setTitle(R.string.title_activity_make_group);
                         return true;
 
                     case R.id.settings:
@@ -231,7 +244,15 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
         mMap.getUiSettings().setScrollGesturesEnabled(true);
         mMap.getUiSettings().setMyLocationButtonEnabled(true);
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+
+            ActivityCompat.requestPermissions(MapsActivity.instance,
+                    new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
+                    MY_PERMISSIONS_REQUEST_LOCATION);
+
             return;
+
+
+
         }
         mMap.setMyLocationEnabled(true);
         mMap.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
@@ -269,6 +290,29 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
         }
 
         getJSON();
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        if (requestCode == MY_PERMISSIONS_REQUEST_LOCATION) {
+            // If request is cancelled, the result arrays are empty.
+            if (grantResults.length > 0
+                    && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                // permission was granted, yay! Do the
+                // contacts-related task you need to do.
+
+            } else {
+
+                // permission denied, boo! Disable the
+                // functionality that depends on this permission.
+            }
+
+        }
+
+        // other 'case' lines to check for other
+        // permissions this app might request
     }
 
     public void getJSON(){
@@ -310,19 +354,11 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
                         tree.setCurrentGirth(Integer.parseInt(jo.getString(ConfigIDTree.TAG_CURRENT_GIRTH)));
                         tree.setCuttingShape(jo.getString(ConfigIDTree.TAG_CUTTING_SHAPE));
 
-                        mMap.addMarker(new MarkerOptions()
-                                .position(new LatLng(tree.getLatitude(), tree.getLongitude()))
-                                .title(tree.getName())
-                                .snippet("" + tree.getIdTree()          //0
-                                        + "-" + tree.getLatitude()      //1
-                                        + "-" + tree.getLongitude()     //2
-                                        + "-" + tree.getSpecie()        //3
-                                        + "-" + tree.getStatus()        //4
-                                        + "-" + tree.getOriginalGirth() //5
-                                        + "-" + tree.getCurrentGirth()  //6
-                                        + "-" + tree.getCuttingShape()  //7
-                                        + "-" + tree.getName())         //8
-                                .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_map_tree)));
+                        addMarker(tree);
+                        //db.addTree(tree);
+
+                        //String text = db.getTree(213508).toString();
+                        //Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT).show();
                     }
 
                     Toast.makeText(getApplicationContext(), "result size: " + result.length(), Toast.LENGTH_SHORT).show();
@@ -334,14 +370,43 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
 
             @Override
             protected String doInBackground(Void... params) {
-                //LatLng leuven = new LatLng(50.878554 , 4.70637);
                 RequestHandler rh = new RequestHandler();
+
+                //LatLng leuven = new LatLng(50.878554 , 4.70637);
+                double dummy = currentLoc.longitude - range;
+                String curLongMin = "" + dummy;
+                dummy = currentLoc.longitude + range;
+                String curLongMax = "" + dummy;
+                dummy = currentLoc.latitude + range;
+                String curLatMax = "" + dummy;
+                dummy = currentLoc.latitude - range;
+                String curLatMin = "" + dummy;
+                String rest = "?latMin=" + curLatMin + "&latMax=" + curLatMax + "&longMin=" + curLongMin + "&longMax=" + curLongMax;
+
                 String s = rh.sendGetRequest(ConfigIDTree.URL_GET_ALL);
                 return s;
             }
         }
         GetJSON gj = new GetJSON();
         gj.execute();
+    }
+
+    public void addMarker(Tree tree){
+        mMap.addMarker(new MarkerOptions()
+                .position(new LatLng(tree.getLatitude(), tree.getLongitude()))
+                .title(tree.getName())
+                .snippet("" + tree.getIdTree()          //0
+                        + "-" + tree.getLatitude()      //1
+                        + "-" + tree.getLongitude()     //2
+                        + "-" + tree.getSpecie()        //3
+                        + "-" + tree.getStatus()        //4
+                        + "-" + tree.getOriginalGirth() //5
+                        + "-" + tree.getCurrentGirth()  //6
+                        + "-" + tree.getCuttingShape()  //7
+                        + "-" + tree.getName()         //8
+                        + "-" + tree.getShortDescr())   //9
+
+                .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_map_tree)));
     }
 
     @Override
@@ -359,6 +424,7 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
             intentMoreInfo.putExtra("treeCurGirth", Integer.parseInt(parts[6]));
             intentMoreInfo.putExtra("treeCutShape", parts[7]);
             intentMoreInfo.putExtra("treeName", parts[8]);
+            intentMoreInfo.putExtra("shortDescription", parts[9]);
         }
         startActivity(intentMoreInfo);
     }
