@@ -311,7 +311,7 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
         List<Tree> trees = new ArrayList<>();
         trees = db.getAllTrees();
 
-        for(int i = 0; i < 10000; i++){
+        for(int i = 0; i < 100; i++){
             addMarker(trees.get(i));
         }
 

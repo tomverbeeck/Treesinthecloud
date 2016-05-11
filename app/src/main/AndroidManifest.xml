@@ -101,7 +101,7 @@
         <activity
             android:name=".AddTree.ChooseLocationActivity"
             android:label="@string/title_activity_choose_location"
-            android:theme="@style/AppTheme">
+            android:theme="@style/MyMaterialTheme">
         <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.user.treesinthecloud.MapsActivity" />
@@ -110,7 +110,7 @@
             android:name=".RoutesActivity"
             android:label="@string/title_activity_routes"
             android:parentActivityName=".MapsActivity"
-            android:theme="@style/AppTheme">
+            android:theme="@style/MyMaterialTheme">
         <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.user.treesinthecloud.MapsActivity" />
@@ -119,7 +119,7 @@
         <activity
             android:name=".Routes.MapsActivity_Route"
             android:label="@string/title_activity_maps_activity__route"
-            android:theme="@style/Theme.Example">
+            android:theme="@style/MyMaterialTheme">
         <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.user.treesinthecloud.MapsActivity" />
@@ -127,19 +127,19 @@
         <activity
             android:name=".Routes.NewRouteMapsActivity"
             android:label="@string/title_activity_new_route_maps"
-            android:theme="@style/AppTheme">
+            android:theme="@style/MyMaterialTheme">
         <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.user.treesinthecloud.MapsActivity" />
         </activity>
 
         <activity android:name=".Routes.SetDetailsRouteActivity"
-            android:theme="@style/AppTheme"/>
+            android:theme="@style/MyMaterialTheme"/>
         <activity android:name=".Routes.NewRouteDescriptionTree"
-            android:theme="@style/AppTheme"/>
+            android:theme="@style/MyMaterialTheme"/>
 
         <activity android:name=".Groups.MakegroupActivity"
-            android:theme="@style/AppTheme"/>
+            android:theme="@style/MyMaterialTheme"/>
 
 
     </application>
