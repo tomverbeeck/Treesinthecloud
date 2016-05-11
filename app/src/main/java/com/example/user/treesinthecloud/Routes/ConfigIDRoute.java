@@ -5,7 +5,7 @@ public class ConfigIDRoute {
     public static final String ADDROUTE_URL = "http://projectmovie.16mb.com/addRoute.php";
     public static final String ADDTREETOROUTE_URL = "http://projectmovie.16mb.com/addTreeToRoute.php";
     public static final String GET_ROUTE_URL = "http://projectmovie.16mb.com/sortIDRoute.php?name=";
-    public static final String URL_GET_ALL = "http://projectmovie.16mb.com/showAllRoutes.php";
+    public static final String URL_GET_ALL = "https://projectmovie.16mb.com/showAllRoutes.php";
 
     public static final String KEY_NAME = "name";
     public static final String KEY_SHORTDESCRIPTION = "shortDescription";

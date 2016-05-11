@@ -49,6 +49,13 @@
             android:id="@+id/TextView_extra_info_tree_descr"
             android:paddingBottom="20dp"/>
 
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Extra info boom"
+            android:id="@+id/button3"
+            android:layout_gravity="center_horizontal"/>
+
     </LinearLayout>
 
 

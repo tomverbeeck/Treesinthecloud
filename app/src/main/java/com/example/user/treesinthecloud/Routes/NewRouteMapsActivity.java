@@ -6,12 +6,15 @@ import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.IntentCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.user.treesinthecloud.MapsActivity;
 import com.example.user.treesinthecloud.R;
 import com.example.user.treesinthecloud.TreeDatabase.ConfigIDTree;
 import com.example.user.treesinthecloud.TreeDatabase.RequestHandler;
@@ -54,6 +57,8 @@ public class NewRouteMapsActivity extends AppCompatActivity implements OnMapRead
     private ArrayList<Tree> trees;
     private LatLng location;
     private int countTrees;
+    private Toolbar toolbar;
+
 
     private Route route = new Route();
 
@@ -61,6 +66,10 @@ public class NewRouteMapsActivity extends AppCompatActivity implements OnMapRead
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_route_maps);
+
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
@@ -246,7 +255,9 @@ public class NewRouteMapsActivity extends AppCompatActivity implements OnMapRead
                 }
                 addWholeRoute();
 
-                finish();
+                Intent intent = new Intent(getApplicationContext(), MapsActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | IntentCompat.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
             }
         });
 
@@ -589,7 +600,7 @@ public class NewRouteMapsActivity extends AppCompatActivity implements OnMapRead
                         }
                     }
 
-                    Toast.makeText(getApplicationContext(), "trees size: " + trees.size(), Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(getApplicationContext(), "trees size: " + trees.size(), Toast.LENGTH_SHORT).show();
                     //this.loading.dismiss();
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -636,7 +647,7 @@ public class NewRouteMapsActivity extends AppCompatActivity implements OnMapRead
                 String stredittext=data.getStringExtra("descriptionTree");
                 String id = data.getStringExtra("idTreesReturn");
                 route.addTree(id , stredittext, getApplicationContext());
-                Toast.makeText(getApplicationContext(), "Tree added to temporary Database, size is " + route.getTreesHash().size(), Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getApplicationContext(), "Tree added to temporary Database, size is " + route.getTreesHash().size(), Toast.LENGTH_SHORT).show();
             }
         }
     }

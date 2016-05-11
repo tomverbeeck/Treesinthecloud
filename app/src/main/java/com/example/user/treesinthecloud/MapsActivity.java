@@ -50,9 +50,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoWindowClickListener,OnMapReadyCallback {
 
     private GoogleMap mMap;
@@ -306,14 +303,14 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
             currentLoc = new LatLng(location.getLatitude(), location.getLongitude());
         }
 
-        //getJSON();
+        getJSON();
 
-        List<Tree> trees = new ArrayList<>();
+        /*List<Tree> trees = new ArrayList<>();
         trees = db.getAllTrees();
 
         for(int i = 0; i < 100; i++){
             addMarker(trees.get(i));
-        }
+        }*/
 
 
 
@@ -387,7 +384,7 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
                         tree.setCurrentGirth(Integer.parseInt(jo.getString(ConfigIDTree.TAG_CURRENT_GIRTH)));
                         tree.setCuttingShape(jo.getString(ConfigIDTree.TAG_CUTTING_SHAPE));
 
-                        //addMarker(tree);
+                        addMarker(tree);
 
                         /*if(update == "false")
                             db.addTree(tree);*/
@@ -444,7 +441,7 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
         intentMoreInfo.putExtra("treeID", parts[0]);
         intentMoreInfo.putExtra("treeLat", Double.parseDouble(parts[1]));
         intentMoreInfo.putExtra("treeLong", Double.parseDouble(parts[2]));
-        if(parts[8] != "") {
+        if(parts[8] != "" || parts[8] !=null) {
             intentMoreInfo.putExtra("treeSpecie", parts[3]);
             intentMoreInfo.putExtra("treeStatus", parts[4]);
             intentMoreInfo.putExtra("treeOrgGirth", Integer.parseInt(parts[6]));

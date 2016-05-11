@@ -4,10 +4,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
+import android.support.design.widget.FloatingActionButton;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -25,21 +26,24 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RoutesActivity extends FragmentActivity implements ListView.OnItemClickListener{
+public class RoutesActivity extends AppCompatActivity implements ListView.OnItemClickListener{
 
     ListView routeList;
     List<Route> routes = new ArrayList<>();
-    Button newRoute;
     //private ProgressDialog loading;
     private Context myContext;
+    private FloatingActionButton fab;
+    private Toolbar toolbar;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.layout_routes);
 
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
         routeList = (ListView)findViewById(R.id.listView_routes);
-        newRoute = (Button) findViewById(R.id.button_route_add_new_route);
 
         if(this == null)
             myContext = this;
@@ -47,6 +51,16 @@ public class RoutesActivity extends FragmentActivity implements ListView.OnItemC
         getJSONRoute();
 
         routeList.setOnItemClickListener(this);
+
+        fab = (FloatingActionButton) findViewById(R.id.btn_create_route);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intentNewRoute = new Intent(getApplicationContext(), SetDetailsRouteActivity.class);
+                startActivity(intentNewRoute);
+
+            }
+        });
     }
 
     public void getJSONRoute(){
@@ -65,6 +79,8 @@ public class RoutesActivity extends FragmentActivity implements ListView.OnItemC
             protected void onPostExecute(String s) {
                 super.onPostExecute(s);
                 JSONObject jsonObject = null;
+
+                Toast.makeText(getApplicationContext(), s, Toast.LENGTH_SHORT).show();
 
                 try {
 
@@ -111,10 +127,4 @@ public class RoutesActivity extends FragmentActivity implements ListView.OnItemC
         intent.putExtra("route_name", routeName);
         startActivity(intent);
     }
-
-    public void getCreateRoute(View view){
-        Intent intentNewRoute = new Intent(this, SetDetailsRouteActivity.class);
-        startActivity(intentNewRoute);
-    }
-
 }

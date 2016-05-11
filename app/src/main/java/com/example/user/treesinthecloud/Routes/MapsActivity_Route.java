@@ -9,6 +9,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -52,6 +53,8 @@ public class MapsActivity_Route extends AppCompatActivity implements OnMapReadyC
     private GoogleMap mMapRoute;
     //private ProgressDialog loading;
     private Route route = new Route();
+    private Toolbar toolbar;
+
     ArrayList<LatLng> markers = new ArrayList<>();
 
 
@@ -59,6 +62,10 @@ public class MapsActivity_Route extends AppCompatActivity implements OnMapReadyC
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps_activity__route);
+
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
