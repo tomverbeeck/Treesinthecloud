@@ -5,6 +5,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.location.Criteria;
@@ -49,6 +50,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoWindowClickListener,OnMapReadyCallback {
 
     private GoogleMap mMap;
@@ -71,12 +75,29 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
 
     private int MY_PERMISSIONS_REQUEST_LOCATION =11;
 
+    private String update;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
+
+        /*SharedPreferences prefs = getSharedPreferences("updateornot", MODE_PRIVATE);
+        String restoredText = prefs.getString("updateornot", null);
+        if(restoredText == null){
+            SharedPreferences.Editor editor = getSharedPreferences("updateornot", MODE_PRIVATE).edit();
+            editor.putString("updateornot", "false");
+            editor.commit();
+        }else{
+            setUpdate();
+        }*/
+
+       // Toast.makeText(getApplicationContext(), "update is " + update, Toast.LENGTH_SHORT).show();
+
+        db = new DatabaseHandler(getApplicationContext());
+
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
@@ -85,7 +106,6 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
         // Initializing Toolbar and setting it as the actionbar
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        db = new DatabaseHandler(getApplicationContext());
 
         //Initializing NavigationView
         navigationView = (NavigationView) findViewById(R.id.navigation_view);
@@ -227,7 +247,7 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        zoomLevel = 10;
+        zoomLevel = 14;
 
         //start with fixed location
         LatLng leuven = new LatLng(50.875, 4.708);
@@ -286,7 +306,17 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
             currentLoc = new LatLng(location.getLatitude(), location.getLongitude());
         }
 
-        getJSON();
+        //getJSON();
+
+        List<Tree> trees = new ArrayList<>();
+        trees = db.getAllTrees();
+
+        for(int i = 0; i < 10000; i++){
+            addMarker(trees.get(i));
+        }
+
+
+
     }
 
     @Override
@@ -333,6 +363,12 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
                 super.onPostExecute(s);
                 loading.dismiss();
                 JSONObject jsonObject = null;
+
+                /*SharedPreferences.Editor editor = getSharedPreferences("updateornot", MODE_PRIVATE).edit();
+                editor.putString("updateornot", "true");
+                editor.commit();
+                setUpdate();*/
+
                 try {
 
                     jsonObject = new JSONObject(s);
@@ -351,14 +387,19 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
                         tree.setCurrentGirth(Integer.parseInt(jo.getString(ConfigIDTree.TAG_CURRENT_GIRTH)));
                         tree.setCuttingShape(jo.getString(ConfigIDTree.TAG_CUTTING_SHAPE));
 
-                        addMarker(tree);
-                        //db.addTree(tree);
+                        //addMarker(tree);
 
-                        //String text = db.getTree(213508).toString();
-                        //Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT).show();
+                        /*if(update == "false")
+                            db.addTree(tree);*/
+                        //Toast.makeText(getApplicationContext(), "update in loop is " + update, Toast.LENGTH_SHORT).show();
                     }
 
-                    Toast.makeText(getApplicationContext(), "result size: " + result.length(), Toast.LENGTH_SHORT).show();
+                   /* editor.putString("updateornot", "true");
+                    editor.commit();
+                    setUpdate();*/
+
+                    Toast.makeText(getApplicationContext(), "resultsize: " + result.length(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "sqlite size is " + db.getTreesCount(), Toast.LENGTH_SHORT).show();
                     this.loading.dismiss();
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -368,17 +409,6 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
             @Override
             protected String doInBackground(Void... params) {
                 RequestHandler rh = new RequestHandler();
-
-                //LatLng leuven = new LatLng(50.878554 , 4.70637);
-                double dummy = currentLoc.longitude - range;
-                String curLongMin = "" + dummy;
-                dummy = currentLoc.longitude + range;
-                String curLongMax = "" + dummy;
-                dummy = currentLoc.latitude + range;
-                String curLatMax = "" + dummy;
-                dummy = currentLoc.latitude - range;
-                String curLatMin = "" + dummy;
-                String rest = "?latMin=" + curLatMin + "&latMax=" + curLatMax + "&longMin=" + curLongMin + "&longMax=" + curLongMax;
 
                 String s = rh.sendGetRequest(ConfigIDTree.URL_GET_ALL);
                 return s;
@@ -417,12 +447,18 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
         if(parts[8] != "") {
             intentMoreInfo.putExtra("treeSpecie", parts[3]);
             intentMoreInfo.putExtra("treeStatus", parts[4]);
-            intentMoreInfo.putExtra("treeOrgGirth", Integer.parseInt(parts[5]));
-            intentMoreInfo.putExtra("treeCurGirth", Integer.parseInt(parts[6]));
+            intentMoreInfo.putExtra("treeOrgGirth", Integer.parseInt(parts[6]));
+            intentMoreInfo.putExtra("treeCurGirth", Integer.parseInt(parts[5]));
             intentMoreInfo.putExtra("treeCutShape", parts[7]);
             intentMoreInfo.putExtra("treeName", parts[8]);
             intentMoreInfo.putExtra("shortDescription", parts[9]);
         }
         startActivity(intentMoreInfo);
+    }
+
+    private void setUpdate(){
+        SharedPreferences prefs = getSharedPreferences("updateornot", MODE_PRIVATE);
+        String restoredText = prefs.getString("updateornot", null);
+        update = restoredText;
     }
 }

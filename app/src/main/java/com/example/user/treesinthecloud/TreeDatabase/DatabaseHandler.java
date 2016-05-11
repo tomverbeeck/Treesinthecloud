@@ -38,34 +38,36 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     // Creating Tables
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String sql =     "CREATE TABLE " + TABLE_NAME + " ( " +
-                KEY_ID + " INTEGER , " +
-                KEY_LONGITUDE + " DOUBLE , " +
-                KEY_LATITUDE + " DOUBLE , " +
-                KEY_SPECIE + " TEXT " +
-                KEY_STATUS + " TEXT , " +
-                KEY_COMMON_NAME + " TEXT, " +
-                KEY_CURRENT_GIRTH + " INTEGER, " +
-                KEY_ORIGINAL_GIRTH + " INTEGER, " +
-                KEY_CUTTING_SHAPE + " TEXT" +
-                " ) ";
+        String sql = "CREATE TABLE " + TABLE_NAME + "( " +
+                KEY_ID + " INT," +
+                KEY_LONGITUDE + " DOUBLE," +
+                KEY_LATITUDE + " DOUBLE, " +
+                KEY_SPECIE + " VARCHAR(255)," +
+                KEY_STATUS + " VARCHAR(255)," +
+                KEY_COMMON_NAME + " VARCHAR(255)," +
+                KEY_CURRENT_GIRTH + " INT," +
+                KEY_ORIGINAL_GIRTH + " INT," +
+                KEY_CUTTING_SHAPE + " VARCHAR(255)" +
+                ");";
         db.execSQL(sql);
     }
 
     // Upgrading database
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+
         // Drop older table if existed
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
 
         // Create tables again
         onCreate(db);
+
     }
 
     public List<Tree> getAllTrees() {
         List<Tree> treeList = new ArrayList<Tree>();
         // Select All Query
-        String selectQuery = "SELECT  * FROM " + TABLE_NAME;
+        String selectQuery = "SELECT * FROM " + TABLE_NAME;
 
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);
@@ -93,13 +95,16 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     }
 
     public int getTreesCount() {
-        String countQuery = "SELECT  * FROM " + TABLE_NAME;
+        String countQuery = "SELECT * FROM " + TABLE_NAME;
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(countQuery, null);
+
+        int count = cursor.getCount();
+
         cursor.close();
 
         // return count
-        return cursor.getCount();
+        return count;
     }
 
     public Tree getTree(int id) {
@@ -122,29 +127,23 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     public void addTree(Tree tree) {
         SQLiteDatabase db = this.getWritableDatabase();
 
-        /*ContentValues values = new ContentValues();
-        values.put(KEY_ID, tree.getIdTree());
-        values.put(KEY_LONGITUDE, tree.getLongitude());
-        values.put(KEY_LATITUDE, tree.getLatitude());
-        values.put(KEY_SPECIE, tree.getSpecie());
-        values.put(KEY_STATUS, tree.getStatus());
-        values.put(KEY_COMMON_NAME, tree.getName());
-        values.put(KEY_ORIGINAL_GIRTH, tree.getOriginalGirth());
-        values.put(KEY_CURRENT_GIRTH, tree.getCurrentGirth());
-        values.put(KEY_CUTTING_SHAPE, tree.getCuttingShape());*/
+        tree.setSpecie(tree.getSpecie().replace("'", "~"));
+        tree.setName(tree.getName().replace("'", "~"));
 
         String sql =
-                "INSERT or replace INTO " + TABLE_NAME + "(" +  KEY_ID + "," +
+                "INSERT INTO " + TABLE_NAME + /*"(" +             KEY_ID + "," +
                                                                 KEY_LONGITUDE + "," +
                                                                 KEY_LATITUDE  + "," +
                                                                 KEY_SPECIE + "," +
                                                                 KEY_STATUS + "," +
-                                                                KEY_COMMON_NAME + "," +
+                                                                KEY_COMMON_NAME +  "," +
                                                                 KEY_ORIGINAL_GIRTH + "," +
-                                                                KEY_CURRENT_GIRTH + "," + KEY_CUTTING_SHAPE + ")"
-                            + " VALUES(" + tree.getIdTree() + "," + tree.getLongitude() + "," + tree.getLatitude()
-                                         + "," + tree.getSpecie()  + "," + tree.getStatus()  + "," + tree.getName()
-                                         + "," + tree.getOriginalGirth() + "," + tree.getCurrentGirth()  + "," + tree.getCuttingShape() + ");" ;
+                                                                KEY_CURRENT_GIRTH + "," +
+                                                                KEY_CUTTING_SHAPE + ")"
+                            + */" VALUES(" + tree.getIdTree() + "," + tree.getLongitude() + "," + tree.getLatitude()
+                                         + "," + "'" + tree.getSpecie() + "'"  + "," + "'" + tree.getStatus() + "'"  + "," + "'" +
+                                            tree.getName() + "'" + "," + tree.getOriginalGirth() + "," +
+                                            tree.getCurrentGirth()  + "," + "'" + tree.getCuttingShape() + "'" + ");";
         db.execSQL(sql);
         db.close();
     }

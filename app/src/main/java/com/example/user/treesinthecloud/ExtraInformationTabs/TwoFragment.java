@@ -44,6 +44,7 @@ public class TwoFragment extends Fragment {
         if(description == null){
             titelDescr.setVisibility(View.INVISIBLE);
             descr.setVisibility(View.INVISIBLE);
+            descr.setText("");
         }else{
             titelDescr.setVisibility(View.VISIBLE);
             descr.setVisibility(View.VISIBLE);
