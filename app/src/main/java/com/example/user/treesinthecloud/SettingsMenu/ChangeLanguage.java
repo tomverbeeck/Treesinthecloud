@@ -1,10 +1,11 @@
 package com.example.user.treesinthecloud.SettingsMenu;
 
-import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.content.IntentCompat;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -19,7 +20,7 @@ import java.util.Locale;
 /**
  * Created by User on 11/03/2016.
  */
-public class ChangeLanguage extends Activity {
+public class ChangeLanguage extends AppCompatActivity {
 
     private ListView list_languages;
 
@@ -30,6 +31,8 @@ public class ChangeLanguage extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.layout_settings_change_language);
+
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         //Only Dutch and English work at the moment
 

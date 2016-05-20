@@ -3,13 +3,16 @@ package com.example.user.treesinthecloud.Routes;
 import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.location.Criteria;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -22,6 +25,7 @@ import com.android.volley.toolbox.Volley;
 import com.example.user.treesinthecloud.ExtraInformationTabs.ExtraInfoTreeActivity;
 import com.example.user.treesinthecloud.R;
 import com.example.user.treesinthecloud.TreeDatabase.ConfigIDTree;
+import com.example.user.treesinthecloud.TreeDatabase.DatabaseHandler;
 import com.example.user.treesinthecloud.TreeDatabase.RequestHandler;
 import com.example.user.treesinthecloud.TreeDatabase.Tree;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -53,9 +57,15 @@ public class MapsActivity_Route extends AppCompatActivity implements OnMapReadyC
     private GoogleMap mMapRoute;
     //private ProgressDialog loading;
     private Route route = new Route();
-    private Toolbar toolbar;
 
     ArrayList<LatLng> markers = new ArrayList<>();
+    private DatabaseHandler db;
+
+    private HashMap<Integer, String> descr = new HashMap<>();
+
+    private int MY_PERMISSIONS_REQUEST_LOCATION =11;
+
+    private LatLng currentLoc;
 
 
     @Override
@@ -63,8 +73,9 @@ public class MapsActivity_Route extends AppCompatActivity implements OnMapReadyC
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps_activity__route);
 
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
+        db = new DatabaseHandler(getApplicationContext());
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -96,7 +107,7 @@ public class MapsActivity_Route extends AppCompatActivity implements OnMapReadyC
         LatLng leuven = new LatLng(50.875, 4.708);
         //mMap.addMarker(new MarkerOptions().position(leuven).title("Marker on Group T"));
         mMapRoute.moveCamera(CameraUpdateFactory.newLatLng(leuven));
-        mMapRoute.animateCamera(CameraUpdateFactory.newLatLngZoom(leuven, 10));
+        mMapRoute.animateCamera(CameraUpdateFactory.newLatLngZoom(leuven, 15));
 
         mMapRoute.setMapType(GoogleMap.MAP_TYPE_NORMAL);
         mMapRoute.getUiSettings().setZoomGesturesEnabled(true);
@@ -104,9 +115,13 @@ public class MapsActivity_Route extends AppCompatActivity implements OnMapReadyC
         mMapRoute.getUiSettings().setScrollGesturesEnabled(true);
         mMapRoute.getUiSettings().setMyLocationButtonEnabled(true);
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            return;
+
+            ActivityCompat.requestPermissions(MapsActivity_Route.this,
+                    new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION},
+                    MY_PERMISSIONS_REQUEST_LOCATION);
+        }else{
+            allLocationRequiredStuff();
         }
-        mMapRoute.setMyLocationEnabled(true);
         mMapRoute.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
             @Override
             public View getInfoWindow(Marker marker) {
@@ -121,10 +136,13 @@ public class MapsActivity_Route extends AppCompatActivity implements OnMapReadyC
                 TextView specie = (TextView) infoWindows.findViewById(R.id.textview_specie_layout_window);
                 TextView status = (TextView) infoWindows.findViewById(R.id.textview_status_layout_window);
 
-                String [] parts = marker.getSnippet().split("-");
-                name.setText(marker.getTitle());
-                specie.setText(parts[3]);
-                status.setText(parts[4]);
+                Tree treeDummy = new Tree();
+
+                treeDummy = db.getTree(Integer.parseInt(marker.getSnippet()));
+
+                name.setText(treeDummy.getName());
+                specie.setText(treeDummy.getSpecie());
+                status.setText(treeDummy.getStatus());
 
                 return (infoWindows);
             }
@@ -148,7 +166,7 @@ public class MapsActivity_Route extends AppCompatActivity implements OnMapReadyC
                     JSONObject data = result.getJSONObject(0);
                     route.setName(name);
                     route.setShortDescription(data.getString(ConfigIDRoute.KEY_SHORTDESCRIPTION));
-                    route.setLength(data.getString(ConfigIDRoute.KEY_LENGTH));
+                    route.setLength(data.getDouble(ConfigIDRoute.KEY_LENGTH));
 
                     markers.add(getLatLngFromString(data.getString(ConfigIDRoute.KEY_START)));
                     markers.add(getLatLngFromString(data.getString(ConfigIDRoute.KEY_END)));
@@ -157,14 +175,16 @@ public class MapsActivity_Route extends AppCompatActivity implements OnMapReadyC
 
                     LatLng location;
                     String query;
+
                     for(int i = 2; i<10; i++){
                         query = "w" + (i-1) + "LatLng";
-                        String dataString = data.getString(query).toString();
-                        location = getLatLngFromString(dataString);
-                        if(dataString != "") {
+                        String dataString = data.getString(query);
+                        if(dataString.equals("not used")) {
+                        }else{
+                            location = getLatLngFromString(dataString);
                             markers.add(location);
+                            addMarkers(markers.get(i));
                         }
-                        addMarkers(markers.get(i));
                     }
                     // Checks, whether start and end locations are captured
                     if(markers.size() >= 2){
@@ -182,6 +202,7 @@ public class MapsActivity_Route extends AppCompatActivity implements OnMapReadyC
                         Toast.makeText(getApplicationContext(), "Please Select at Least Two Points", Toast.LENGTH_SHORT).show();
                         return;
                     }
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -210,24 +231,16 @@ public class MapsActivity_Route extends AppCompatActivity implements OnMapReadyC
     private void addMarkers(LatLng marker){
         mMapRoute.addMarker(new MarkerOptions()
                 .position(marker)
-                .title(route.getName())
-                .snippet(route.getShortDescription()));
+                .title("waypoint")
+                .snippet(route.getShortDescription())
+                .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_yellow_dot)));
     }
 
     private void addTreeMarkers(Tree tree){
         mMapRoute.addMarker(new MarkerOptions()
                 .position(new LatLng(tree.getLatitude(), tree.getLongitude()))
-                .title(tree.getName())
-                .snippet("" + tree.getIdTree()          //0
-                        + "-" + tree.getLatitude()      //1
-                        + "-" + tree.getLongitude()     //2
-                        + "-" + tree.getSpecie()        //3
-                        + "-" + tree.getStatus()        //4
-                        + "-" + tree.getOriginalGirth() //5
-                        + "-" + tree.getCurrentGirth()  //6
-                        + "-" + tree.getCuttingShape()  //7
-                        + "-" + tree.getName()          //8
-                        + "-" + tree.getShortDescr())   //9
+                .title(tree.getStatus())
+                .snippet("" + tree.getIdTree())
                 .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_map_tree)));
     }
 
@@ -307,21 +320,10 @@ public class MapsActivity_Route extends AppCompatActivity implements OnMapReadyC
 
     @Override
     public void onInfoWindowClick(Marker marker) {
+        String shortDescr = descr.get(Integer.parseInt(marker.getSnippet()));
         Intent intentMoreInfo = new Intent(getApplicationContext(), ExtraInfoTreeActivity.class);
-
-        String [] parts = marker.getSnippet().split("-");
-        intentMoreInfo.putExtra("treeID", parts[0]);
-        intentMoreInfo.putExtra("treeLat", Double.parseDouble(parts[1]));
-        intentMoreInfo.putExtra("treeLong", Double.parseDouble(parts[2]));
-        if(parts[8] != "") {
-            intentMoreInfo.putExtra("treeSpecie", parts[3]);
-            intentMoreInfo.putExtra("treeStatus", parts[4]);
-            intentMoreInfo.putExtra("treeOrgGirth", Integer.parseInt(parts[5]));
-            intentMoreInfo.putExtra("treeCurGirth", Integer.parseInt(parts[6]));
-            intentMoreInfo.putExtra("treeCutShape", parts[7]);
-            intentMoreInfo.putExtra("treeName", parts[8]);
-            intentMoreInfo.putExtra("shortDescription", parts[9]);
-        }
+        intentMoreInfo.putExtra("treeID", Integer.parseInt(marker.getSnippet()));
+        intentMoreInfo.putExtra("treeDescr", shortDescr);
         startActivity(intentMoreInfo);
     }
 
@@ -408,7 +410,7 @@ public class MapsActivity_Route extends AppCompatActivity implements OnMapReadyC
 
                 // Adding all the points in the route to LineOptions
                 lineOptions.addAll(points);
-                lineOptions.width(5);
+                lineOptions.width(7);
                 lineOptions.color(Color.RED);
             }
 
@@ -491,6 +493,8 @@ public class MapsActivity_Route extends AppCompatActivity implements OnMapReadyC
                     tree.setCuttingShape(data.getString(ConfigIDTree.TAG_CUTTING_SHAPE));
                     tree.setShortDescr(descrTree);
 
+                    descr.put(tree.getIdTree(), tree.getShortDescr());
+
                     route.setTrees(tree);
 
                     addTreeMarkers(tree);
@@ -510,4 +514,29 @@ public class MapsActivity_Route extends AppCompatActivity implements OnMapReadyC
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         requestQueue.add(stringRequest);
     }
-}
+
+    public void allLocationRequiredStuff() {
+        mMapRoute.setMyLocationEnabled(true);
+        LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        Criteria criteria = new Criteria();
+
+        Location location = locationManager.getLastKnownLocation(locationManager.getBestProvider(criteria, false));
+        if (location != null) {
+            currentLoc = new LatLng(location.getLatitude(), location.getLongitude());
+        }
+
+        //start with fixed location
+        LatLng leuven = new LatLng(50.875, 4.708);
+        //mMap.addMarker(new MarkerOptions().position(leuven).title("Marker on Group T"));
+
+        if (currentLoc == null) {
+            mMapRoute.moveCamera(CameraUpdateFactory.newLatLng(leuven));
+            mMapRoute.animateCamera(CameraUpdateFactory.newLatLngZoom(leuven, 15));
+        } else {
+            mMapRoute.moveCamera(CameraUpdateFactory.newLatLng(currentLoc));
+            mMapRoute.animateCamera(CameraUpdateFactory.newLatLngZoom(currentLoc, 15));
+        }
+
+    }
+
+    }

@@ -14,6 +14,8 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.user.treesinthecloud.R;
+import com.example.user.treesinthecloud.TreeDatabase.DatabaseHandler;
+import com.example.user.treesinthecloud.TreeDatabase.Tree;
 
 import java.util.List;
 import java.util.Locale;
@@ -25,10 +27,13 @@ public class TwoFragment extends Fragment {
     private double latitude;
     private String description, specie;
     private Button search;
+    private Tree tree = new Tree();
+    private DatabaseHandler db;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        db = new DatabaseHandler(getContext());
     }
 
     @Nullable
@@ -36,10 +41,15 @@ public class TwoFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.layout_extra_info_fragment_two, container, false);
 
-        longitude = getActivity().getIntent().getExtras().getDouble("treeLong");
-        latitude = getActivity().getIntent().getExtras().getDouble("treeLat");
-        description = getActivity().getIntent().getExtras().getString("shortDescription");
-        specie = getActivity().getIntent().getExtras().getString("treeSpecie");
+        int id = getActivity().getIntent().getExtras().getInt("treeID");
+
+        tree = db.getTree(id);
+
+        longitude = tree.getLongitude();
+        latitude = tree.getLatitude();
+        specie = tree.getSpecie();
+        description = getActivity().getIntent().getExtras().getString("treeDescr");
+
 
         search = (Button)view.findViewById(R.id.button3) ;
         search.setOnClickListener(new View.OnClickListener() {
@@ -71,6 +81,12 @@ public class TwoFragment extends Fragment {
         locationTree.setLatitude(latitude);
         locationTree.setLongitude(longitude);
 
+        if(tree.getStatus().equals("Virtueel")){
+            search.setVisibility(View.INVISIBLE);
+        }else {
+            search.setVisibility(View.VISIBLE);
+        }
+
         String strAdd = "";
         Geocoder geocoder = new Geocoder(view.getContext(), Locale.getDefault());
         try {
@@ -91,7 +107,11 @@ public class TwoFragment extends Fragment {
             e.printStackTrace();
             addressLabel.setText(getResources().getText(R.string.text_unable_to_load_address));
         }
-        addressLabel.setText(strAdd);
+        if(strAdd.equals("")){
+            addressLabel.setText("Check your internet connection!");
+        }else {
+            addressLabel.setText(strAdd);
+        }
         return view;
     }
 }

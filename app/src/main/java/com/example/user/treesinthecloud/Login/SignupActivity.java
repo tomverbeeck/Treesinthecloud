@@ -2,22 +2,20 @@ package com.example.user.treesinthecloud.Login;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.toolbox.Volley;
 import com.example.user.treesinthecloud.R;
 import com.kosalgeek.android.md5simply.MD5;
+import com.kosalgeek.genasync12.AsyncResponse;
+import com.kosalgeek.genasync12.PostResponseAsyncTask;
 
-import org.json.JSONException;
-import org.json.JSONObject;
+import java.util.HashMap;
 
 public class SignupActivity extends AppCompatActivity implements View.OnClickListener{
 
@@ -26,11 +24,13 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
     private EditText editTextPassword;
     private EditText editTextEmail;
 
-    private Button buttonRegister;
-    Button create_account;
-    TextView already_member;
-    private String loggedin = "false";
+    private SharedPreferences loginPreferences;
+    private SharedPreferences.Editor loginPrefsEditor;
 
+    private Button buttonRegister;
+    private TextView already_member;
+
+    final String TAG = this.getClass().getName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +52,8 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
         already_member = (TextView) findViewById(R.id.link_login);
         already_member.setOnClickListener(this);
 
+        loginPreferences = getSharedPreferences("userData", MODE_PRIVATE);
+        loginPrefsEditor = loginPreferences.edit();
     }
 
     @Override
@@ -64,49 +66,27 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
 
             case R.id.signup:
 
+                HashMap data = new HashMap();
+                data.put("nickname", editTextUsername.getText().toString());
+                data.put("email", MD5.encrypt(editTextEmail.getText().toString()));
+                data.put("password", MD5.encrypt(editTextPassword.getText().toString()));
 
 
-                SharedPreferences sharedPreferences = getSharedPreferences("userData", MODE_PRIVATE);
-                SharedPreferences.Editor spEditor = sharedPreferences.edit();
-
-                spEditor.putString("name", editTextUsername.getText().toString());
-                spEditor.putString("email", editTextEmail.getText().toString());
-                spEditor.putString("password", editTextPassword.getText().toString());
-                spEditor.putString("loggedin", "true");
-                spEditor.commit();
-
-                String username = editTextUsername.getText().toString();
-                String useremail = MD5.encrypt(editTextEmail.getText().toString());
-                String userpassword = MD5.encrypt(editTextPassword.getText().toString());
-
-                Response.Listener<String> responseListener = new Response.Listener<String>() {
+                PostResponseAsyncTask task = new PostResponseAsyncTask(SignupActivity.this, data, new AsyncResponse() {
                     @Override
-                    public void onResponse(String response) {
-                        try {
-                            JSONObject jsonResponse = new JSONObject(response);
-                            boolean success = jsonResponse.getBoolean("success");
-                            if (success) {
-                                Toast.makeText(getApplicationContext(), "successfully regestered ",Toast.LENGTH_LONG).show();
-                                finish();
-                            } else {
-                                AlertDialog.Builder builder = new AlertDialog.Builder(SignupActivity.this);
-                                builder.setMessage("Register Failed")
-                                        .setNegativeButton("Retry", null)
-                                        .create()
-                                        .show();
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
+                    public void processFinish(String s) {
+                        Log.d(TAG,s);
+                        if(s.contains("succes")){
+                            loginPrefsEditor.putString("username", editTextUsername.getText().toString());
+                            Toast.makeText(getApplicationContext(), "successfully registered ",Toast.LENGTH_LONG).show();
+                            finish();
                         }
                     }
-                };
+                });
 
-                RegisterRequest registerRequest = new RegisterRequest(username, useremail,userpassword, responseListener);
-                RequestQueue queue = Volley.newRequestQueue(SignupActivity.this);
-                queue.add(registerRequest);
+                task.execute("http://projectmovie.16mb.com/registration.php");
 
                 break;
-
         }
     }
 }

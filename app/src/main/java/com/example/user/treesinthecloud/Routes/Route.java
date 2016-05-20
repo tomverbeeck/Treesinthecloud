@@ -14,7 +14,7 @@ public class Route {
 
     private String name;
     private String shortDescription;
-    private String length;
+    private Double length;
 
     private ArrayList<String> markers = new ArrayList<>();
 
@@ -35,7 +35,7 @@ public class Route {
                 '}';
     }
 
-    public Route(String name, String shortDescription, String length)
+    public Route(String name, String shortDescription, Double length)
     {
         this.name = name;
         this.shortDescription = shortDescription;
@@ -50,11 +50,11 @@ public class Route {
         this.name = name;
     }
 
-    public String getLength() {
+    public Double getLength() {
         return length;
     }
 
-    public void setLength(String length) {
+    public void setLength(Double length) {
         this.length = length;
     }
 

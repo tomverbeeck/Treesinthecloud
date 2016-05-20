@@ -41,9 +41,9 @@
     <string name="string_textExplainWhy">Why do you want a tree on that specific location? Explain thoroughly</string>
     <string name="string_longitude_text_newtree">Longitude:</string>
     <string name="string_latitude_text_newtree">Latitude:</string>
-    <string name="string_group_text_newtree">Group (optional):</string>
+    <string name="string_group_text_newtree">Tree Specie (optional): </string>
     <string name="string_currentLoacationB">Get current location</string>
-    <string name="string_type_text_newtree">Type of tree (optional):</string>
+    <string name="string_type_text_newtree">Common Name (optional):</string>
     <string name="string_submitNewTreeB">Submit</string>
     <string name="String_explenationError">Explantion is to short</string>
     @string/String_locationError
@@ -55,15 +55,13 @@
 
     <!--Settings menu-->
     <array name="settings">
-        <item>Color Menu</item>
         <item>Language</item>
         <item>Customize Marker</item>
-        <item>Change Password</item>
+        <item>Customize Map</item>
     </array>
     <array name="languages">
         <item>English</item>
         <item>Dutch</item>
-        <item>Spannish</item>
     </array>
     <array name="colors">
         <item>Blue</item>
@@ -102,12 +100,11 @@
     <string name="title_activity_new_route_maps">Map</string>
 
     <!--Strings concerning adding a tree-->
-    <string name="string_popup_newtree">Bent u zeker dat u deze boom wilt aanvragen? Een verzoek zal verstuurd worden naar Klimaat Neutraal Leuven.</string>
-    <string name="string_popup_newtree_cancel">Annuleren</string>
-    <string name="string_popup_newtree_continue">DOORGAAN</string>
+    <string name="string_popup_newtree">Are you sure you want to plant this tree? A request will be send to Leuven Klimaat Neutraal to plant the tree with you.</string>
+    <string name="string_popup_newtree_continue">PROCEED</string>
 
     <!-- social part-->
-    <string name="string_username">username</string>
+    <string name="string_username">Username</string>
     <string name="string_make_a_group">Make a group</string>
     <string name="string_user_does_not_exist">User does not existt</string>
     <string name="string_popup_makegroup">Do you still want to add</string>
@@ -117,6 +114,22 @@
     <string name="string_cancel">Cancel</string>
     <string name="string_confirm">Confirm</string>
     <string name="string_choose_your_group_name">Choose your group name</string>
+
+    <!--Strings concerning tutorialscreen-->
+    <string name="next">NEXT</string>
+    <string name="skip">SKIP</string>
+    <string name="start">GOT IT</string>
+
+    <string name="slide_1_title">Trees in The Cloud</string>
+    <string name="slide_1_desc">Together for a greener Leuven</string>
+
+    <string name="slide_2_title">Route</string>
+    <string name="slide_2_desc">Make a beautiful walk through Leuven</string>
+
+    <string name="slide_3_title">Login</string>
+    <string name="slide_3_desc">Add your own trees and routes when you are logged in!</string>
+    <string name="string_popup_newtree_cancel">cancel</string>
+
 
 </resources>
 

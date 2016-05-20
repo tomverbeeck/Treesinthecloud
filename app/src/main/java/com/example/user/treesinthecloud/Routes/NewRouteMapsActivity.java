@@ -1,14 +1,13 @@
 package com.example.user.treesinthecloud.Routes;
 
+import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
+import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.IntentCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -24,11 +23,11 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.maps.android.SphericalUtil;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -57,7 +56,9 @@ public class NewRouteMapsActivity extends AppCompatActivity implements OnMapRead
     private ArrayList<Tree> trees;
     private LatLng location;
     private int countTrees;
-    private Toolbar toolbar;
+    private String whichMarker;
+
+    public static final String MyPREFERENCES = "MyPrefs" ;
 
 
     private Route route = new Route();
@@ -67,8 +68,7 @@ public class NewRouteMapsActivity extends AppCompatActivity implements OnMapRead
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_route_maps);
 
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -90,6 +90,9 @@ public class NewRouteMapsActivity extends AppCompatActivity implements OnMapRead
 
         route.setName(getIntent().getExtras().getString("nameRoute"));
         route.setShortDescription(getIntent().getExtras().getString("descriptionRoute"));
+
+        whichMarker = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE).getString("markerImage", "");
+
     }
 
     @Override
@@ -108,11 +111,6 @@ public class NewRouteMapsActivity extends AppCompatActivity implements OnMapRead
         mMap.getUiSettings().setZoomGesturesEnabled(true);
         mMap.getUiSettings().setZoomControlsEnabled(true);
         mMap.getUiSettings().setScrollGesturesEnabled(true);
-        mMap.getUiSettings().setMyLocationButtonEnabled(true);
-        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            return;
-        }
-        mMap.setMyLocationEnabled(true);
 
         // Setting onclick event listener for the map
         mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
@@ -135,14 +133,7 @@ public class NewRouteMapsActivity extends AppCompatActivity implements OnMapRead
 
                 // Setting the position of the marker
                 options.position(point);
-
-                /**
-                 * For the start location, the color of marker is GREEN and
-                 * for the end location, the color of marker is RED and
-                 * for the rest of markers, the color is AZURE
-                 */
-
-                //drawCircle(point);
+                options.snippet("Actueel");
 
                 if(markerPoints.size()==1){
                     options.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
@@ -153,8 +144,6 @@ public class NewRouteMapsActivity extends AppCompatActivity implements OnMapRead
                 }else{
                     options.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE));
                 }
-
-                // Add new marker to the Google Map Android API V2
                 mMap.addMarker(options);
             }
         });
@@ -336,8 +325,8 @@ public class NewRouteMapsActivity extends AppCompatActivity implements OnMapRead
                 TextView specie = (TextView) infoWindows.findViewById(R.id.textview_new_route_specie_layout_window);
                 TextView status = (TextView) infoWindows.findViewById(R.id.textview_new_route_status_layout_window);
 
-                String [] parts = marker.getSnippet().split("-");
-                name.setText(marker.getTitle());
+                String [] parts = marker.getSnippet().split("_");
+                name.setText(parts[5]);
                 specie.setText(parts[3]);
                 status.setText(parts[4]);
 
@@ -347,14 +336,6 @@ public class NewRouteMapsActivity extends AppCompatActivity implements OnMapRead
         });
         mMap.setOnInfoWindowClickListener(this);
     }
-
-
-
-
-
-
-
-
 
     private String getDirectionsUrl(LatLng origin,LatLng dest){
 
@@ -522,30 +503,6 @@ public class NewRouteMapsActivity extends AppCompatActivity implements OnMapRead
         }
     }
 
-    private void drawCircle(LatLng point){
-
-        // Instantiating CircleOptions to draw a circle around the marker
-        CircleOptions circleOptions = new CircleOptions();
-
-        // Specifying the center of the circle
-        circleOptions.center(point);
-
-        // Radius of the circle
-        circleOptions.radius(100);
-
-        // Border color of the circle
-        circleOptions.strokeColor(Color.GREEN);
-
-        // Fill color of the circle
-        circleOptions.fillColor(0x30ff0000);
-
-        // Border width of the circle
-        circleOptions.strokeWidth(2);
-
-        // Adding the circle to the GoogleMap
-        mMap.addCircle(circleOptions);
-    }
-
     public void getJSON() {
         class GetJSON extends AsyncTask<Void, Void, String> {
 
@@ -588,15 +545,58 @@ public class NewRouteMapsActivity extends AppCompatActivity implements OnMapRead
                             //Toast.makeText(getApplicationContext(), "Tree added", Toast.LENGTH_SHORT).show();
                             trees.add(tree);
                             String snippet = "" + tree.getIdTree()      //0
-                                    + "-" + tree.getLatitude()          //1
-                                    + "-" + tree.getLongitude()         //2
-                                    + "-" + tree.getSpecie()            //3
-                                    + "-" + tree.getStatus();           //4
-                            mMap.addMarker(new MarkerOptions()
+                                    + "_" + tree.getLatitude()          //1
+                                    + "_" + tree.getLongitude()         //2
+                                    + "_" + tree.getSpecie()            //3
+                                    + "_" + tree.getStatus()            //4
+                                    + "_" + tree.getName();             //5
+                            Marker mkr = mMap.addMarker(new MarkerOptions()
                                     .position(new LatLng(tree.getLatitude(), tree.getLongitude()))
-                                    .title(tree.getName())
+                                    .title(tree.getStatus())
                                     .snippet(snippet)
                                     .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_map_tree)));
+
+                            if(whichMarker == null){
+                                mkr.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.ic_map_tree));
+                            }else {
+                                switch (whichMarker) {
+                                    case "Tree Marker":
+                                        if (mkr.getTitle().equals("Actueel")) {
+                                            mkr.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.ic_map_tree));
+                                        } else {
+                                            mkr.remove();
+                                        }
+                                        break;
+                                    case "Green Dot":
+                                        if (mkr.getTitle().equals("Actueel")) {
+                                            mkr.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.ic_green_dot));
+                                        } else {
+                                            mkr.remove();
+                                        }
+                                        break;
+                                    case "Basic Red Marker":
+                                        if (mkr.getTitle().equals("Actueel")) {
+                                            mkr.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
+                                        } else {
+                                            mkr.remove();
+                                        }
+                                        break;
+                                    case "Basic Green Marker":
+                                        if (mkr.getTitle().equals("Actueel")) {
+                                            mkr.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
+                                        } else {
+                                            mkr.remove();
+                                        }
+                                        break;
+                                    default:
+                                        if (mkr.getTitle().equals("Actueel")) {
+                                            mkr.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.ic_map_tree));
+                                        } else {
+                                            mkr.remove();
+                                        }
+                                        break;
+                                }
+                            }
                         }
                     }
 
@@ -634,7 +634,7 @@ public class NewRouteMapsActivity extends AppCompatActivity implements OnMapRead
         //add tree to database
         Intent intentNewTree = new Intent(getApplicationContext(), NewRouteDescriptionTree.class);
 
-        String [] parts = marker.getSnippet().split("-");
+        String [] parts = marker.getSnippet().split("_");
 
         intentNewTree.putExtra("idTree", parts[0]);
         startActivityForResult(intentNewTree, 1);
@@ -674,9 +674,14 @@ public class NewRouteMapsActivity extends AppCompatActivity implements OnMapRead
     }
 
     private void addWholeRoute(){
+        Double distance = getDistance(markerPoints);
+        distance = distance/1000;
+        distance = Math.floor(distance*100)/100;
+        route.setLength(distance);
+
         final String name = route.getName();
         final String shortDescription = route.getShortDescription();
-        final String length = "0"; //+ route.getLength();
+        final Double length = route.getLength();
         final String startLatLng = route.getMarkers().get(0);
         final String endLatLng = route.getMarkers().get(1);
         final String w1 = route.getMarkers().get(2);
@@ -687,6 +692,7 @@ public class NewRouteMapsActivity extends AppCompatActivity implements OnMapRead
         final String w6 = route.getMarkers().get(7);
         final String w7 = route.getMarkers().get(8);
         final String w8 = route.getMarkers().get(9);
+
 
         class AddWholeRoute extends AsyncTask<Void,Void,String>{
 
@@ -710,7 +716,7 @@ public class NewRouteMapsActivity extends AppCompatActivity implements OnMapRead
                 HashMap<String,String> params = new HashMap<>();
                 params.put(ConfigIDRoute.KEY_NAME,name);
                 params.put(ConfigIDRoute.KEY_SHORTDESCRIPTION,shortDescription);
-                params.put(ConfigIDRoute.KEY_LENGTH,length);
+                params.put(ConfigIDRoute.KEY_LENGTH,"" + length);
                 params.put(ConfigIDRoute.KEY_START,startLatLng);
                 params.put(ConfigIDRoute.KEY_END,endLatLng);
                 params.put(ConfigIDRoute.KEY_W1,w1);
@@ -769,5 +775,14 @@ public class NewRouteMapsActivity extends AppCompatActivity implements OnMapRead
 
         AddWholeRoute adr = new AddWholeRoute();
         adr.execute();
+    }
+
+    Double getDistance(ArrayList<LatLng> markers){
+        Double distance = SphericalUtil.computeDistanceBetween(markers.get(0), markers.get(2));
+        for(int i = 2; i<markers.size()-1; i++){
+            distance += SphericalUtil.computeDistanceBetween(markers.get(i), markers.get(i+1));
+        }
+        distance += SphericalUtil.computeDistanceBetween(markers.get(markers.size()-1), markers.get(1));
+        return distance;
     }
 }

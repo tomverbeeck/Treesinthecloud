@@ -27,12 +27,6 @@
             android:icon="@drawable/ic_routes"
             android:title="@string/title_menu_options_routes"/>
 
-        <item
-            android:id="@+id/makeGroup"
-            android:checked="false"
-            android:icon="@drawable/ic_group"
-            android:title="@string/make_group_string" />
-
 
         <item
             android:id="@+id/settings"

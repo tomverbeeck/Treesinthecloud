@@ -39,6 +39,7 @@ public class MakegroupActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.layout_make_group);
+
         addUser = (AutoCompleteTextView  )findViewById(R.id.addUserText);
         userError = (TextView) findViewById(R.id.user_does_not_exist);
 

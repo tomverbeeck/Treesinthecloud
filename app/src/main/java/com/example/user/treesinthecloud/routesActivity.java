@@ -2,11 +2,11 @@ package com.example.user.treesinthecloud;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -33,15 +33,13 @@ public class RoutesActivity extends AppCompatActivity implements ListView.OnItem
     //private ProgressDialog loading;
     private Context myContext;
     private FloatingActionButton fab;
-    private Toolbar toolbar;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.layout_routes);
 
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         routeList = (ListView)findViewById(R.id.listView_routes);
 
@@ -78,15 +76,13 @@ public class RoutesActivity extends AppCompatActivity implements ListView.OnItem
             @Override
             protected void onPostExecute(String s) {
                 super.onPostExecute(s);
-                JSONObject jsonObject = null;
-
-                Toast.makeText(getApplicationContext(), s, Toast.LENGTH_SHORT).show();
+                JSONObject jsonObject;
 
                 try {
 
                     jsonObject = new JSONObject(s);
                     JSONArray result = jsonObject.getJSONArray(ConfigIDRoute.JSON_ARRAY);
-                    Route route = null;
+                    Route route;
 
                     for(int i = 0; i<result.length(); i++){
                         route = new Route();
@@ -94,14 +90,15 @@ public class RoutesActivity extends AppCompatActivity implements ListView.OnItem
 
                         route.setName(jo.getString(ConfigIDRoute.KEY_NAME));
                         route.setShortDescription(jo.getString(ConfigIDRoute.KEY_SHORTDESCRIPTION));
-                        route.setLength(jo.getString(ConfigIDRoute.KEY_LENGTH));
+                        Double distance = jo.getDouble(ConfigIDRoute.KEY_LENGTH);;
+                        route.setLength(distance);
 
                         routes.add(route);
                     }
                     //loading.dismiss();
                 } catch (JSONException e) {
                     e.printStackTrace();
-                    Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "Check you internet connection and try again!", Toast.LENGTH_LONG).show();
                 }
 
                 CustomListAdapter adapter = new CustomListAdapter(context, routes);
@@ -123,7 +120,6 @@ public class RoutesActivity extends AppCompatActivity implements ListView.OnItem
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Intent intent = new Intent(this, MapsActivity_Route.class);
         String routeName = routes.get(position).getName();
-        String length = routes.get(position).getLength();
         intent.putExtra("route_name", routeName);
         startActivity(intent);
     }

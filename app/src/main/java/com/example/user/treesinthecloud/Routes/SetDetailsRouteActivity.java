@@ -1,6 +1,7 @@
 package com.example.user.treesinthecloud.Routes;
 
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -13,11 +14,12 @@ public class SetDetailsRouteActivity extends AppCompatActivity {
 
     Button startCreating;
     EditText name, description;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.layout_set_details_route);
+
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         startCreating = (Button)findViewById(R.id.button_set_details_route_start_creating);
         description = (EditText)findViewById(R.id.editText_new_route_details_short_description);

@@ -15,6 +15,39 @@
             layout="@layout/tool_bar"
             />
 
+        <RadioGroup
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal">
+
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20dp"
+                android:text="Normal"
+                android:id="@+id/radioButton_normal"
+                android:layout_marginRight="10dp"
+                android:onClick="onRadioButtonClicked"/>
+
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20dp"
+                android:text="Clusters"
+                android:id="@+id/radioButton_cluster"
+                android:layout_marginRight="10dp"
+                android:onClick="onRadioButtonClicked"/>
+
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20dp"
+                android:text="Heatmap"
+                android:id="@+id/radioButton_heat_map"
+                android:onClick="onRadioButtonClicked"/>
+        </RadioGroup>
+
         <FrameLayout
             android:id="@+id/frame"
             android:layout_width="wrap_content"
@@ -23,7 +56,6 @@
         </FrameLayout>
 
         <fragment xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:map="http://schemas.android.com/apk/res-auto"
             xmlns:tools="http://schemas.android.com/tools"
             android:id="@+id/map"
             class="com.google.android.gms.maps.SupportMapFragment"

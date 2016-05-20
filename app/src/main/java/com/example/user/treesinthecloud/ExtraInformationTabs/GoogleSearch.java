@@ -24,11 +24,14 @@ public class GoogleSearch extends AppCompatActivity{
         specie = getIntent().getExtras().getString("Specie");
         web.setWebViewClient(new MyBrowser());
 
+        if(specie.startsWith("http")){
+            url = specie;
+            specie = null;
+        }
+
         if (specie != null) {
             specie.replace(" ", "+");
             url = "https://www.google.com/#q=" + specie;
-        }else{
-            url = "https://www.google.com";
         }
 
         web.getSettings().setLoadsImagesAutomatically(true);

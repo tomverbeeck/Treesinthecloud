@@ -1,6 +1,6 @@
 package com.example.user.treesinthecloud.ExtraInformationTabs;
 
-import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -8,7 +8,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 
 import com.example.user.treesinthecloud.R;
 
@@ -17,7 +16,6 @@ import java.util.List;
 
 public class ExtraInfoTreeActivity extends AppCompatActivity {
 
-    private Toolbar toolbar;
     private TabLayout tabLayout;
     private ViewPager viewPager;
     private int[] tabIcons = {
@@ -33,13 +31,7 @@ public class ExtraInfoTreeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.layout_extra_info_tree);
 
-        Intent i = getIntent();
-        id = i.getStringExtra("treeID");
-
-        toolbar = (Toolbar)findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         viewPager = (ViewPager)findViewById(R.id.viewpager);
         setupViewPager(viewPager);

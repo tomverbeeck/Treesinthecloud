@@ -21,5 +21,14 @@ public class ConfigIDTree {
     public static final String TAG_ORIGINAL_GIRTH = "original girth";
     public static final String TAG_CURRENT_GIRTH = "current girth";
     public static final String TAG_CUTTING_SHAPE = "cutting shape";
+	
+    public static final String URL_GET_LIKES = "http://projectmovie.16mb.com/FetchLikesByTreeId.php";
+    public static final String URL_lIKE_TREE = "http://projectmovie.16mb.com/likeTree.php";
+    public static final String URL_DISlIKE_TREE = "http://projectmovie.16mb.com/dislikeTree.php";
+    public static final String URL_HASLIKED_TREE = "http://projectmovie.16mb.com/hasliked.php";
+    public static final String URL_COMMENT_TREE = "http://projectmovie.16mb.com/setComment.php";
+    public static final String URL_GET_ALL_COMMENTS_TREE = "http://projectmovie.16mb.com/FetchCommentsByTreeId.php";
+    public static final String URL_DELETE_COMMENT_TREE = "http://projectmovie.16mb.com/DeleteComment.php";
+    public static final String URL_FIND_USER = "http://projectmovie.16mb.com/FindUser.php";
 
 }

@@ -45,8 +45,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 KEY_SPECIE + " VARCHAR(255)," +
                 KEY_STATUS + " VARCHAR(255)," +
                 KEY_COMMON_NAME + " VARCHAR(255)," +
-                KEY_CURRENT_GIRTH + " INT," +
                 KEY_ORIGINAL_GIRTH + " INT," +
+                KEY_CURRENT_GIRTH + " INT," +
                 KEY_CUTTING_SHAPE + " VARCHAR(255)" +
                 ");";
         db.execSQL(sql);
@@ -82,8 +82,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 tree.setSpecie(cursor.getString(3));
                 tree.setStatus(cursor.getString(4));
                 tree.setName(cursor.getString(5));
-                tree.setCurrentGirth(Integer.parseInt(cursor.getString(6)));
-                tree.setOriginalGirth(Integer.parseInt(cursor.getString(7)));
+                tree.setOriginalGirth(Integer.parseInt(cursor.getString(6)));
+                tree.setCurrentGirth(Integer.parseInt(cursor.getString(7)));
                 tree.setCuttingShape(cursor.getString(8));
                 // Adding contact to list
                 treeList.add(tree);
@@ -111,15 +111,15 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
 
         Cursor cursor = db.query(TABLE_NAME, new String[] { KEY_ID,
-                        KEY_LONGITUDE, KEY_LATITUDE, KEY_SPECIE, KEY_STATUS,
-                        KEY_COMMON_NAME, KEY_ORIGINAL_GIRTH,
+                        KEY_LONGITUDE, KEY_LATITUDE, KEY_SPECIE, KEY_STATUS, KEY_COMMON_NAME,
+                        KEY_ORIGINAL_GIRTH,
                         KEY_CURRENT_GIRTH, KEY_CUTTING_SHAPE }, KEY_ID + "=?",
                 new String[] { String.valueOf(id) }, null, null, null, null);
         if (cursor != null)
             cursor.moveToFirst();
 
         Tree tree = new Tree(Integer.parseInt(cursor.getString(0)),
-                Double.parseDouble(cursor.getString(1)), Double.parseDouble(cursor.getString(2)), cursor.getString(3), cursor.getString(4), cursor.getString(5), cursor.getString(8), Integer.parseInt(cursor.getString(6)), Integer.parseInt(cursor.getString(7)));
+                Double.parseDouble(cursor.getString(1)), Double.parseDouble(cursor.getString(2)), cursor.getString(3), cursor.getString(4), cursor.getString(5), Integer.parseInt(cursor.getString(6)), Integer.parseInt(cursor.getString(7)), cursor.getString(8));
         // return contact
         return tree;
     }
@@ -127,25 +127,29 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     public void addTree(Tree tree) {
         SQLiteDatabase db = this.getWritableDatabase();
 
-        tree.setSpecie(tree.getSpecie().replace("'", "~"));
-        tree.setName(tree.getName().replace("'", "~"));
+        tree.setSpecie(tree.getSpecie().replace("'", " "));
+        tree.setName(tree.getName().replace("'", " "));
 
         String sql =
-                "INSERT INTO " + TABLE_NAME + /*"(" +             KEY_ID + "," +
-                                                                KEY_LONGITUDE + "," +
-                                                                KEY_LATITUDE  + "," +
-                                                                KEY_SPECIE + "," +
-                                                                KEY_STATUS + "," +
-                                                                KEY_COMMON_NAME +  "," +
-                                                                KEY_ORIGINAL_GIRTH + "," +
-                                                                KEY_CURRENT_GIRTH + "," +
-                                                                KEY_CUTTING_SHAPE + ")"
-                            + */" VALUES(" + tree.getIdTree() + "," + tree.getLongitude() + "," + tree.getLatitude()
+                "INSERT INTO " + TABLE_NAME + " VALUES(" + tree.getIdTree() + "," + tree.getLongitude() + "," + tree.getLatitude()
                                          + "," + "'" + tree.getSpecie() + "'"  + "," + "'" + tree.getStatus() + "'"  + "," + "'" +
                                             tree.getName() + "'" + "," + tree.getOriginalGirth() + "," +
                                             tree.getCurrentGirth()  + "," + "'" + tree.getCuttingShape() + "'" + ");";
         db.execSQL(sql);
         db.close();
+    }
+
+    public int getLastID(){
+        SQLiteDatabase db = this.getReadableDatabase();
+        String selectQuery = "SELECT  * FROM " + TABLE_NAME;
+        Cursor cursor = db.rawQuery(selectQuery, null);
+        cursor.moveToLast();
+        int id = cursor.getInt(0);
+        db.close();
+        if(id != 0)
+            return id;
+        else
+            return -1;
     }
 
 }

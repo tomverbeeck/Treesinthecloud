@@ -1,24 +1,13 @@
 package com.example.user.treesinthecloud.TreeDatabase;
 
 import com.google.android.gms.maps.model.LatLng;
+import com.google.maps.android.clustering.ClusterItem;
 
-import java.io.Serializable;
-
-public class Tree implements Serializable{
+public class Tree implements ClusterItem{
 
     private int idTree;
     private double latitude;
     private double longitude;
-
-    public LatLng getPosition() {
-        return position;
-    }
-
-    public void setPosition(LatLng position) {
-        this.position = new LatLng(getLatitude(), getLongitude());
-    }
-
-    private LatLng position;
     private String specie;
     private String name;
     private String status;
@@ -31,25 +20,46 @@ public class Tree implements Serializable{
 
     public Tree(){}
 
-    public Tree (int idTree, double latitude, double longitude, String specie, String name, String status, String cuttingShape, int originalGirth, int currentGirth){
+    public Tree(LatLng position){
+        this.latitude = position.latitude;
+        this.longitude = position.longitude;
+    }
+
+    public Tree (int idTree, double longitude, double latitude, String specie, String status, String name, int originalGirth, int currentGirth, String cuttingShape){
         super();
         this.idTree = idTree;
         this.latitude = latitude;
         this.longitude = longitude;
         this.specie = specie;
-        this.name = name;
         this.status = status;
-        this.cuttingShape = cuttingShape;
+        this.name = name;
         this.originalGirth = originalGirth;
         this.currentGirth = currentGirth;
+        this.cuttingShape = cuttingShape;
+    }
+    @Override
+    public LatLng getPosition() {
+        return new LatLng(latitude, longitude);
+    }
+
+    public void setPosition(LatLng position) {
+        latitude = position.latitude;
+        longitude = position.longitude;
     }
 
     @Override
     public String toString() {
-        return "Name= " + name +
-                ", Specie= " + specie +
-                ", Status= " + status +
-                ", OrgGirth= " + originalGirth;
+        return "Tree{" +
+                "currentGirth=" + currentGirth +
+                ", idTree=" + idTree +
+                ", latitude=" + latitude +
+                ", longitude=" + longitude +
+                ", specie='" + specie + '\'' +
+                ", name='" + name + '\'' +
+                ", status='" + status + '\'' +
+                ", cuttingShape='" + cuttingShape + '\'' +
+                ", originalGirth=" + originalGirth +
+                '}';
     }
 
     public int getIdTree() {

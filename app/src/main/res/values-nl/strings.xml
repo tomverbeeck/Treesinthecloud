@@ -22,12 +22,12 @@
     <string name="string_TitleNewTree">Nieuwe Boom Toevoegen</string>
     <string name="string_add_tree">Boom Toevoegen</string>
     <string name="string_currentLoacationB">Huidige Locatie</string>
-    <string name="string_group_text_newtree">Groep (optioneel): </string>
+    <string name="string_group_text_newtree">Boomsoort (optioneel):</string>
     <string name="string_latitude_text_newtree">Lengtegraad:</string>
     <string name="string_longitude_text_newtree">Breedtegraad:</string>
     <string name="string_submitNewTreeB">Bevestig</string>
     <string name="string_textExplainWhy">Waarom wil je hier een boom plaatsen? Leg uitgebreid uit!</string>
-    <string name="string_type_text_newtree">Type van boom (Optioneel):</string>
+    <string name="string_type_text_newtree">Naam van de boom (Optioneel):</string>
     <string name="title_acitivty_add_tree">Boom Toevoegen</string>
     <string name="title_activity_change_color">Welke Kleur?</string>
     <string name="title_activity_change_language">Selecteer Taal</string>
@@ -37,10 +37,10 @@
     <string name="title_activity_tree_profile">Boom Profiel</string>
     <string name="username">Gebruikersnaam</string>
     <array name="settings">
-        <item>KleurenSchema Aanpassen</item>
+        <item>Kleuren Schema Aanpassen</item>
         <item>Taal Veranderen</item>
         <item>Marker Aanpassen</item>
-        <item>Vernader Wachtwoord</item>
+        <item>Personaliseer Map</item>
     </array>
     <array name="languages">
         <item>Engels</item>
@@ -81,6 +81,32 @@
     <string name="text_unable_to_load_address">Adres van de Boom niet kunnen ophalen</string>
     <string name="title_menu_options_routes">Routes</string>
     <string name="make_group_string">Maak groep</string>
+    <string name="string_popup_newtree_continue">DOORGAAN</string>
+    <string name="string_popup_newtree_cancel">Annuleren</string>
+    <string name="string_make_a_group">Maak een Groep</string>
+    <string name="string_group_name_error">Groepsnaam al in Gebruik</string>
+    <string name="string_choose_your_group_name">Kies je Groepsnaam</string>
+    <string name="start">SNAP HET</string>
+    <string name="slide_1_desc">Samen voor een Groener Leuven</string>
+    <string name="slide_1_title">Trees in The Cloud</string>
+    <string name="slide_2_desc">Maak een mooie Wandeling door Leuven!</string>
+    <string name="slide_2_title">Route</string>
+    <string name="slide_3_desc">Voeg je eigen bomen toe als je aangemeld bent!</string>
+    <string name="skip">SKIP</string>
+    <string name="next">VOLGENDE</string>
+    <string name="string_confirm">Bevestig</string>
+    <string name="string_cancel">Annuleer</string>
+    <string name="stirng_no">Nee</string>
+    <string name="slide_3_title">Aanmelden</string>
+    <string name="string_popup_newtree">Bent u zeker dat u deze boom wilt aanvragen? Een verzoek zal verstuurd worden naar Klimaat Neutraal Leuven.</string>
+    <string name="string_popup_makegroup">Wel je het nog steeds toevoegen</string>
+    <string name="string_user_does_not_exist">Gebruiker bestaat niet</string>
+    <string name="string_username">Gebruikersnaam</string>
+    <string name="string_yes">Ja</string>
+    <string name="title_activity_new_route_maps">Map</string>
+    <string name="title_activity_routes">Routes</string>
+    <string name="title_activity_maps_activity__route">MapRoute</string>
+    <string name="title_activity_make_group">Maak een Groep</string>
 
 
 </resources>

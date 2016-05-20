@@ -1,6 +1,7 @@
 package com.example.user.treesinthecloud.Routes;
 
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -22,6 +23,8 @@ public class NewRouteDescriptionTree extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.layout_new_route_description_tree);
+
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         textDescription = (TextView)findViewById(R.id.Textview_new_route_new_tree);
         descrption = (EditText)findViewById(R.id.Edittext_new_route_new_tree);

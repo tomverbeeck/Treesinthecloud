@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class LoginRequest extends StringRequest {
-    private static final String LOGIN_REQUEST_URL = "http://treesinthecloud.net23.net/Login.php";
+    private static final String LOGIN_REQUEST_URL = "http://projectmovie.16mb.com/login.php";
     private Map<String, String> params;
 
     //http://treesinthecloud.net23.net/Login.php
@@ -15,12 +15,10 @@ public class LoginRequest extends StringRequest {
 
     public LoginRequest(String useremail, String userpassword, Response.Listener<String> listener) {
         super(Method.POST, LOGIN_REQUEST_URL, listener, null);
-        params = new HashMap<>();
-        params.put("useremail", useremail);
-        params.put("userpassword", userpassword);
 
-        /*params.put("email", useremail);
-        params.put("password", userpassword);*/
+        params = new HashMap<>();
+        params.put("nickname", useremail);
+        params.put("password", userpassword);
     }
 
     @Override

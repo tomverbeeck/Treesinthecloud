@@ -1,15 +1,12 @@
 package com.example.user.treesinthecloud.AddTree;
 
-import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
-import android.location.Criteria;
-import android.location.Location;
-import android.location.LocationManager;
+import android.content.pm.ActivityInfo;
+import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.IntentCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -22,7 +19,14 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.user.treesinthecloud.MapsActivity;
 import com.example.user.treesinthecloud.R;
+import com.example.user.treesinthecloud.TreeDatabase.DatabaseHandler;
+import com.example.user.treesinthecloud.TreeDatabase.RequestHandler;
+import com.example.user.treesinthecloud.TreeDatabase.Tree;
+
+import java.util.HashMap;
+import java.util.Random;
 
 public class NewtreeActivity extends AppCompatActivity {
 
@@ -31,57 +35,34 @@ public class NewtreeActivity extends AppCompatActivity {
     String longitudeString;
     String latitudeString;
     PopupWindow popupMessage;
-
+    private Tree tree;
+    private String specieS;
+    private String nameS;
+    private int ID;
+    private DatabaseHandler db;
+    private EditText explanation;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.layout_add_tree__new_tree);
 
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
+        tree = new Tree();
+        db = new DatabaseHandler(getApplicationContext());
+
         final EditText longitude = (EditText) findViewById(R.id.longtitudeNewTree);
         final EditText latitude = (EditText) findViewById(R.id.latitudeNewTree);
-        EditText group = (EditText) findViewById(R.id.groupNewTree);
-        final EditText type = (EditText) findViewById(R.id.TypeNewTree);
-        final EditText explanation = (EditText) findViewById(R.id.reasonForNewTree);
+        final EditText specie = (EditText) findViewById(R.id.groupNewTree);
+        final EditText name = (EditText) findViewById(R.id.TypeNewTree);
+        explanation = (EditText) findViewById(R.id.reasonForNewTree);
         final TextView explanationError = (TextView) findViewById(R.id.explanationError_newtree);
         final TextView locationError = (TextView) findViewById(R.id.locationError_newtree);
 
 
-        Button getCurrentLocation = (Button) findViewById(R.id.currentLocationB);
+
         Button getMap = (Button) findViewById(R.id.button_add_tree_choose_location);
-
-        getCurrentLocation.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                //start with current location
-                LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-                Criteria criteria = new Criteria();
-
-                //Checing if the phone can get their current location, needs to be declared in manifest
-                if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION)
-                        != PackageManager.PERMISSION_GRANTED
-                        && ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_COARSE_LOCATION)
-                        != PackageManager.PERMISSION_GRANTED) {
-                    return;
-                }
-                Location location = locationManager.getLastKnownLocation(locationManager.getBestProvider(criteria, false));
-
-                if (location != null) {
-                    longitudeDouble = location.getLongitude();
-                    latitudeDouble = location.getLatitude();
-                    longitudeString = "" + longitudeDouble;
-                    latitudeString = "" + latitudeDouble;
-                } else {
-                    Toast.makeText(getApplicationContext(), "Getting current location Failed", Toast.LENGTH_SHORT).show();
-
-                }
-
-                longitude.setText(longitudeString);
-                latitude.setText(latitudeString);
-
-            }
-        });
 
         Button submit = (Button) findViewById(R.id.submitNewTreeB);
 
@@ -116,6 +97,25 @@ public class NewtreeActivity extends AppCompatActivity {
 
                 locationError.setVisibility(view.INVISIBLE);
 
+                if(specie.getText().toString().equals("")){
+                    specieS = "Onbekend";
+                }else{
+                    specieS = specie.getText().toString();
+                }
+
+                if(name.getText().toString().equals("")){
+                    nameS = "Onbekend";
+                }else{
+                    nameS = name.getText().toString();
+                }
+
+                ID = db.getLastID();
+                ID++;
+                if(ID == -1){
+                    Random ran = new Random();
+                    ID = ran.nextInt(1000000)+1;
+                }
+
                 popupInit();
 
                 popupMessage.showAtLocation(view, Gravity.CENTER_HORIZONTAL, 0, 0);
@@ -129,8 +129,6 @@ public class NewtreeActivity extends AppCompatActivity {
 
     public void getLocationOnMap(View view){
         Intent openMap = new Intent(this, ChooseLocationActivity.class);
-        openMap.putExtra("longitude", longitudeDouble);
-        openMap.putExtra("latitude", latitudeDouble);
         startActivityForResult(openMap,1);
     }
 
@@ -152,29 +150,73 @@ public class NewtreeActivity extends AppCompatActivity {
 
     public void continuePopup(View view){
         popupMessage.dismiss();
-        // parse information to database
-        Toast.makeText(getApplicationContext(), "Sending data to server succeeded", Toast.LENGTH_SHORT).show();
-        finish();
+        tree.setLongitude(longitudeDouble);
+        tree.setLatitude(latitudeDouble);
+        tree.setSpecie(specieS);
+        tree.setName(nameS);
+        tree.setStatus("Aangevraagd");
+        tree.setCuttingShape("Onbekend");
+        tree.setCurrentGirth(0);
+        tree.setOriginalGirth(0);
+        tree.setIdTree(ID);
+        if(tree != null) {
+            db.addTree(tree);
+        }else{
+            Toast.makeText(getApplicationContext(), "Something went wrong", Toast.LENGTH_SHORT).show();
+        }
+        Toast.makeText(getApplicationContext(), "Sending data to local database succeeded", Toast.LENGTH_SHORT).show();
+
+        String descr = explanation.getText().toString();
+
+        requestTree(tree, descr);
+
+        SharedPreferences sharedPreferences = getBaseContext().getSharedPreferences("userData", Context.MODE_PRIVATE);
+        String email = sharedPreferences.getString("useremail", null);
+
+        Intent intent = new Intent(getApplicationContext(), MapsActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | IntentCompat.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
     }
-
-
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        SharedPreferences prefs = getSharedPreferences("location", MODE_PRIVATE);
-        String restoredText = prefs.getString("longitude", null);
-        if (restoredText != null) {
-            longitudeString = prefs.getString("longitude", "0.0");
-            latitudeString = prefs.getString("latitude", "0.0");
-            final EditText longtitude = (EditText) findViewById(R.id.longtitudeNewTree);
-            final EditText latitude = (EditText) findViewById(R.id.latitudeNewTree);
-            longtitude.setText(longitudeString);
-            latitude.setText(latitudeString);
-            longitudeDouble = Double.parseDouble(longitudeString);
-            latitudeDouble = Double.parseDouble(latitudeString);
+        if (requestCode == 1) {
+            if (resultCode == RESULT_OK) {
+                longitudeDouble = Double.parseDouble(data.getStringExtra("longitude"));
+                latitudeDouble = Double.parseDouble(data.getStringExtra("latitude"));
+
+                final EditText longtitude = (EditText) findViewById(R.id.longtitudeNewTree);
+                final EditText latitude = (EditText) findViewById(R.id.latitudeNewTree);
+                longtitude.setText("" + longitudeDouble);
+                latitude.setText("" + latitudeDouble);
+            }
         }
+
     }
 
+    public void requestTree(final Tree tree, final String explanation){
+        class RequestTree extends AsyncTask<Void,Void,String> {
+
+            @Override
+            protected String doInBackground(Void... params) {
+                HashMap data = new HashMap();
+                SharedPreferences sharedPreferences = getBaseContext().getSharedPreferences("userData", Context.MODE_PRIVATE);
+                String email = sharedPreferences.getString("useremail", null);
+
+                data.put("description", explanation);
+                data.put("lat", "" + tree.getLatitude());
+                data.put("long","" + tree.getLongitude());
+                data.put("com_name", tree.getName());
+                data.put("email", email);
+
+                RequestHandler rh = new RequestHandler();
+                String s = rh.sendPostRequest("http://projectmovie.16mb.com/AddTree.php", data);
+                return s;
+            }
+        }
+        RequestTree rq = new RequestTree();
+        rq.execute();
+    }
 }

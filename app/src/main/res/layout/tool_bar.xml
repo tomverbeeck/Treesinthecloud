@@ -9,4 +9,12 @@
     app:popupTheme="@style/Theme.AppCompat.Light"
     android:background="@color/green"
     android:fitsSystemWindows="true"
-    xmlns:android="http://schemas.android.com/apk/res/android" />
+    xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <ImageView
+        android:id="@+id/sponserlogo"
+        android:layout_width="128dp"
+        android:layout_height="64dp"
+        android:layout_gravity="right"/>
+
+</android.support.v7.widget.Toolbar>
