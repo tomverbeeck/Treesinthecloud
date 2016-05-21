@@ -546,9 +546,13 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
     }
 
     private void initHeatMapSettings(){
-        mProvider = new HeatmapTileProvider.Builder().data(generateLocations()).build();
-        mProvider.setRadius(100);
-        mMap.addTileOverlay(new TileOverlayOptions().tileProvider(mProvider));
+        if(generateLocations() != null && generateLocations().size() != 0) {
+            mProvider = new HeatmapTileProvider.Builder().data(generateLocations()).build();
+            mProvider.setRadius(100);
+            mMap.addTileOverlay(new TileOverlayOptions().tileProvider(mProvider));
+        }else{
+            Toast.makeText(getApplicationContext(), "Something went wrong with loading the trees!", Toast.LENGTH_LONG).show();
+        }
     }
 
     private ArrayList<LatLng> generateLocations() {
