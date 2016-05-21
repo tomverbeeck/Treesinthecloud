@@ -107,7 +107,7 @@ public class OneFragment extends Fragment{
                     }
                 }
                 else {
-                    Toast.makeText(getContext(),"Please login to like a tree" , Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), R.string.toast_login_to_like_tree , Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -235,8 +235,7 @@ public class OneFragment extends Fragment{
             protected String doInBackground(Void... params) {
                 HashMap postParam = new HashMap<>();
                 postParam.put("idTree", "" + tree.getIdTree() );
-                String s = rh.sendPostRequest(ConfigIDTree.URL_GET_LIKES, postParam);
-                return s;
+                return rh.sendPostRequest(ConfigIDTree.URL_GET_LIKES, postParam);
             }
         }
         GetLikes gl = new GetLikes();

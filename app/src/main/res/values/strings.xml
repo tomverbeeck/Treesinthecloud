@@ -63,13 +63,6 @@
         <item>English</item>
         <item>Dutch</item>
     </array>
-    <array name="colors">
-        <item>Blue</item>
-        <item>Green</item>
-        <item>White</item>
-        <item>Black</item>
-        <item>Yellow</item>
-    </array>
 
     <!--Strings concerning the pop up window-->
     <string name="textview_layout_window_specie">Specie: </string>
@@ -129,6 +122,43 @@
     <string name="slide_3_title">Login</string>
     <string name="slide_3_desc">Add your own trees and routes when you are logged in!</string>
     <string name="string_popup_newtree_cancel">cancel</string>
+    <string name="string_textview_new_route_help">Choose Start Location!</string>
+    <string name="string_warning_above_8_waypoints">You can\'t add more then 8 waypoints!</string>
+    <string name="textview_help_set_end_location">Set End Location!</string>
+    <string name="textview_help_set_points_on_the_way">Set Points on the Way!</string>
+    <string name="textview_help_set_start_location">Choose Start Location!</string>
+    <string name="textview_help_select_trees">Good? then select your trees that you want to see during the walk (click per marker)</string>
+    <string name="textview_help_select_trees_you_want_to_see_at_this_point">Select the trees that you want to see at this point!\n</string>
+    <string name="textview_help_cant_go_back">Look out if you press next you can\'t go back to selecting trees!</string>
+    <string name="textview_help_previous_button">Select the trees that you want to see at this point!</string>
+    <string name="toast_login_fetching_data">Fetching data from server</string>
+    <string name="toast_welcome_you_are_logged_in">Welcome you are now logged in</string>
+    <string name="alertdialog_login_failed">Login Failed</string>
+    <string name="alertdialog_retry">Retry</string>
+    <string name="toast_registered_succesfull">successfully registered </string>
+    <string name="toast_login_to_like_tree">Please login to like a tree</string>
+    <string name="toast_please_log_in_to_comment">Please login to add a comment</string>
+    <string name="textview_check_internet_connection">Check your internet connection!</string>
+    <string name="textview_help_select_location_new_tree">Click on the marker (and window) to accept this location</string>
+    <string name="textview_help_drag_marker_new_tree">Hold and drag the marker to set a Location</string>
+    <string name="toast_save_new_tree">Sending data to local database succeeded</string>
+    <string name="alertdialog_login_to_unlock_feature">please login to unlock this feature!</string>
+    <string name="toast_max_zoom_reached">When you zoom in more the heatmap isn\'t visible!</string>
+    <string name="textview_new_route_draw_route">Draw Route</string>
+    <string name="textview_add_route_create_route">Create Route</string>
+    <string name="textview_new_route_select_trees">Select Trees</string>
+    <string name="textview_new_route_previous_marker">Previous Marker</string>
+    <string name="textview_new_route_next_marker">Next Marker</string>
+    <string name="toast_select_marker_representation">Select a visual representation of the trees!</string>
+    <string name="hint_login_username">Username</string>
+    <string name="hint_login_password">Password</string>
+    <string name="button_login">Login</string>
+    <string name="check_box_login_remember_password">remember password</string>
+    <string name="textview_no_account_yet_create_one">No account yet? Create one</string>
+    <string name="button_create_account">Create Account</string>
+    <string name="textview_register_already_a_member_login">Already a member? Login</string>
+    <string name="hint_register_email">Email</string>
+    <string name="toast_min_zoom_reached">If you zoom out more there will be too many trees displayed!</string>
 
 
 </resources>

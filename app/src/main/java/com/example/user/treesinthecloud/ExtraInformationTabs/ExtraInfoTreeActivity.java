@@ -37,6 +37,7 @@ public class ExtraInfoTreeActivity extends AppCompatActivity {
         setupViewPager(viewPager);
 
         tabLayout = (TabLayout)findViewById(R.id.tabs);
+        assert tabLayout != null;
         tabLayout.setupWithViewPager(viewPager);
         setupTabIcons();
     }

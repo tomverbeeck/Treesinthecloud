@@ -37,7 +37,6 @@
     <string name="title_activity_tree_profile">Boom Profiel</string>
     <string name="username">Gebruikersnaam</string>
     <array name="settings">
-        <item>Kleuren Schema Aanpassen</item>
         <item>Taal Veranderen</item>
         <item>Marker Aanpassen</item>
         <item>Personaliseer Map</item>
@@ -45,15 +44,8 @@
     <array name="languages">
         <item>Engels</item>
         <item>Nederlands</item>
-        <item>Spaans</item>
     </array>
-    <array name="colors">
-        <item>Blauw</item>
-        <item>Groen</item>
-        <item>Wit</item>
-        <item>Zwart</item>
-        <item>Geel</item>
-    </array>
+
     <string name="title_acitivty_customize_marker">Marker Aanpassen</string>
     <string name="title_activity_signup">Gelieve te Registreren</string>
     <string name="textview_layout_window_specie">Soort:</string>
@@ -107,6 +99,42 @@
     <string name="title_activity_routes">Routes</string>
     <string name="title_activity_maps_activity__route">MapRoute</string>
     <string name="title_activity_make_group">Maak een Groep</string>
+    <string name="string_textview_new_route_help">Kies Start Locatie!</string>
+    <string name="string_warning_above_8_waypoints">Je kan niet meer dan 8 punten toevoegen!</string>
+    <string name="textview_help_set_end_location">Selecteer een Eind Locatie</string>
+    <string name="textview_help_set_points_on_the_way">Selecteer Punten Onderweg!</string>
+    <string name="textview_help_set_start_location">Selecteer een Start Locatie!</string>
+    <string name="textview_help_select_trees">goed? Dan selecteer de bomen die je wilt zien tijdens de wandeling! (per marker)</string>
+    <string name="textview_help_previous_button">Selecteer de bomen die je bij deze locatie wilt!</string>
+    <string name="toast_welcome_you_are_logged_in">Welkom, u bent nu aangemeld!</string>
+    <string name="alertdialog_login_failed">Login Failed</string>
+    <string name="toast_registered_succesfull">Registratie Voltooid!</string>
+    <string name="toast_login_to_like_tree">Gelieve aan te melden voor te liken!</string>
+    <string name="toast_please_log_in_to_comment">Gelieve aan te melden voor te reageren!</string>
+    <string name="textview_check_internet_connection">Controleer je internet verbinding!</string>
+    <string name="textview_help_select_location_new_tree">Druk op de marker en zijn info scherm om de locatie te bevestigen!</string>
+    <string name="textview_help_drag_marker_new_tree">Hou de marker ingedrukt en sleep hem naar de gewilde locatie!</string>
+    <string name="toast_save_new_tree">Data verzonden!</string>
+    <string name="alertdialog_login_to_unlock_feature">Gelieve in te loggen voor deze functie!</string>
+    <string name="alertdialog_retry">Opnieuw</string>
+    <string name="textview_help_select_trees_you_want_to_see_at_this_point">Selecteer de bomen die je wilt zien op dit punt!\n</string>
+    <string name="textview_help_cant_go_back">Let op als je op volgende drukt dan kan je niet terug voor bomen te selecteren!</string>
+    <string name="textview_new_route_draw_route">Teken Route</string>
+    <string name="textview_add_route_create_route">Create Route</string>
+    <string name="textview_new_route_select_trees">Selecteer Bomen</string>
+    <string name="textview_new_route_previous_marker">Vorig Punt</string>
+    <string name="textview_new_route_next_marker">Volgend Punt</string>
+    <string name="toast_login_fetching_data">Data van de server ophalen</string>
+    <string name="toast_max_zoom_reached">Wanneer je nog meer inzoomed zal de heatmap niet meer zichtbaar zijn!</string>
+    <string name="toast_select_marker_representation">Selecteer een visuele presentatie van de bomen!</string>
+    <string name="hint_login_username">Gebruikersnaam</string>
+    <string name="hint_login_password">Wachtwoord</string>
+    <string name="button_login">Aanmelden</string>
+    <string name="check_box_login_remember_password">Herinner Wachtwoord</string>
+    <string name="button_create_account">Maak een Account</string>
+    <string name="textview_no_account_yet_create_one">Nog geen account? Maak een</string>
+    <string name="textview_register_already_a_member_login">Al een account? Aanmelden</string>
+    <string name="hint_register_email">E-mail</string>
 
 
 </resources>

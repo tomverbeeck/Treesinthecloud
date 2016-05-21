@@ -97,7 +97,7 @@ public class ThreeFragment extends Fragment {
                 }
                 else{
 
-                    Toast.makeText(getContext(), "Please login to add a comment", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), R.string.toast_please_log_in_to_comment, Toast.LENGTH_SHORT).show();
                 }
 
 
@@ -157,8 +157,7 @@ public class ThreeFragment extends Fragment {
                 HashMap postParam = new HashMap<>();
                 postParam.put("idTree", ""+ treeId );
                 RequestHandler rh = new RequestHandler();
-                String s = rh.sendPostRequest(ConfigIDTree.URL_GET_ALL_COMMENTS_TREE, postParam);
-                return s;
+                return rh.sendPostRequest(ConfigIDTree.URL_GET_ALL_COMMENTS_TREE, postParam);
             }
         }
         GetMessages gm = new GetMessages();
@@ -211,8 +210,7 @@ public class ThreeFragment extends Fragment {
                 postParam.put("username", nickname);
                 postParam.put("comment", text);
                 RequestHandler rh = new RequestHandler();
-                String s = rh.sendPostRequest(ConfigIDTree.URL_COMMENT_TREE, postParam);
-                return s;
+                return rh.sendPostRequest(ConfigIDTree.URL_COMMENT_TREE, postParam);
             }
         }
         SendMessage sm = new SendMessage();

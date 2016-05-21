@@ -32,7 +32,6 @@ public class RoutesActivity extends AppCompatActivity implements ListView.OnItem
 
     ListView routeList;
     List<Route> routes = new ArrayList<>();
-    //private ProgressDialog loading;
     private Context myContext;
     private FloatingActionButton fab;
 
@@ -44,9 +43,6 @@ public class RoutesActivity extends AppCompatActivity implements ListView.OnItem
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         routeList = (ListView)findViewById(R.id.listView_routes);
-
-        if(this == null)
-            myContext = this;
 
         getJSONRoute();
 
@@ -62,8 +58,8 @@ public class RoutesActivity extends AppCompatActivity implements ListView.OnItem
                     startActivity(intentNewRoute);
                 }else{
                     AlertDialog.Builder builder = new AlertDialog.Builder(RoutesActivity.this);
-                    builder.setMessage("please login to unlock this feature!!!")
-                            .setNegativeButton("Retry", null)
+                    builder.setMessage(getString(R.string.alertdialog_login_to_unlock_feature))
+                            .setNegativeButton(R.string.alertdialog_retry, null)
                             .create()
                             .show();
                 }
@@ -108,7 +104,7 @@ public class RoutesActivity extends AppCompatActivity implements ListView.OnItem
                     //loading.dismiss();
                 } catch (JSONException e) {
                     e.printStackTrace();
-                    Toast.makeText(getApplicationContext(), "Check you internet connection and try again!", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), R.string.textview_check_internet_connection, Toast.LENGTH_LONG).show();
                 }
 
                 CustomListAdapter adapter = new CustomListAdapter(context, routes);

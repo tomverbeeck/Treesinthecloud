@@ -47,7 +47,8 @@ public class ChooseLocationActivity extends AppCompatActivity implements OnMapRe
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         help = (TextView)findViewById(R.id.textview_choose_location_help);
-        help.setText("Hold and drag the marker to set a Location");
+        assert help != null;
+        help.setText(R.string.textview_help_drag_marker_new_tree);
 
         longitude = 4.708;
         latitude = 50.875;
@@ -106,7 +107,7 @@ public class ChooseLocationActivity extends AppCompatActivity implements OnMapRe
 
             @Override
             public void onMarkerDragEnd(Marker marker) {
-                help.setText("Click on the marker (and window) to accept this location");
+                help.setText(R.string.textview_help_select_location_new_tree);
                 latitude = marker.getPosition().latitude;
                 longitude = marker.getPosition().longitude;
             }

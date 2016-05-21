@@ -137,7 +137,7 @@ public class MapsActivity_Route extends AppCompatActivity implements OnMapReadyC
                 TextView status = (TextView) infoWindows.findViewById(R.id.textview_status_layout_window);
 
                 if(marker.getTitle().equals("waypoint")){
-
+                    //do nothing
                 }else {
 
                     Tree treeDummy;
@@ -185,6 +185,7 @@ public class MapsActivity_Route extends AppCompatActivity implements OnMapReadyC
                         query = "w" + (i-1) + "LatLng";
                         String dataString = data.getString(query);
                         if(dataString.equals("not used")) {
+                            //nothing happens
                         }else{
                             location = getLatLngFromString(dataString);
                             markers.add(location);
@@ -225,10 +226,9 @@ public class MapsActivity_Route extends AppCompatActivity implements OnMapReadyC
     }
 
     private LatLng getLatLngFromString(String latlong){
-        if(latlong != "not used" || latlong != null || latlong != "") {
+        if(latlong != "not used" || latlong != null || latlong.equals("")) {
             String[] parts = latlong.split("-");
-            LatLng dummy = new LatLng(Double.parseDouble(parts[0]), Double.parseDouble(parts[1]));
-            return dummy;
+            return new LatLng(Double.parseDouble(parts[0]), Double.parseDouble(parts[1]));
         }
         return new LatLng(0,0);
     }
@@ -317,8 +317,10 @@ public class MapsActivity_Route extends AppCompatActivity implements OnMapReadyC
         }catch(Exception e){
             e.printStackTrace();
         }finally{
-            iStream.close();
-            urlConnection.disconnect();
+            if(iStream != null)
+                iStream.close();
+            if(urlConnection != null)
+                urlConnection.disconnect();
         }
         return data;
     }
@@ -463,7 +465,7 @@ public class MapsActivity_Route extends AppCompatActivity implements OnMapReadyC
             @Override
             protected String doInBackground(Void... params) {
                 RequestHandler rh = new RequestHandler();
-                String url = ConfigIDRoute.GET_TREE_URL + nameRoute.toString().trim();
+                String url = ConfigIDRoute.GET_TREE_URL + nameRoute.trim();
                 String s = rh.sendGetRequest(url);
                 return s;
             }

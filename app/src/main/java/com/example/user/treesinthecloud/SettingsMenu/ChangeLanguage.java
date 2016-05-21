@@ -17,9 +17,6 @@ import com.example.user.treesinthecloud.R;
 
 import java.util.Locale;
 
-/**
- * Created by User on 11/03/2016.
- */
 public class ChangeLanguage extends AppCompatActivity {
 
     private ListView list_languages;

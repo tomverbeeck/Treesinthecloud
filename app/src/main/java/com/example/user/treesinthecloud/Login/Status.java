@@ -2,9 +2,7 @@ package com.example.user.treesinthecloud.Login;
 
 import android.app.Application;
 
-/**
- * Created by GroepT on 5/17/2016.
- */
+
 public class Status extends Application  {
 
     public  boolean LoggedIn;

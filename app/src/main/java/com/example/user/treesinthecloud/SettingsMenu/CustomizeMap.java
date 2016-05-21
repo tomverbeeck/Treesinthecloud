@@ -41,8 +41,8 @@ public class CustomizeMap extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 SharedPreferences.Editor editor = getSharedPreferences(MyPREFERENCES, MODE_PRIVATE).edit();
                 editor.remove("typeMap");
-                editor.putString("typeMap", data[position].toString());
-                editor.commit();
+                editor.putString("typeMap", data[position]);
+                editor.apply();
 
                 Intent intent = new Intent(getApplicationContext(), MapsActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | IntentCompat.FLAG_ACTIVITY_CLEAR_TASK);

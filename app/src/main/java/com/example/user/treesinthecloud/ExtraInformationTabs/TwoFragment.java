@@ -108,7 +108,7 @@ public class TwoFragment extends Fragment {
             addressLabel.setText(getResources().getText(R.string.text_unable_to_load_address));
         }
         if(strAdd.equals("")){
-            addressLabel.setText("Check your internet connection!");
+            addressLabel.setText(R.string.textview_check_internet_connection);
         }else {
             addressLabel.setText(strAdd);
         }

@@ -86,7 +86,8 @@ public class NewRouteMapsActivity extends AppCompatActivity implements OnMapRead
         btnPrev = (Button) findViewById(R.id.btn_add_route_prev_tree);
 
         help = (TextView)findViewById(R.id.textview_new_route_help);
-        help.setText("Choose Start Location!");
+        if(help != null)
+            help.setText(R.string.string_textview_new_route_help);
 
         route.setName(getIntent().getExtras().getString("nameRoute"));
         route.setShortDescription(getIntent().getExtras().getString("descriptionRoute"));
@@ -121,7 +122,7 @@ public class NewRouteMapsActivity extends AppCompatActivity implements OnMapRead
                 // Already 10 locations with 8 waypoints and 1 start location and 1 end location.
                 // Upto 8 waypoints are allowed in a query for non-business users
                 if(markerPoints.size()>=10){
-                    Toast.makeText(getApplicationContext(), "You can't add more then 8 waypoints!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), R.string.string_warning_above_8_waypoints, Toast.LENGTH_SHORT).show();
                     return;
                 }
 
@@ -137,10 +138,10 @@ public class NewRouteMapsActivity extends AppCompatActivity implements OnMapRead
 
                 if(markerPoints.size()==1){
                     options.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
-                    help.setText("Set End Location!");
+                    help.setText(R.string.textview_help_set_end_location);
                 }else if(markerPoints.size()==2){
                     options.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
-                    help.setText("Set Points on the Way!");
+                    help.setText(R.string.textview_help_set_points_on_the_way);
                 }else{
                     options.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE));
                 }
@@ -159,22 +160,27 @@ public class NewRouteMapsActivity extends AppCompatActivity implements OnMapRead
                 // Removes all the points in the ArrayList
                 markerPoints.clear();
 
-                help.setText("Choose Start Location!");
+                help.setText(R.string.textview_help_set_start_location);
 
                 View view = findViewById(R.id.btnCreate);
-                view.setVisibility(View.INVISIBLE);
+                if(view != null)
+                    view.setVisibility(View.INVISIBLE);
 
                 View view1 = findViewById(R.id.btnSelectTrees);
-                view1.setVisibility(View.INVISIBLE);
+                if(view1 != null)
+                    view1.setVisibility(View.INVISIBLE);
 
                 View view2 = findViewById(R.id.btnDraw);
-                view2.setVisibility(View.VISIBLE);
+                if(view2 != null)
+                    view2.setVisibility(View.VISIBLE);
 
                 View view3 = findViewById(R.id.btn_add_route_next_tree);
-                view3.setVisibility(View.INVISIBLE);
+                if(view3 != null)
+                    view3.setVisibility(View.INVISIBLE);
 
                 View view4 = findViewById(R.id.btn_add_route_prev_tree);
-                view4.setVisibility(View.INVISIBLE);
+                if(view4 != null)
+                    view4.setVisibility(View.INVISIBLE);
 
                 countTrees = 0;
             }
@@ -201,12 +207,13 @@ public class NewRouteMapsActivity extends AppCompatActivity implements OnMapRead
                     Toast.makeText(getApplicationContext(), "Please Select at Least Two Points", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                help.setText("Good? then select your trees that you want to see during the walk (click per marker)");
+                help.setText(R.string.textview_help_select_trees);
 
                 Button button = (Button) v;
                 button.setVisibility(View.INVISIBLE);
                 View view = findViewById(R.id.btnSelectTrees);
-                view.setVisibility(View.VISIBLE);
+                if(view != null)
+                    view.setVisibility(View.VISIBLE);
 
                 for(int j = 0; j<markerPoints.size(); j++){
                     markerpointsString.add(getStringFromLatLng(markerPoints.get(j)));
@@ -229,7 +236,6 @@ public class NewRouteMapsActivity extends AppCompatActivity implements OnMapRead
             public void onClick(View v) {
                 String idTree = "";
                 String shortDescr = "";
-                String res = "";
 
                 // Get a set of the entries
                 Set set = route.getTreesHash().entrySet();
@@ -261,9 +267,11 @@ public class NewRouteMapsActivity extends AppCompatActivity implements OnMapRead
                 Button button = (Button) v;
                 button.setVisibility(View.INVISIBLE);
                 View view = findViewById(R.id.btn_add_route_next_tree);
-                view.setVisibility(View.VISIBLE);
+                if(view != null)
+                    view.setVisibility(View.VISIBLE);
                 View view2 = findViewById(R.id.btn_add_route_prev_tree);
-                view2.setVisibility(View.VISIBLE);
+                if(view2 != null)
+                    view2.setVisibility(View.VISIBLE);
             }
         });
 
@@ -275,19 +283,21 @@ public class NewRouteMapsActivity extends AppCompatActivity implements OnMapRead
                 location = markerPoints.get(countTrees);
                 getJSON();
 
-                help.setText("Select the trees that you want to see at this point!\n");
+                help.setText(R.string.textview_help_select_trees_you_want_to_see_at_this_point);
 
                 if(countTrees == markerPoints.size()-2)
-                    help.setText("Look out if you press next you can't go back to selecting trees!");
+                    help.setText(R.string.textview_help_cant_go_back);
 
                 if(countTrees == markerPoints.size()-1) {
                     //end routine
                     Button button = (Button) v;
                     button.setVisibility(View.INVISIBLE);
                     View view = findViewById(R.id.btnCreate);
-                    view.setVisibility(View.VISIBLE);
+                    if(view != null)
+                        view.setVisibility(View.VISIBLE);
                     View view2 = findViewById(R.id.btn_add_route_prev_tree);
-                    view2.setVisibility(View.INVISIBLE);
+                    if(view2 != null)
+                        view2.setVisibility(View.INVISIBLE);
                 }
 
             }
@@ -301,7 +311,7 @@ public class NewRouteMapsActivity extends AppCompatActivity implements OnMapRead
                 location = markerPoints.get(countTrees);
                 getJSON();
 
-                help.setText("Select the trees that you want to see at this point!");
+                help.setText(R.string.textview_help_previous_button);
                 //end routine
 
             }
@@ -366,10 +376,7 @@ public class NewRouteMapsActivity extends AppCompatActivity implements OnMapRead
         // Output format
         String output = "json";
 
-        // Building the url to the web service
-        String url = "https://maps.googleapis.com/maps/api/directions/"+output+"?"+parameters;
-
-        return url;
+        return "https://maps.googleapis.com/maps/api/directions/"+output+"?"+parameters;
     }
 
     /** A method to download json data from url */
@@ -405,8 +412,10 @@ public class NewRouteMapsActivity extends AppCompatActivity implements OnMapRead
         }catch(Exception e){
             e.printStackTrace();
         }finally{
-            iStream.close();
-            urlConnection.disconnect();
+            if(iStream != null)
+                iStream.close();
+            if(urlConnection != null)
+                urlConnection.disconnect();
         }
         return data;
     }
@@ -621,8 +630,7 @@ public class NewRouteMapsActivity extends AppCompatActivity implements OnMapRead
                 String curLatMin = "" + dummy;
                 String rest = "?latMin=" + curLatMin + "&latMax=" + curLatMax + "&longMin=" + curLongMin + "&longMax=" + curLongMax;
 
-                String s = rh.sendGetRequest(ConfigIDTree.URL_GET_TREE_AREA + rest.trim());
-                return s;
+                return rh.sendGetRequest(ConfigIDTree.URL_GET_TREE_AREA + rest.trim());
             }
         }
         GetJSON gj = new GetJSON();
@@ -729,8 +737,7 @@ public class NewRouteMapsActivity extends AppCompatActivity implements OnMapRead
                 params.put(ConfigIDRoute.KEY_W8,w8);
 
                 RequestHandler rh = new RequestHandler();
-                String res = rh.sendPostRequest(ConfigIDRoute.ADDROUTE_URL, params);
-                return res;
+                return rh.sendPostRequest(ConfigIDRoute.ADDROUTE_URL, params);
             }
         }
 
@@ -768,8 +775,7 @@ public class NewRouteMapsActivity extends AppCompatActivity implements OnMapRead
                 params.put(ConfigIDRoute.KEY_DESCR_TREE, descr);
 
                 RequestHandler rh = new RequestHandler();
-                String res = rh.sendPostRequest(ConfigIDRoute.ADDTREETOROUTE_URL, params);
-                return res;
+                return rh.sendPostRequest(ConfigIDRoute.ADDTREETOROUTE_URL, params);
             }
         }
 

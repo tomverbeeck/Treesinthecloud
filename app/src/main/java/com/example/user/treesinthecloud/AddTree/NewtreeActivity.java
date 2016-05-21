@@ -66,6 +66,7 @@ public class NewtreeActivity extends AppCompatActivity {
 
         Button submit = (Button) findViewById(R.id.submitNewTreeB);
 
+        assert submit != null;
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -73,16 +74,21 @@ public class NewtreeActivity extends AppCompatActivity {
 
                 String expl = explanation.getText().toString();
                 if (expl.trim().length() < 20) {
+                    assert explanationError != null;
                     explanationError.setVisibility(view.VISIBLE);
                     return;
                 }
 
+                assert explanationError != null;
                 explanationError.setVisibility(view.INVISIBLE);
 
+                assert longitude != null;
                 String longS = longitude.getText().toString();
+                assert latitude != null;
                 String latS = latitude.getText().toString();
 
                 if (longS.isEmpty() || latS.isEmpty()) {
+                    assert locationError != null;
                     locationError.setVisibility(view.VISIBLE);
                     return;
                 }
@@ -91,18 +97,22 @@ public class NewtreeActivity extends AppCompatActivity {
                     Double longD = Double.parseDouble(longS);
                     Double latD = Double.parseDouble(latS);
                 } catch (NumberFormatException e) {
+                    assert locationError != null;
                     locationError.setVisibility(view.VISIBLE);
                     return;
                 }
 
+                assert locationError != null;
                 locationError.setVisibility(view.INVISIBLE);
 
+                assert specie != null;
                 if(specie.getText().toString().equals("")){
                     specieS = "Onbekend";
                 }else{
                     specieS = specie.getText().toString();
                 }
 
+                assert name != null;
                 if(name.getText().toString().equals("")){
                     nameS = "Onbekend";
                 }else{
@@ -164,7 +174,7 @@ public class NewtreeActivity extends AppCompatActivity {
         }else{
             Toast.makeText(getApplicationContext(), "Something went wrong", Toast.LENGTH_SHORT).show();
         }
-        Toast.makeText(getApplicationContext(), "Sending data to local database succeeded", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getApplicationContext(), R.string.toast_save_new_tree, Toast.LENGTH_SHORT).show();
 
         String descr = explanation.getText().toString();
 
@@ -189,7 +199,9 @@ public class NewtreeActivity extends AppCompatActivity {
 
                 final EditText longtitude = (EditText) findViewById(R.id.longtitudeNewTree);
                 final EditText latitude = (EditText) findViewById(R.id.latitudeNewTree);
+                assert longtitude != null;
                 longtitude.setText("" + longitudeDouble);
+                assert latitude != null;
                 latitude.setText("" + latitudeDouble);
             }
         }
@@ -212,8 +224,7 @@ public class NewtreeActivity extends AppCompatActivity {
                 data.put("email", email);
 
                 RequestHandler rh = new RequestHandler();
-                String s = rh.sendPostRequest("http://projectmovie.16mb.com/AddTree.php", data);
-                return s;
+                return rh.sendPostRequest("http://projectmovie.16mb.com/AddTree.php", data);
             }
         }
         RequestTree rq = new RequestTree();

@@ -7,9 +7,6 @@ import com.example.user.treesinthecloud.TreeDatabase.Tree;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-/**
- * Created by User on 21/04/2016.
- */
 public class Route {
 
     private String name;

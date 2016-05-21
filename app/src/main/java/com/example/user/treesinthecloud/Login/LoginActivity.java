@@ -51,21 +51,27 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         setContentView(R.layout.layout_login_activity);
 
         email = (EditText) findViewById(R.id.proName);
-        email.setOnClickListener(this);
+        if(email != null)
+            email.setOnClickListener(this);
         password = (EditText) findViewById(R.id.input_password);
-        password.setOnClickListener(this);
+        if(password != null)
+            password.setOnClickListener(this);
 
         login = (Button) findViewById(R.id.login);
-        login.setOnClickListener(this);
+        if(login != null)
+            login.setOnClickListener(this);
 
         create_account = (TextView) findViewById(R.id.input_account);
-        create_account.setOnClickListener(this);
+        if(create_account != null)
+            create_account.setOnClickListener(this);
 
 
         CheckBox = (CheckBox)findViewById(R.id.checkBox);
-        CheckBox.setOnCheckedChangeListener(this);
-        checkflag = CheckBox.isChecked();
-        Log.d(TAG,"is checked" + checkflag);
+        if(CheckBox != null) {
+            CheckBox.setOnCheckedChangeListener(this);
+            checkflag = CheckBox.isChecked();
+            Log.d(TAG, "is checked" + checkflag);
+        }
 
         loginPreferences = getSharedPreferences("userData", MODE_PRIVATE);
         loginPrefsEditor = loginPreferences.edit();
@@ -105,12 +111,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     passwordEd = password.getText().toString();
 
                     if(user_email.equals(emailEd) && user_password.equals(passwordEd)){
-                        Toast.makeText(this, "Welcome you are logged in", Toast.LENGTH_LONG).show();
+                        Toast.makeText(this, R.string.toast_welcome_you_are_logged_in, Toast.LENGTH_LONG).show();
                         ((Status)getApplication()).setLoggedIn(true);
                         finish();
                     }else{
 
-                        Toast.makeText(this, "user info fetching  from server ", Toast.LENGTH_LONG).show();
+                        Toast.makeText(this, R.string.toast_login_fetching_data, Toast.LENGTH_LONG).show();
                         String useremail1  = email.getText().toString();
                         String userpassword1  = MD5.encrypt(password.getText().toString());
 
@@ -131,7 +137,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
                                         Context context = getApplicationContext();
                                         int duration = Toast.LENGTH_SHORT;
-                                        Toast toast = Toast.makeText(context, "Welcome you are now loggedIn", duration);
+                                        Toast toast = Toast.makeText(context, R.string.toast_welcome_you_are_logged_in, duration);
                                         toast.show();
 
                                         Intent intent = new Intent(getApplicationContext(), MapsActivity.class);
@@ -140,8 +146,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
                                     } else {
                                         AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
-                                        builder.setMessage("Login Failed")
-                                                .setNegativeButton("Retry", null)
+                                        builder.setMessage(R.string.alertdialog_login_failed)
+                                                .setNegativeButton(R.string.alertdialog_retry, null)
                                                 .create()
                                                 .show();
 
@@ -159,7 +165,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         queue.add(loginRequest);}
                 } else {
 
-                    Toast.makeText(this, "fetching data from server ", Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, R.string.toast_login_fetching_data, Toast.LENGTH_LONG).show();
                     String useremail1  = MD5.encrypt(email.getText().toString());
                     String userpassword1  = MD5.encrypt(password.getText().toString());
 
@@ -175,7 +181,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                     loginPrefsEditor.clear();
                                     loginPrefsEditor.commit();
 
-                                    Toast.makeText(getApplicationContext(), "Welcome you are now loggedIn", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(getApplicationContext(), R.string.toast_welcome_you_are_logged_in, Toast.LENGTH_SHORT).show();
 
                                     ((Status)getApplication()).setLoggedIn(true);
 
@@ -186,8 +192,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                 } else {
                                     ((Status)getApplication()).setLoggedIn(false);
                                     AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
-                                    builder.setMessage("Login Failed")
-                                            .setNegativeButton("Retry", null)
+                                    builder.setMessage(getString(R.string.alertdialog_login_failed))
+                                            .setNegativeButton(getString(R.string.alertdialog_retry), null)
                                             .create()
                                             .show();
                                 }

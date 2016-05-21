@@ -78,8 +78,6 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
 
     private double range = 0.002;
 
-    UserLocalStore userLocalStore;
-
     public static final String MyPREFERENCES = "MyPrefs" ;
 
     //get one tree
@@ -112,6 +110,7 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
     private static final int SELECT_PICTURE = 100;
     private static final String TAG = "MapsActivity";
     Uri profile_picture;
+    UserLocalStore userLocalStore;
 
     AppCompatImageView proPic;
     Button upload;
@@ -140,6 +139,8 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
 
         proPic.setImageURI(profile);
 
+        userLocalStore = new UserLocalStore(this);
+
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
@@ -150,7 +151,6 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
-        userLocalStore = new UserLocalStore(this);
         // Initializing Toolbar and setting it as the actionbar
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -188,7 +188,6 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
                 switch (menuItem.getItemId()) {
                     //Replacing the main content with ContentFragment Which is our Inbox View;
                     case R.id.map:
-                        //getSupportActionBar().setTitle("Map");
                         return true;
 
                     case R.id.login:
@@ -196,7 +195,6 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
                         userLocalStore.setUserLoggedIn(false);
 
                         Intent intentLogin = new Intent(getApplicationContext(), LoginActivity.class);
-                        //getSupportActionBar().setTitle(R.string.title_activity_login);
                         startActivity(intentLogin);
                         return true;
 
@@ -208,8 +206,8 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
                             startActivity(intentmakeGroup);
                         }else{
                             AlertDialog.Builder builder = new AlertDialog.Builder(MapsActivity.this);
-                            builder.setMessage("please login to unlock this feature!!!")
-                                    .setNegativeButton("Retry", null)
+                            builder.setMessage(R.string.alertdialog_login_to_unlock_feature)
+                                    .setNegativeButton(R.string.alertdialog_retry, null)
                                     .create()
                                     .show();
                         }
@@ -218,12 +216,10 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
                     case R.id.settings:
                         Intent intentSettings = new Intent(getApplicationContext(), SettingsActivity.class);
                         startActivity(intentSettings);
-                        //getSupportActionBar().setTitle(R.string.title_activity_settings);
                         return true;
                     case R.id.routes:
                         Intent intentRoutes = new Intent(getApplicationContext(), RoutesActivity.class);
                         startActivity(intentRoutes);
-                        //getSupportActionBar().setTitle(R.string.title_activity_routes);
                     default:
                         if(getSupportActionBar() != null)
                             getSupportActionBar().setTitle(R.string.app_name);
@@ -258,6 +254,8 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
 
         whichMarker = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE).getString("markerImage", "");
 
+        Toast.makeText(getApplicationContext(), R.string.toast_select_marker_representation, Toast.LENGTH_LONG).show();
+        Toast.makeText(getApplicationContext(), R.string.toast_select_marker_representation, Toast.LENGTH_LONG).show();
     }
 
     @Override
@@ -370,7 +368,7 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
                         public void onCameraChange(CameraPosition cameraPosition) {
                             if(maxZoom < cameraPosition.zoom){
                                 mMap.animateCamera(CameraUpdateFactory.zoomTo(maxZoom));
-                                Toast.makeText(getApplicationContext(), "When you zoom in more the heatmap isn't visible!" , Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getApplicationContext(), R.string.toast_max_zoom_reached , Toast.LENGTH_SHORT).show();
                             }
                         }
                     });
@@ -386,18 +384,25 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
             @Override
             public void onCameraChange(CameraPosition position)
             {
-                //This is the current user-viewable region of the map
-                LatLngBounds bounds = mMap.getProjection().getVisibleRegion().latLngBounds;
+                float minZoom = 18;
+                if(minZoom > position.zoom){
+                    mMap.animateCamera(CameraUpdateFactory.zoomTo(minZoom));
+                    Toast.makeText(getApplicationContext(), R.string.toast_min_zoom_reached , Toast.LENGTH_SHORT).show();
+                }else {
 
-                if(!bounds.equals(camerachange)){
-                    if(globalMarker == 10) {
-                        globalMarker = 0;
-                        mMap.clear();
-                    }else {
-                        globalMarker++;
+                    //This is the current user-viewable region of the map
+                    LatLngBounds bounds = mMap.getProjection().getVisibleRegion().latLngBounds;
+
+                    if (!bounds.equals(camerachange)) {
+                        if (globalMarker == 10) {
+                            globalMarker = 0;
+                            mMap.clear();
+                        } else {
+                            globalMarker++;
+                        }
+                        camerachange = bounds;
+                        addItems(bounds);
                     }
-                    camerachange = bounds;
-                    addItems(bounds);
                 }
             }
         };

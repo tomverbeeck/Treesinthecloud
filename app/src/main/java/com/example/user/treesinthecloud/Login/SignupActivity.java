@@ -19,7 +19,6 @@ import java.util.HashMap;
 
 public class SignupActivity extends AppCompatActivity implements View.OnClickListener{
 
-    // private EditText editTextName;
     private EditText editTextUsername;
     private EditText editTextPassword;
     private EditText editTextEmail;
@@ -38,19 +37,24 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
         setContentView(R.layout.layout_signup_acitivity);
 
         editTextUsername = (EditText) findViewById(R.id.c);
-        editTextUsername.setOnClickListener(this);
+        if(editTextUsername != null)
+            editTextUsername.setOnClickListener(this);
 
         editTextPassword = (EditText) findViewById(R.id.input_password);
-        editTextPassword.setOnClickListener(this);
+        if(editTextPassword != null)
+            editTextPassword.setOnClickListener(this);
 
         editTextEmail = (EditText) findViewById(R.id.input_email);
-        editTextEmail.setOnClickListener(this);
+        if(editTextEmail != null)
+            editTextEmail.setOnClickListener(this);
 
         buttonRegister = (Button) findViewById(R.id.signup);
-        buttonRegister.setOnClickListener(this);
+        if(buttonRegister != null)
+            buttonRegister.setOnClickListener(this);
 
         already_member = (TextView) findViewById(R.id.link_login);
-        already_member.setOnClickListener(this);
+        if(already_member != null)
+            already_member.setOnClickListener(this);
 
         loginPreferences = getSharedPreferences("userData", MODE_PRIVATE);
         loginPrefsEditor = loginPreferences.edit();
@@ -78,7 +82,7 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
                         Log.d(TAG,s);
                         if(s.contains("succes")){
                             loginPrefsEditor.putString("username", editTextUsername.getText().toString());
-                            Toast.makeText(getApplicationContext(), "successfully registered ",Toast.LENGTH_LONG).show();
+                            Toast.makeText(getApplicationContext(), R.string.toast_registered_succesfull,Toast.LENGTH_LONG).show();
                             finish();
                         }
                     }

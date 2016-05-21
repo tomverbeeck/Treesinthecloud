@@ -42,7 +42,7 @@ public class CustomizeMarker extends AppCompatActivity {
                 SharedPreferences.Editor editor = getSharedPreferences(MyPREFERENCES, MODE_PRIVATE).edit();
                 editor.remove("markerImage");
                 editor.putString("markerImage", data[position]);
-                editor.commit();
+                editor.apply();
 
                 Intent intent = new Intent(getApplicationContext(), MapsActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | IntentCompat.FLAG_ACTIVITY_CLEAR_TASK);
