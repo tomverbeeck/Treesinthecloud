@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.content.IntentCompat;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -135,6 +136,11 @@ public class WelcomeScreenActivity extends AppCompatActivity {
     private void launchHomeScreen() {
         if (prefManager.isFirstTimeLaunch()){
             getJSON();
+        }
+        if(!prefManager.isFirstTimeLaunch()){
+            Intent intent = new Intent(getApplicationContext(), MapsActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | IntentCompat.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
         }
         prefManager.setFirstTimeLaunch(false);
         startActivity(new Intent(WelcomeScreenActivity.this, MapsActivity.class));

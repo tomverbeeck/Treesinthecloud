@@ -80,7 +80,10 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
                     @Override
                     public void processFinish(String s) {
                         Log.d(TAG,s);
-                        if(s.contains("succes")){
+                        if(s.contains("taken")){
+                            Toast.makeText(getApplicationContext(), R.string.toast_username_taken, Toast.LENGTH_SHORT).show();
+                        }
+                        if(s.contains("true")){
                             loginPrefsEditor.putString("username", editTextUsername.getText().toString());
                             Toast.makeText(getApplicationContext(), R.string.toast_registered_succesfull,Toast.LENGTH_LONG).show();
                             finish();

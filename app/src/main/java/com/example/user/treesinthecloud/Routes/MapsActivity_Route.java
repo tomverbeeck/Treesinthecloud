@@ -192,6 +192,9 @@ public class MapsActivity_Route extends AppCompatActivity implements OnMapReadyC
                             addMarkers(markers.get(i));
                         }
                     }
+                    mMapRoute.moveCamera(CameraUpdateFactory.newLatLng(markers.get(0)));
+                    mMapRoute.animateCamera(CameraUpdateFactory.newLatLngZoom(markers.get(0), 15));
+
                     // Checks, whether start and end locations are captured
                     if(markers.size() >= 2){
                         LatLng origin = markers.get(0);
@@ -540,8 +543,8 @@ public class MapsActivity_Route extends AppCompatActivity implements OnMapReadyC
             mMapRoute.moveCamera(CameraUpdateFactory.newLatLng(leuven));
             mMapRoute.animateCamera(CameraUpdateFactory.newLatLngZoom(leuven, 15));
         } else {
-            mMapRoute.moveCamera(CameraUpdateFactory.newLatLng(currentLoc));
-            mMapRoute.animateCamera(CameraUpdateFactory.newLatLngZoom(currentLoc, 15));
+            //mMapRoute.moveCamera(CameraUpdateFactory.newLatLng(currentLoc));
+            // mMapRoute.animateCamera(CameraUpdateFactory.newLatLngZoom(currentLoc, 15));
         }
 
     }

@@ -1,6 +1,5 @@
 package com.example.user.treesinthecloud;
 
-import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -73,16 +72,11 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
     private ActionBarDrawerToggle actionBarDrawerToggle;
     private int zoomLevel;
     private DatabaseHandler db;
-
     private String whichMarker;
-
-    private double range = 0.002;
-
     public static final String MyPREFERENCES = "MyPrefs" ;
 
     //get one tree
     private Tree tree = new Tree();
-    private static MapsActivity instance;
 
     private LatLng currentLoc;
 
@@ -90,7 +84,6 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
 
     private HeatmapTileProvider mProvider;
 
-    private String update;
     List<Tree> trees = new ArrayList<>();
     private List<Integer> visibleMarkers = new ArrayList<>();
     private int globalMarker;
@@ -99,21 +92,16 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
 
     private String website ="http://leuven.be";
     private String SPONSOR_URL ="http://projectmovie.16mb.com/FetchSponsorImage.php";
-
-    String user_name,greeting;
-    EditText username;
-
+    private EditText username;
     private SharedPreferences loginPreferences;
     private SharedPreferences.Editor loginPrefsEditor;
-    public static final String SP_NAME = "N/A";
-
     private static final int SELECT_PICTURE = 100;
     private static final String TAG = "MapsActivity";
-    Uri profile_picture;
-    UserLocalStore userLocalStore;
+    private Uri profile_picture;
+    private UserLocalStore userLocalStore;
 
-    AppCompatImageView proPic;
-    Button upload;
+    private AppCompatImageView proPic;
+    private Button upload;
 
 
     @Override
@@ -255,7 +243,6 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
         whichMarker = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE).getString("markerImage", "");
 
         Toast.makeText(getApplicationContext(), R.string.toast_select_marker_representation, Toast.LENGTH_LONG).show();
-        Toast.makeText(getApplicationContext(), R.string.toast_select_marker_representation, Toast.LENGTH_LONG).show();
     }
 
     @Override
@@ -301,14 +288,14 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
         mMap.getUiSettings().setZoomControlsEnabled(true);
         mMap.getUiSettings().setScrollGesturesEnabled(true);
         mMap.getUiSettings().setMyLocationButtonEnabled(true);
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
 
-            ActivityCompat.requestPermissions(MapsActivity.instance,
-                    new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION},
-                    MY_PERMISSIONS_REQUEST_LOCATION);
-        }else{
-            allLocationRequiredStuff();
-        }
+                ActivityCompat.requestPermissions(MapsActivity.this,
+                        new String[]{android.Manifest.permission.ACCESS_COARSE_LOCATION, android.Manifest.permission.ACCESS_FINE_LOCATION},
+                        MY_PERMISSIONS_REQUEST_LOCATION);
+            } else {
+                allLocationRequiredStuff();
+           }
 
         mMap.setOnInfoWindowClickListener(this);
 

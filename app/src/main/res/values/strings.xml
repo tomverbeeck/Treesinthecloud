@@ -61,7 +61,7 @@
     </array>
     <array name="languages">
         <item>English</item>
-        <item>Dutch</item>
+        <item>Nederlands</item>
     </array>
 
     <!--Strings concerning the pop up window-->
@@ -160,6 +160,7 @@
     <string name="hint_register_email">Email</string>
     <string name="toast_min_zoom_reached">If you zoom out more there will be too many trees displayed!</string>
     <string name="textview_welcome_screen_if_you_press_finish_it_will_load_the_trees_from_the_database_online_this_could_take_some_time">If you press finish it will load the trees from the database online, this could take some time!</string>
+    <string name="toast_username_taken">Username Already Taken, please choose another one!</string>
 
 
 </resources>

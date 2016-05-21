@@ -42,7 +42,7 @@
         <item>Personaliseer Map</item>
     </array>
     <array name="languages">
-        <item>Engels</item>
+        <item>English</item>
         <item>Nederlands</item>
     </array>
 
@@ -132,11 +132,12 @@
     <string name="button_login">Aanmelden</string>
     <string name="check_box_login_remember_password">Herinner Wachtwoord</string>
     <string name="button_create_account">Maak een Account</string>
-    <string name="textview_no_account_yet_create_one">Nog geen account? Maak een</string>
+    <string name="textview_no_account_yet_create_one">Nog geen account? Maak een Account</string>
     <string name="textview_register_already_a_member_login">Al een account? Aanmelden</string>
     <string name="hint_register_email">E-mail</string>
     <string name="textview_welcome_screen_if_you_press_finish_it_will_load_the_trees_from_the_database_online_this_could_take_some_time">Als je op SNAP HET drukt zullen de bomen geladen worden uit de database, dit kan enkele minuten duren!</string>
     <string name="toast_min_zoom_reached">Als je meer uitoomt zullen er te veel bomen getoond worden!</string>
+    <string name="toast_username_taken">Gebruikersnaam is al in gebruik, kies er alstublief een andere!</string>
 
 
 </resources>
