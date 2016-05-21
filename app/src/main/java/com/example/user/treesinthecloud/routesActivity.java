@@ -6,12 +6,14 @@ import android.content.pm.ActivityInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.example.user.treesinthecloud.Login.Status;
 import com.example.user.treesinthecloud.Routes.ConfigIDRoute;
 import com.example.user.treesinthecloud.Routes.CustomListAdapter;
 import com.example.user.treesinthecloud.Routes.MapsActivity_Route;
@@ -54,9 +56,17 @@ public class RoutesActivity extends AppCompatActivity implements ListView.OnItem
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intentNewRoute = new Intent(getApplicationContext(), SetDetailsRouteActivity.class);
-                startActivity(intentNewRoute);
-
+                boolean makeroute = ((Status)getApplication()).getLoggedIn();
+                if(makeroute){
+                    Intent intentNewRoute = new Intent(getApplicationContext(), SetDetailsRouteActivity.class);
+                    startActivity(intentNewRoute);
+                }else{
+                    AlertDialog.Builder builder = new AlertDialog.Builder(RoutesActivity.this);
+                    builder.setMessage("please login to unlock this feature!!!")
+                            .setNegativeButton("Retry", null)
+                            .create()
+                            .show();
+                }
             }
         });
     }

@@ -136,13 +136,18 @@ public class MapsActivity_Route extends AppCompatActivity implements OnMapReadyC
                 TextView specie = (TextView) infoWindows.findViewById(R.id.textview_specie_layout_window);
                 TextView status = (TextView) infoWindows.findViewById(R.id.textview_status_layout_window);
 
-                Tree treeDummy = new Tree();
+                if(marker.getTitle().equals("waypoint")){
 
-                treeDummy = db.getTree(Integer.parseInt(marker.getSnippet()));
+                }else {
 
-                name.setText(treeDummy.getName());
-                specie.setText(treeDummy.getSpecie());
-                status.setText(treeDummy.getStatus());
+                    Tree treeDummy;
+
+                    treeDummy = db.getTree(Integer.parseInt(marker.getSnippet()));
+
+                    name.setText(treeDummy.getName());
+                    specie.setText(treeDummy.getSpecie());
+                    status.setText(treeDummy.getStatus());
+                }
 
                 return (infoWindows);
             }
@@ -233,7 +238,7 @@ public class MapsActivity_Route extends AppCompatActivity implements OnMapReadyC
                 .position(marker)
                 .title("waypoint")
                 .snippet(route.getShortDescription())
-                .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_yellow_dot)));
+                .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_green_dot)));
     }
 
     private void addTreeMarkers(Tree tree){

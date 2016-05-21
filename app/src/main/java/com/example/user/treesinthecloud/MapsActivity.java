@@ -138,8 +138,7 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
         username.setText("Welcome, " + loginPreferences.getString("useremail", ""));
         Uri  profile = Uri.parse(loginPreferences.getString("profile", ""));
 
-
-        setProfile(profile);
+        proPic.setImageURI(profile);
 
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
@@ -155,7 +154,9 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
         // Initializing Toolbar and setting it as the actionbar
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
         ImageView img = (ImageView)findViewById(R.id.sponserlogo);
+        if(img!=null)
         img.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent browserIntent = new Intent(getApplicationContext(), GoogleSearch.class);
@@ -170,6 +171,7 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
         navigationView = (NavigationView) findViewById(R.id.navigation_view);
 
         //Setting Navigation View Item Selected Listener to handle the item click of the navigation menu
+        if(navigationView != null)
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
 
             // This method will trigger on item Click of navigation menu
@@ -199,8 +201,8 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
                         return true;
 
                     case R.id.addTree:
-                        boolean makegroutp = ((Status)getApplication()).getLoggedIn();
-                        if(makegroutp){
+                        boolean addtree = ((Status)getApplication()).getLoggedIn();
+                        if(addtree){
 
                             Intent intentmakeGroup = new Intent(getApplicationContext(), NewtreeActivity.class);
                             startActivity(intentmakeGroup);
@@ -223,7 +225,8 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
                         startActivity(intentRoutes);
                         //getSupportActionBar().setTitle(R.string.title_activity_routes);
                     default:
-                        getSupportActionBar().setTitle(R.string.app_name);
+                        if(getSupportActionBar() != null)
+                            getSupportActionBar().setTitle(R.string.app_name);
                         return true;
                 }
             }
@@ -248,7 +251,8 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
                 invalidateOptionsMenu();
             }
         };
-        getSupportActionBar().setHomeButtonEnabled(true);
+        if(getSupportActionBar() != null)
+            getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         actionBarDrawerToggle.setDrawerIndicatorEnabled(true);
 
@@ -623,21 +627,23 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
                 String site ="www.leuven.be";
                 String image ="http://a15_ee5_trees1.studev.groept.be/Pictures/leuvenlogo.png";
                 try {
-                    site =jsonObject.getString("website");
-                    image =jsonObject.getString("url");
+                    if(jsonObject != null) {
+                        site = jsonObject.getString("website");
+                        image = jsonObject.getString("url");
+                    }
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
                 setWebsite(site);
-                Bitmap bitmap = rh.DownloadImage(image);
 
-                return bitmap;
+                return rh.DownloadImage(image);
 
             }
             @Override
             public void onPostExecute (Bitmap bitmap){
 
                 ImageView img = (ImageView) findViewById(R.id.sponserlogo);
+                if(img != null)
                 img.setImageBitmap(bitmap);
             }
         }
@@ -697,7 +703,7 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
                 Uri selectedImageUri = data.getData();
                 loginPrefsEditor.putString("profile", selectedImageUri.toString());
 
-                if (null != selectedImageUri) {
+                if (selectedImageUri != null) {
                     // Get the path from the Uri
                     String path = getPathFromURI(selectedImageUri);
 
@@ -714,11 +720,12 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
         String res = null;
         String[] proj = {MediaStore.Images.Media.DATA};
         Cursor cursor = getContentResolver().query(contentUri, proj, null, null, null);
-        if (cursor.moveToFirst()) {
+        if (cursor != null && cursor.moveToFirst()) {
             int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
             res = cursor.getString(column_index);
         }
-        cursor.close();
+        if(cursor != null)
+            cursor.close();
         return res;
     }
 

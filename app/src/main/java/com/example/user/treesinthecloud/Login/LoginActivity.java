@@ -159,7 +159,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         queue.add(loginRequest);}
                 } else {
 
-                    Toast.makeText(this, "faching data from server ", Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, "fetching data from server ", Toast.LENGTH_LONG).show();
                     String useremail1  = MD5.encrypt(email.getText().toString());
                     String userpassword1  = MD5.encrypt(password.getText().toString());
 
@@ -172,14 +172,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                 boolean success = jsonResponse.getBoolean("success");
 
                                 if (success) {
-
                                     loginPrefsEditor.clear();
                                     loginPrefsEditor.commit();
 
-                                    Context context = getApplicationContext();
-                                    int duration = Toast.LENGTH_SHORT;
-                                    Toast toast = Toast.makeText(context, "Welcome you are now loggedIn", duration);
-                                    toast.show();
+                                    Toast.makeText(getApplicationContext(), "Welcome you are now loggedIn", Toast.LENGTH_SHORT).show();
 
                                     ((Status)getApplication()).setLoggedIn(true);
 
@@ -195,13 +191,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                             .create()
                                             .show();
                                 }
-
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
                         }
                     };
-
                     LoginRequest loginRequest = new LoginRequest(useremail1, userpassword1, responseListener);
                     RequestQueue queue = Volley.newRequestQueue(LoginActivity.this);
                     queue.add(loginRequest);}
