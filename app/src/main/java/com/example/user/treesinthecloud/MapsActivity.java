@@ -310,7 +310,7 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
             case R.id.radioButton_normal:
                 if (checked)
                     mMap.clear();
-                    mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(50.875, 4.708), zoomLevel));
+                    mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(currentLoc, zoomLevel));
                     globalMarker = 0;
                     mMap.setOnCameraChangeListener(getCameraChangeListener());
                     mMap.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
@@ -452,7 +452,7 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
                     } else {
                         switch (whichMarker) {
                             case "Tree Marker":
-                                if (mkr.getTitle().equals("Virtueel")) {
+                                if (mkr.getTitle().equals("Virtueel") || item.getName().equals("")) {
                                     mkr.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.ic_map_tree_unknown));
                                 } else if (mkr.getTitle().equals("Aangevraagd")) {
                                     mkr.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.ic_map_tree_new));
@@ -461,7 +461,7 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
                                 }
                                 break;
                             case "Green Dot":
-                                if (mkr.getTitle().equals("Virtueel")) {
+                                if (mkr.getTitle().equals("Virtueel") || item.getName().equals("")) {
                                     mkr.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.ic_green_dot_unknown));
                                 } else if (mkr.getTitle().equals("Aangevraagd")) {
                                     mkr.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.ic_yellow_dot));
@@ -470,7 +470,7 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
                                 }
                                 break;
                             case "Basic Red Marker":
-                                if (mkr.getTitle().equals("Virtueel")) {
+                                if (mkr.getTitle().equals("Virtueel") || item.getName().equals("")) {
                                     mkr.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.ic_grey_marker));
                                 } else if (mkr.getTitle().equals("Aangevraagd")) {
                                     mkr.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW));
@@ -479,7 +479,7 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
                                 }
                                 break;
                             case "Basic Green Marker":
-                                if (mkr.getTitle().equals("Virtueel")) {
+                                if (mkr.getTitle().equals("Virtueel") || item.getName().equals("")) {
                                     mkr.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.ic_grey_marker));
                                 } else if (mkr.getTitle().equals("Aangevraagd")) {
                                     mkr.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW));
@@ -488,7 +488,7 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
                                 }
                                 break;
                             default:
-                                if (mkr.getTitle().equals("Virtueel")) {
+                                if (mkr.getTitle().equals("Virtueel") || item.getName().equals("")) {
                                     mkr.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.ic_map_tree_unknown));
                                 } else if (mkr.getTitle().equals("Aangevraagd")) {
                                     mkr.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.ic_map_tree_new));
