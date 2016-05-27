@@ -16,6 +16,7 @@ import android.widget.Toast;
 import com.example.user.treesinthecloud.MapsActivity;
 import com.example.user.treesinthecloud.R;
 import com.example.user.treesinthecloud.TreeDatabase.ConfigIDTree;
+import com.example.user.treesinthecloud.TreeDatabase.DatabaseHandler;
 import com.example.user.treesinthecloud.TreeDatabase.RequestHandler;
 import com.example.user.treesinthecloud.TreeDatabase.Tree;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -57,6 +58,7 @@ public class NewRouteMapsActivity extends AppCompatActivity implements OnMapRead
     private LatLng location;
     private int countTrees;
     private String whichMarker;
+    private DatabaseHandler db;
 
     public static final String MyPREFERENCES = "MyPrefs" ;
 
@@ -67,6 +69,8 @@ public class NewRouteMapsActivity extends AppCompatActivity implements OnMapRead
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_route_maps);
+
+        db = new DatabaseHandler(this);
 
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
@@ -335,10 +339,12 @@ public class NewRouteMapsActivity extends AppCompatActivity implements OnMapRead
                 TextView specie = (TextView) infoWindows.findViewById(R.id.textview_new_route_specie_layout_window);
                 TextView status = (TextView) infoWindows.findViewById(R.id.textview_new_route_status_layout_window);
 
-                String [] parts = marker.getSnippet().split("_");
-                name.setText(parts[5]);
-                specie.setText(parts[3]);
-                status.setText(parts[4]);
+                Tree treeDummy;
+                treeDummy = db.getTree(Integer.parseInt(marker.getSnippet()));
+
+                name.setText(treeDummy.getName());
+                specie.setText(treeDummy.getSpecie());
+                status.setText(marker.getTitle());
 
                 return (infoWindows);
 
@@ -551,14 +557,8 @@ public class NewRouteMapsActivity extends AppCompatActivity implements OnMapRead
                         tree.setStatus(jo.getString(ConfigIDTree.TAG_STATUS));
 
                         if (tree != null) {
-                            //Toast.makeText(getApplicationContext(), "Tree added", Toast.LENGTH_SHORT).show();
                             trees.add(tree);
-                            String snippet = "" + tree.getIdTree()      //0
-                                    + "_" + tree.getLatitude()          //1
-                                    + "_" + tree.getLongitude()         //2
-                                    + "_" + tree.getSpecie()            //3
-                                    + "_" + tree.getStatus()            //4
-                                    + "_" + tree.getName();             //5
+                            String snippet = "" + tree.getIdTree();
                             Marker mkr = mMap.addMarker(new MarkerOptions()
                                     .position(new LatLng(tree.getLatitude(), tree.getLongitude()))
                                     .title(tree.getStatus())
@@ -570,46 +570,26 @@ public class NewRouteMapsActivity extends AppCompatActivity implements OnMapRead
                             }else {
                                 switch (whichMarker) {
                                     case "Tree Marker":
-                                        if (mkr.getTitle().equals("Actueel")) {
-                                            mkr.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.ic_map_tree));
-                                        } else {
-                                            mkr.remove();
-                                        }
+                                        mkr.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.ic_map_tree));
                                         break;
                                     case "Green Dot":
-                                        if (mkr.getTitle().equals("Actueel")) {
-                                            mkr.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.ic_green_dot));
-                                        } else {
-                                            mkr.remove();
-                                        }
+                                        mkr.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.ic_green_dot));
                                         break;
                                     case "Basic Red Marker":
-                                        if (mkr.getTitle().equals("Actueel")) {
-                                            mkr.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
-                                        } else {
-                                            mkr.remove();
-                                        }
+                                        mkr.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
                                         break;
                                     case "Basic Green Marker":
-                                        if (mkr.getTitle().equals("Actueel")) {
-                                            mkr.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
-                                        } else {
-                                            mkr.remove();
-                                        }
+                                        mkr.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
                                         break;
                                     default:
-                                        if (mkr.getTitle().equals("Actueel")) {
-                                            mkr.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.ic_map_tree));
-                                        } else {
-                                            mkr.remove();
-                                        }
+                                        mkr.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.ic_map_tree));
+
                                         break;
                                 }
                             }
                         }
                     }
 
-                    //Toast.makeText(getApplicationContext(), "trees size: " + trees.size(), Toast.LENGTH_SHORT).show();
                     //this.loading.dismiss();
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -655,7 +635,6 @@ public class NewRouteMapsActivity extends AppCompatActivity implements OnMapRead
                 String stredittext=data.getStringExtra("descriptionTree");
                 String id = data.getStringExtra("idTreesReturn");
                 route.addTree(id , stredittext, getApplicationContext());
-                //Toast.makeText(getApplicationContext(), "Tree added to temporary Database, size is " + route.getTreesHash().size(), Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -757,14 +736,12 @@ public class NewRouteMapsActivity extends AppCompatActivity implements OnMapRead
             @Override
             protected void onPreExecute() {
                 super.onPreExecute();
-                //loading = ProgressDialog.show(MainActivity.this,"Adding...","Wait...",false,false);
             }
 
             @Override
             protected void onPostExecute(String s) {
                 super.onPostExecute(s);
                 //loading.dismiss();
-                Toast.makeText(NewRouteMapsActivity.this,s,Toast.LENGTH_LONG).show();
             }
 
             @Override

@@ -53,7 +53,7 @@
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Extra info boom"
+            android:text="@string/button_google_extra_info_boom"
             android:id="@+id/button3"
             android:layout_gravity="center_horizontal"/>
 

@@ -141,7 +141,7 @@
     <string name="textview_check_internet_connection">Check your internet connection!</string>
     <string name="textview_help_select_location_new_tree">Click on the marker (and window) to accept this location</string>
     <string name="textview_help_drag_marker_new_tree">Hold and drag the marker to set a Location</string>
-    <string name="toast_save_new_tree">Sending data to local database succeeded</string>
+    <string name="toast_save_new_tree">Sending data to database succeeded</string>
     <string name="alertdialog_login_to_unlock_feature">please login to unlock this feature!</string>
     <string name="toast_max_zoom_reached">When you zoom in more the heatmap isn\'t visible!</string>
     <string name="textview_new_route_draw_route">Draw Route</string>
@@ -161,6 +161,7 @@
     <string name="toast_min_zoom_reached">If you zoom out more there will be too many trees displayed!</string>
     <string name="textview_welcome_screen_if_you_press_finish_it_will_load_the_trees_from_the_database_online_this_could_take_some_time">If you press finish it will load the trees from the database online, this could take some time!</string>
     <string name="toast_username_taken">Username Already Taken, please choose another one!</string>
+    <string name="button_google_extra_info_boom">Extra Information Tree</string>
 
 
 </resources>

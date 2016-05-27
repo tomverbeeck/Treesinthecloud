@@ -170,9 +170,9 @@
             android:id="@+id/locationError_newtree"
             android:textColor="#f42a2a"
             android:visibility="invisible"
-            android:layout_below="@+id/TypeNewTree"
-            android:layout_alignRight="@+id/submitNewTreeB"
-            android:layout_alignEnd="@+id/submitNewTreeB" />
+            android:layout_below="@+id/type_text_newtree"
+            android:layout_alignLeft="@+id/type_text_newtree"
+            android:layout_alignStart="@+id/type_text_newtree" />
 
         <Button
             android:layout_width="150dp"

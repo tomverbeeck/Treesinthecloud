@@ -89,6 +89,11 @@ public class OneFragment extends Fragment{
                 int likesInt = 0;
                 boolean status = ((Status)getActivity().getApplication()).getLoggedIn();
 
+                if(likes.getText().toString().equals("-")){
+                    Toast.makeText(getContext(), "Tree doesn't exist!", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
                 if (likes.getText().toString() != null || likes.getText().toString()!= "")
                     likesInt = Integer.parseInt(likes.getText().toString());
 
@@ -218,8 +223,8 @@ public class OneFragment extends Fragment{
                     jsonObject = new JSONObject(s);
                     String numbLikes = jsonObject.getString("likes");
 
-                    if(numbLikes==null || numbLikes.equals(""))
-                        likes.setText("0");
+                    if(numbLikes==null || numbLikes.equals("-1"))
+                        likes.setText("-");
 
                     else
                         likes.setText(numbLikes);

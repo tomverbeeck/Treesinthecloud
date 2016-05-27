@@ -301,6 +301,7 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
 
         trees = db.getAllTrees();
 
+
     }
 
     public void onRadioButtonClicked(View view) {
@@ -371,6 +372,7 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
             @Override
             public void onCameraChange(CameraPosition position)
             {
+                currentLoc = new LatLng(position.target.latitude, position.target.longitude);
                 float minZoom = 18;
                 if(minZoom > position.zoom){
                     mMap.animateCamera(CameraUpdateFactory.zoomTo(minZoom));
@@ -508,7 +510,7 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
     private void setUpClusterer() {
 
         // Position the map.
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(50.875, 4.708), 10));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLoc, zoomLevel-5));
 
         // Initialize the manager with the context and the map.
         // (Activity extends context, so we can pass 'this' in the constructor.)
@@ -522,7 +524,6 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
         double lat;
         double lng;
 
-        // Add ten cluster items in close proximity, for purposes of this example.
         for (int i = 0; i < trees.size(); i++) {
             lat = trees.get(i).getLatitude();
             lng = trees.get(i).getLongitude();
@@ -659,13 +660,15 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
         if (location != null)
         {
             currentLoc = new LatLng(location.getLatitude(), location.getLongitude());
+            Toast.makeText(getApplicationContext(), currentLoc.toString(), Toast.LENGTH_LONG).show();
+
         }
 
         //start with fixed location
         LatLng leuven = new LatLng(50.875, 4.708);
         //mMap.addMarker(new MarkerOptions().position(leuven).title("Marker on Group T"));
 
-        if(currentLoc == null){
+        if(currentLoc != null){
             mMap.moveCamera(CameraUpdateFactory.newLatLng(leuven));
             mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(leuven, zoomLevel));
         }else{

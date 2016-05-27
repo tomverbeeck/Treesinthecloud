@@ -138,6 +138,7 @@
     <string name="textview_welcome_screen_if_you_press_finish_it_will_load_the_trees_from_the_database_online_this_could_take_some_time">Als je op SNAP HET drukt zullen de bomen geladen worden uit de database, dit kan enkele minuten duren!</string>
     <string name="toast_min_zoom_reached">Als je meer uitoomt zullen er te veel bomen getoond worden!</string>
     <string name="toast_username_taken">Gebruikersnaam is al in gebruik, kies er alstublief een andere!</string>
+    <string name="button_google_extra_info_boom">Extra info boom</string>
 
 
 </resources>

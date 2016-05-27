@@ -20,7 +20,9 @@ import android.widget.Toast;
 import com.example.user.treesinthecloud.Login.Status;
 import com.example.user.treesinthecloud.R;
 import com.example.user.treesinthecloud.TreeDatabase.ConfigIDTree;
+import com.example.user.treesinthecloud.TreeDatabase.DatabaseHandler;
 import com.example.user.treesinthecloud.TreeDatabase.RequestHandler;
+import com.example.user.treesinthecloud.TreeDatabase.Tree;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -39,10 +41,19 @@ public class ThreeFragment extends Fragment {
     private int treeId;
     private String nickname;
     private ThreeFragment frag;
+    private DatabaseHandler db;
+    private String statusTree;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        db = new DatabaseHandler(getContext());
+
+        int id = getActivity().getIntent().getExtras().getInt("treeID");
+
+        Tree tree = db.getTree(id);
+        statusTree = tree.getStatus();
     }
 
     @Nullable
@@ -79,6 +90,12 @@ public class ThreeFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 boolean status = ((Status)getActivity().getApplication()).getLoggedIn();
+
+                if(statusTree.equals("Aangevraagd")){
+                    Toast.makeText(getContext(), "Tree doesn't exist!", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
                 if(status) {
 
                     String cText = comment.getText().toString();
